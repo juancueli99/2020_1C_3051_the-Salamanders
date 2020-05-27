@@ -93,6 +93,7 @@ namespace TGC.Group.Model
             Camera = personaje;
             //Camara.SetCamera(personaje.PosicionMesh(), new TGCVector3(0, 0, 0));
 
+            personaje.LockMouse = true;
 
             //Internamente el framework construye la matriz de view con estos dos vectores.
             //Luego en nuestro juego tendremos que crear una cámara que cambie la matriz de view con variables como movimientos o animaciones de escenas
@@ -247,7 +248,7 @@ namespace TGC.Group.Model
                     Console.WriteLine("x: {0} \ny: {1} \nz: {2}", personaje.getPosition().X, personaje.getPosition().Y, personaje.getPosition().Z);
 
                     var objetoInteractuable = this.objetosInteractuables.OrderBy(mesh => this.DistanciaA(mesh)).First();
-                    if(objetoInteractuable is Escondite && this.DistanciaA(objetoInteractuable) < 400)
+                    if(objetoInteractuable is Escondite && this.DistanciaA(objetoInteractuable) < 300)
                     {
                         objetoInteractuable.Interactuar(personaje);
                     }

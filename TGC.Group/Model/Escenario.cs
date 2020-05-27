@@ -35,10 +35,10 @@ namespace TGC.Group.Model
             }
             return escalera;
         }
-        public void InstanciarEstructuras() //va en el init()
+        public void InstanciarEstructuras()
         {
             TgcSceneLoader loader = new TgcSceneLoader();
-            tgcScene = loader.loadSceneFromFile(MediaDir + "NuestrosModelos\\MapaConPinosFarolesVelasPilasMasPinos-TgcScene.xml");
+            tgcScene = loader.loadSceneFromFile(MediaDir + "NuestrosModelos\\MapaConPinosFarolesVelasPilasMasPinosBuenosNombresMasAdornosYPasto-TgcScene.xml");
         }
 
         public void InstanciarSkyBox()
@@ -46,7 +46,6 @@ namespace TGC.Group.Model
             //Configurar tamaño SkyBox
             skyBox.Center = new TGCVector3(-250, 1000, -1500);
             skyBox.Size = new TGCVector3(30000, 5000, 30000);
-            
             
 
             //Configurar las texturas para cada una de las 6 caras
@@ -63,7 +62,7 @@ namespace TGC.Group.Model
             skyBox.Init();
         }
 
-        public void InstanciarHeightmap() //va en el init()
+        public void InstanciarHeightmap() // Deprecated - Ya no usamos heightmap
         {
             currentScaleXZ = 600f;
             currentScaleY = 100f;
