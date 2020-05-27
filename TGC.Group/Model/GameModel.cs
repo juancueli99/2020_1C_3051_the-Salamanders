@@ -183,7 +183,7 @@ namespace TGC.Group.Model
             //Capturar Input teclado
 
 
-            if (Input.keyPressed(Key.L))
+            if (Input.keyDown(Key.L))
             {
                 personaje.LockMouse = !personaje.LockMouse;
             }
