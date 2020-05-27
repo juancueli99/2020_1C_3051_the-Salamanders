@@ -131,6 +131,11 @@ float4 ps_VertexColor(PS_INPUT_VERTEX_COLOR input) : COLOR0
 
 	//Componente Diffuse: N dot L
 	float3 n_dot_l = dot(Nn, Ln);
+
+	if(materialDiffuseColor.a<1){
+		materialDiffuseColor.a=1;
+	}
+
 	float3 diffuseLight = intensity * lightColor * materialDiffuseColor.rgb * max(0.0, n_dot_l); //Controlamos que no de negativo
 
 	//Componente Specular: (N dot H)^exp
@@ -141,6 +146,7 @@ float4 ps_VertexColor(PS_INPUT_VERTEX_COLOR input) : COLOR0
 
 	/* Color final: modular (Emissive + Ambient + Diffuse) por el color del mesh, y luego sumar Specular.
 	   El color Alpha sale del diffuse material */
+
 	float4 finalColor = float4(saturate(materialEmissiveColor + ambientLight + diffuseLight) * input.Color + specularLight , materialDiffuseColor.a);
 
 	return finalColor;
@@ -238,11 +244,21 @@ float4 ps_DiffuseMap(PS_DIFFUSE_MAP input) : COLOR0
 	//Obtener texel de la textura
 	float4 texelColor = tex2D(diffuseMap, input.Texcoord);
 
+	if(texelColor.a < 0.5){
+		discard;
+	}
+
 	//Componente Ambient
 	float3 ambientLight = intensity * lightColor * materialAmbientColor;
 
 	//Componente Diffuse: N dot L
 	float3 n_dot_l = dot(Nn, Ln);
+
+	
+	if(materialDiffuseColor.a<1){
+		materialDiffuseColor.a=1;
+	}
+
 	float3 diffuseLight = intensity * lightColor * materialDiffuseColor.rgb * max(0.0, n_dot_l); //Controlamos que no de negativo
 
 	//Componente Specular: (N dot H)^exp
@@ -253,6 +269,8 @@ float4 ps_DiffuseMap(PS_DIFFUSE_MAP input) : COLOR0
 
 	/* Color final: modular (Emissive + Ambient + Diffuse) por el color de la textura, y luego sumar Specular.
 	   El color Alpha sale del diffuse material */
+	
+
 	float4 finalColor = float4(saturate(materialEmissiveColor + ambientLight + diffuseLight) * texelColor + specularLight, materialDiffuseColor.a);
 
 	return finalColor;
@@ -353,6 +371,11 @@ float4 ps_diffuseMapAndLightmap(PS_INPUT_DIFFUSE_MAP_AND_LIGHTMAP input) : COLOR
 
 	//Obtener color de diffuseMap y de Lightmap
 	float4 texelColor = tex2D(diffuseMap, input.Texcoord);
+
+	if(texelColor.a < 0.5){
+		discard;
+	}
+
 	float4 lightmapColor = tex2D(lightMap, input.TexcoordLightmap);
 
 	//Componente Ambient
@@ -360,6 +383,11 @@ float4 ps_diffuseMapAndLightmap(PS_INPUT_DIFFUSE_MAP_AND_LIGHTMAP input) : COLOR
 
 	//Componente Diffuse: N dot L
 	float3 n_dot_l = dot(Nn, Ln);
+
+	if(materialDiffuseColor.a<1){
+		materialDiffuseColor.a=1;
+	}
+
 	float3 diffuseLight = intensity * lightColor * materialDiffuseColor.rgb * max(0.0, n_dot_l); //Controlamos que no de negativo
 
 	//Componente Specular: (N dot H)^exp
@@ -370,7 +398,11 @@ float4 ps_diffuseMapAndLightmap(PS_INPUT_DIFFUSE_MAP_AND_LIGHTMAP input) : COLOR
 
 	/* Color final: modular (Emissive + Ambient + Diffuse) por el color de la textura, y luego sumar Specular.
 	   El color Alpha sale del diffuse material */
+
 	float4 finalColor = float4(saturate(materialEmissiveColor + ambientLight + diffuseLight) * (texelColor * lightmapColor) + specularLight, materialDiffuseColor.a);
+	
+	
+	
 
 	return finalColor;
 }
