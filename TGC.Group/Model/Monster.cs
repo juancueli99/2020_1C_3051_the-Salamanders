@@ -161,7 +161,7 @@ namespace TGC.Group.Model
 
         internal void HuirDe(Personaje personaje, float elapsedTime)
         {
-            var posicionDeBorrado = new TGCVector3(2000, 0.0f, -15000);
+            var posicionDeBorrado = new TGCVector3(ghost.Position.X+2000, ghost.Position.Y, ghost.Position.Z - 15000);
             ghost.Move(posicionDeBorrado);
             ghost.updateBoundingBox();
             ghost.UpdateMeshTransform();
