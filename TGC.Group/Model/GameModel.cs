@@ -73,8 +73,8 @@ namespace TGC.Group.Model
             this.FixedTickEnable = false;
 
             escenario.InstanciarEstructuras();
-            escenario.InstanciarHeightmap();
-            escenario.InstanciarSkyBox();
+            //escenario.InstanciarHeightmap(); No los usamos mas
+            //escenario.InstanciarSkyBox(); Queda feo
             monster.InstanciarMonster();
             CrearObjetosEnEscenario();
             SetearEscalera();

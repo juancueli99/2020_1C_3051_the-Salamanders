@@ -38,7 +38,7 @@ namespace TGC.Group.Model
         public void InstanciarEstructuras()
         {
             TgcSceneLoader loader = new TgcSceneLoader();
-            tgcScene = loader.loadSceneFromFile(MediaDir + "NuestrosModelos\\MapaConPinosFarolesVelasPilasMasPinosBuenosNombresMasAdornosYPasto-TgcScene.xml");
+            tgcScene = loader.loadSceneFromFile(MediaDir + "NuestrosModelos\\MapaCompleto-TgcScene.xml");
         }
 
         public void InstanciarSkyBox()
@@ -79,15 +79,15 @@ namespace TGC.Group.Model
             tgcScene.Meshes.ForEach(mesh => mesh.UpdateMeshTransform());
             tgcScene.Meshes.ForEach(mesh => mesh.Render());
 
-            heightmap.Render();
+            //heightmap.Render();
 
-            skyBox.Render();
+            //skyBox.Render();
         }
 
         public void DisposeEscenario()
         {
-            skyBox.Dispose();
-            heightmap.Dispose();
+            //skyBox.Dispose();
+            //heightmap.Dispose();
             tgcScene.Meshes.ForEach(mesh => mesh.Dispose());
         }
     }
