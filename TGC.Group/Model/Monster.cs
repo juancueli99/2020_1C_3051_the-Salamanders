@@ -20,6 +20,8 @@ namespace TGC.Group.Model
         public TgcMesh ghost;
         String MediaDir = "..\\..\\..\\Media\\";
         TGCVector3 lookAt = new TGCVector3();
+        private float velocidad=2;
+
         public void InstanciarMonster()
         {
             var loader = new TgcSceneLoader();
@@ -29,6 +31,7 @@ namespace TGC.Group.Model
             ghost = scene2.Meshes[0];
 
             ghost.Position = new TGCVector3(200, -350, 100);
+            this.lookAt= new TGCVector3(200, -350, 100);
             //ghost.Transform = TGCMatrix.Translation(0, 5, 0);
         }
 
@@ -106,25 +109,61 @@ namespace TGC.Group.Model
                     //3er Cuadrante
                     anguloRotacion = (float)Math.PI + anguloRotacion;
                 }
-                else if (diferenciaEnX > 0 && diferenciaEnZ > 0)
-                {
-                    //1er Cuadrante
-                }
-                else if (diferenciaEnX > 0 && diferenciaEnZ < 0)
-                {
-                    //4to Cuadrante
-                    anguloRotacion = 2 * (float)Math.PI - anguloRotacion;
-                }
                 else
                 {
-                    //2do Cuadrante
-                    anguloRotacion = (float)Math.PI - anguloRotacion;
+                    if (diferenciaEnX < 0 && diferenciaEnZ > 0)
+                    {
+                        //2do Cuadrante
+                        anguloRotacion = 2*(float)Math.PI + anguloRotacion;
+                    }
+                    else
+                    {
+                        if (diferenciaEnX > 0 && diferenciaEnZ < 0)
+                        {
+                            //4to Cuadrante
+                            anguloRotacion = (float)Math.PI + anguloRotacion;
+                        }
+                    }
                 }
 
-                ghost.RotateY(anguloRotacion);
+               
+
+                ghost.Transform = TGCMatrix.Scaling(ghost.Scale) *
+                 TGCMatrix.RotationYawPitchRoll(anguloRotacion, ghost.Rotation.X, ghost.Rotation.Z)
+                 * TGCMatrix.Translation(ghost.Position);
+
 
                 this.lookAt = personaje.getPosition();
             }
+        }
+
+        internal void InstanciarMonster(Personaje personaje)
+        {
+            var loader = new TgcSceneLoader();
+            var scene2 = loader.loadSceneFromFile(MediaDir + "Modelame\\GhostGrande-TgcScene.xml"); //Con demon no funca, aca rompe
+
+            //Solo nos interesa el primer modelo de esta escena (tiene solo uno)
+            ghost = scene2.Meshes[0];
+            var posicionPersonaje = personaje.Position;
+            ghost.Position = new TGCVector3(posicionPersonaje.X - 200, -350, posicionPersonaje.Z-200);
+            this.lookAt= new TGCVector3(ghost.Rotation);
+            RotarMesh(personaje);
+            
+        }
+
+        internal void HuirDe(Personaje personaje, float elapsedTime)
+        {
+            var posicionDeBorrado = new TGCVector3(2000, 0.0f, -15000);
+            ghost.Move(posicionDeBorrado);
+            ghost.updateBoundingBox();
+            ghost.UpdateMeshTransform();
+
+        }
+
+        internal void MirarA(Personaje personaje, float elapsedTime)
+        {
+           // var vectorRotacion = new TGCVector3(personaje.Position.X * elapsedTime,ghost.Position.Y, personaje.Position.Z * elapsedTime);
+            this.RotarMesh(personaje);
         }
     }
 }
