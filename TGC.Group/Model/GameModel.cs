@@ -45,10 +45,10 @@ namespace TGC.Group.Model
         Escenario escenario = new Escenario();
         Personaje personaje = new Personaje();
         Monster monster = new Monster();
+        Escalera escalera = new Escalera();
+
         public List<IInteractuable> objetosInteractuables = new List<IInteractuable>();
-        public List<String> nombresEscalones= new List<String> { "Box17", "Box18", "Box20", "Box19", "Box24",
-        "Box21","Box23","Box22","Box28","Box25","Box27","Box26","Box31","Box32","Box30",
-        "Box29"};
+ 
         //Caja que se muestra en el ejemplo.
         private TGCBox Box { get; set; }
 
@@ -77,7 +77,7 @@ namespace TGC.Group.Model
             //escenario.InstanciarSkyBox(); Queda feo
             monster.InstanciarMonster();
             CrearObjetosEnEscenario();
-            SetearEscalera();
+
 
             /*
             var cameraPosition = new TGCVector3(-2500, 0, -15000);
@@ -100,14 +100,6 @@ namespace TGC.Group.Model
 
         }
 
-        private void SetearEscalera()
-        {
-            var escalones = escenario.GetEscalera().escalones;
-
-            escenario.GetEscalera().escalonActual = escalones.ElementAt(0);
-            escenario.GetEscalera().escalonInicial = escalones.ElementAt(0);
-            escenario.GetEscalera().escalonFinal = escalones.ElementAt(15);
-        }
 
         /// <summary>
         ///     Se llama en cada frame.
@@ -144,12 +136,7 @@ namespace TGC.Group.Model
             {
                 //tengo que crear una puerta exterior o interior
             }
-            if (mesh.Name.Contains("Escalon"))
-            {
-                Escalera unaEscalera = escenario.GetEscalera();
-                unaEscalera.escalones.Add(mesh);
-                //creo la escalera
-            }
+
             if (mesh.Name.Contains("posteLuz"))
             {
                 escenario.listaDePostes.Add(mesh);       
@@ -159,23 +146,13 @@ namespace TGC.Group.Model
                 interactuable = new Escondite(mesh);
                 objetosInteractuables.Add(interactuable);
             }
-            if (mesh.Name.Contains("Box")) {
-                AgregarEscalon(mesh);
-            
-            }
+ 
+           
 
            // objetosInteractuables.Add((IInteractuable)escenario.GetEscalera());
         }
 
-        private void AgregarEscalon(TgcMesh mesh)
-        {
-            bool flag = nombresEscalones.Any(nombre => nombre.Equals(mesh.Name));
-            if (flag)
-            {
-                int posicion = nombresEscalones.IndexOf(mesh.Name);
-                escenario.GetEscalera().escalones.Insert(posicion, mesh);
-            }
-        }
+
 
         public override void Update()
         {
@@ -193,14 +170,13 @@ namespace TGC.Group.Model
 
             if (personaje.LockMouse)
             {
-                if (!personaje.estoyUsandoEscaleras)
-                {
+            
                     if (Input.keyDown(Key.W))
                     {
                         //Le digo al wachin que vaya para adelante
                         //if (!(personaje.key_left == 'W' || DistanciaA2(escenario.GetEscalera().escalonActual) < 100) && !(personaje.key_back == 'W' || DistanciaA2(escenario.GetEscalera().escalonActual) < 100))
                         //{
-                            personaje.MoverPersonaje('W', ElapsedTime, Input, escenario, monster);
+                            personaje.MoverPersonaje('W', ElapsedTime, Input, escenario, monster, escalera);
                             caminar = true;
                         //}
                     }
@@ -210,7 +186,7 @@ namespace TGC.Group.Model
                        // if (!(personaje.key_left == 'A' || DistanciaA2(escenario.GetEscalera().escalonActual) < 100) && !(personaje.key_back == 'A' || DistanciaA2(escenario.GetEscalera().escalonActual) < 100))
                         //{
                             //Le digo al wachin que vaya para la izquierda
-                            personaje.MoverPersonaje('A', ElapsedTime, Input, escenario, monster);
+                            personaje.MoverPersonaje('A', ElapsedTime, Input, escenario, monster, escalera);
                             caminar = true;
                         //}
                     }
@@ -220,7 +196,7 @@ namespace TGC.Group.Model
                         //if (!(personaje.key_left == 'S' || DistanciaA2(escenario.GetEscalera().escalonActual) < 100) && !(personaje.key_back == 'S' || DistanciaA2(escenario.GetEscalera().escalonActual) < 100))
                         //{
                             //Le digo al wachin que vaya para la izquierda
-                            personaje.MoverPersonaje('S', ElapsedTime, Input, escenario, monster);
+                            personaje.MoverPersonaje('S', ElapsedTime, Input, escenario, monster, escalera);
                             caminar = true;
                        // }
                     }
@@ -230,17 +206,14 @@ namespace TGC.Group.Model
                         // if (!(personaje.key_left == 'D' || DistanciaA2(escenario.GetEscalera().escalonActual) < 100) && !(personaje.key_back == 'D' || DistanciaA2(escenario.GetEscalera().escalonActual) < 100))
                         //{
                         //Le digo al wachin que vaya para la izquierda
-                        personaje.MoverPersonaje('D', ElapsedTime, Input, escenario, monster);
+                        personaje.MoverPersonaje('D', ElapsedTime, Input, escenario, monster, escalera);
                             caminar = true;
                             //}
                      }
 
-                }
-                else {
-                    escenario.GetEscalera().Mover(personaje);
-                }
 
-                personaje.MoverPersonaje('x', ElapsedTime, Input, escenario, monster);
+
+                personaje.MoverPersonaje('x', ElapsedTime, Input, escenario, monster, escalera);
 
                 if (Input.keyDown(Key.E))
                 {
@@ -307,6 +280,11 @@ namespace TGC.Group.Model
                 if (Input.keyDown(Key.H))
                 {
                     personaje.tieneLuz = !personaje.tieneLuz;
+                }
+
+                if(personaje.chocandoConEscalera && Input.keyDown(Key.Space))
+                {
+                    personaje.MoverPersonaje(' ', ElapsedTime, Input, escenario, monster, escalera);
                 }
 
             }

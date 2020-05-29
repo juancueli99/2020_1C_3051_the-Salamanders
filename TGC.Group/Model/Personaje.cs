@@ -31,6 +31,7 @@ namespace TGC.Group.Model
         public float tiempoSinLuz = 0;
         public TgcMesh meshPersonaje;
         public IEquipable itemEnMano;
+        public bool chocandoConEscalera = false;
 
         public IEquipable getItemEnMano()
         {
@@ -527,7 +528,7 @@ namespace TGC.Group.Model
            // MovementSound.dispose();
         }
 
-        public void MoverPersonaje(char key, float elapsedTime, TgcD3dInput input, Escenario escenario, Monster monster)
+        public void MoverPersonaje(char key, float elapsedTime, TgcD3dInput input, Escenario escenario, Monster monster, Escalera escalera)
         {
             MovementSpeed = 800.0f;
             var movimiento = TGCVector3.Empty;
@@ -584,6 +585,8 @@ namespace TGC.Group.Model
                 if (chocaron)
                 {
                     meshPersonaje.Position = lastPos;
+                    //this.chocandoConEscalera = TgcCollisionUtils.testAABBAABB(escalera.devolverEscalera(escenario).BoundingBox, meshPersonaje.BoundingBox);
+
                 }
 
                 bool chocoConMonster = TgcCollisionUtils.testAABBAABB(monster.ghost.BoundingBox, meshPersonaje.BoundingBox);
@@ -591,6 +594,8 @@ namespace TGC.Group.Model
                 {
                     meshPersonaje.Position = lastPos;
                 }
+
+                
 
                 meshPersonaje.Transform = TGCMatrix.Scaling(meshPersonaje.Scale) *
                                     TGCMatrix.RotationYawPitchRoll(meshPersonaje.Rotation.Y, meshPersonaje.Rotation.X, meshPersonaje.Rotation.Z) *
@@ -718,6 +723,7 @@ namespace TGC.Group.Model
 
 
         }
+
     }
 }
 
