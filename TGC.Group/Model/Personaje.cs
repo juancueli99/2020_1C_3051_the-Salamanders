@@ -204,6 +204,8 @@ namespace TGC.Group.Model
         public bool estoyEscondido;
         TGCVector3 posicionInicial;
         internal bool estoyUsandoEscaleras=false;
+        float anguloAbsolutoEnY;
+        float anguloAbsolutoEnX;
 
         public Personaje()
         {
@@ -256,6 +258,7 @@ namespace TGC.Group.Model
              key_forward = 'W';
 
             absoluteRotationX = 0.0f;
+            anguloAbsolutoEnY = 0f;
 
             MovementSpeed = 50.0f;
             ForwardFactor = 1.5f;
@@ -537,23 +540,28 @@ namespace TGC.Group.Model
 
             var moving = false;
             var estoyFlotando = false;
+            var adelante = false;
+            var lateral = false;
 
             if (key == key_forward)
             {
                 movimiento.Z = -1;
                 moving = true;
+                adelante = true;
             }
 
             if (key == key_left)
             {
                 movimiento.X = 1;
                 moving = true;
+                lateral = true;
             }
 
             if (key == key_back)
             {
                 movimiento.Z = 1;
                 moving = true;
+                adelante = true;
             }
 
 
@@ -561,6 +569,7 @@ namespace TGC.Group.Model
             {
                 movimiento.X = -1;
                 moving = true;
+                lateral = true;
             }
 
             if (key == ' ')
@@ -576,12 +585,21 @@ namespace TGC.Group.Model
 
                 var lastPos = meshPersonaje.Position;
 
-                movimiento *= MovementSpeed * elapsedTime;
-                meshPersonaje.Position = meshPersonaje.Position + movimiento;
+                //movimiento *= MovementSpeed * elapsedTime;
+                //meshPersonaje.Position = meshPersonaje.Position + movimiento;
+
+                float rotY1 = input.XposRelative * rotationSpeed;
+                float rotX1 = input.YposRelative * rotationSpeed;
+
+
+                anguloAbsolutoEnY += rotY1;
+                
+                if (adelante) avanzarYretroceder(elapsedTime, movimiento.Z*800, anguloAbsolutoEnY);
+                if (lateral) DesplazamientoLateral(elapsedTime, movimiento.X * 800,1.57f + anguloAbsolutoEnY);                                
                 meshPersonaje.updateBoundingBox();
 
                 //COLISIONES
-
+                /*
                 bool chocaron = escenario.tgcScene.Meshes.Any(mesh => TgcCollisionUtils.testAABBAABB(mesh.BoundingBox, meshPersonaje.BoundingBox));
                 if (chocaron)
                 {
@@ -595,7 +613,7 @@ namespace TGC.Group.Model
                 }
                 if (!chocoConMonster && !chocaron) {
                     vectorDeMovemiento = movimiento;
-                }
+                }*/
 
                 meshPersonaje.Transform = TGCMatrix.Scaling(meshPersonaje.Scale) *
                                     TGCMatrix.RotationYawPitchRoll(meshPersonaje.Rotation.Y, meshPersonaje.Rotation.X, meshPersonaje.Rotation.Z) *
@@ -606,10 +624,16 @@ namespace TGC.Group.Model
                 //camaraInterna.Target = this.Position;
             }
 
+
+
             float rotY = input.XposRelative * rotationSpeed;
             float rotX = input.YposRelative * rotationSpeed;
+
+
+
             eye = this.Position;
-            target += movimiento;
+           
+            target = puntoDemira(rotY, rotX);//movimiento;
             if (lockMouse)
             {
                 if (rotY != 0.0f || rotX != 0.0f)
@@ -620,6 +644,48 @@ namespace TGC.Group.Model
             }
             this.SetCamera(eye, target);
 
+        }
+
+        // Maneja el avance y retroceso del personaje
+        public void avanzarYretroceder(float ElapsedTime, float MovimientoDelPersonaje, float AnguloDeGiro ) {
+            
+            var movimientoReal = MovimientoDelPersonaje * ElapsedTime;
+
+            var x = (float)Math.Cos(AnguloDeGiro) * movimientoReal;
+            var z = -(float)Math.Sin(AnguloDeGiro) * movimientoReal;
+
+            meshPersonaje.Position += new TGCVector3(x, 0, z);
+            meshPersonaje.Transform = TGCMatrix.Scaling(TGCVector3.One * 0.05f) *
+                                  TGCMatrix.RotationYawPitchRoll(meshPersonaje.Rotation.Y, meshPersonaje.Rotation.X, meshPersonaje.Rotation.Z) *
+                                  TGCMatrix.Translation(meshPersonaje.Position);
+
+            //Camara1.Target = meshCompleto[i].Position;
+
+        }
+
+        // Maneja los desplazamientos laterales
+        public void DesplazamientoLateral(float ElapsedTime, float MovimientoDelPersonaje, float AnguloDeGiro)
+        {
+            var movimientoReal = MovimientoDelPersonaje * ElapsedTime;
+
+            var x = (float)Math.Cos(AnguloDeGiro) * movimientoReal;
+            var z = -(float)Math.Sin(AnguloDeGiro) * movimientoReal;
+
+            meshPersonaje.Position += new TGCVector3(x, 0, z);
+            meshPersonaje.Transform = TGCMatrix.Scaling(TGCVector3.One * 0.05f) *
+                                  TGCMatrix.RotationYawPitchRoll(meshPersonaje.Rotation.Y, meshPersonaje.Rotation.X, meshPersonaje.Rotation.Z) *
+                                  TGCMatrix.Translation(meshPersonaje.Position);
+
+        }
+
+        TGCVector3 puntoDemira(float AnguloDeGiroX, float AnguloDeGiroY) {
+
+            float Y = 10*(float)Math.Cos(AnguloDeGiroY);
+            float X = 10*(float)Math.Sin(AnguloDeGiroY) * (float)Math.Cos(AnguloDeGiroX); 
+            float Z= 10*(float)Math.Sin(AnguloDeGiroY) * (float)Math.Sin(AnguloDeGiroX);
+            
+            return new TGCVector3(meshPersonaje.Position.X+X, meshPersonaje.Position.Y + Y, meshPersonaje.Position.Z + Z);
+        
         }
 
         public void aumentarTiempoSinLuz()
