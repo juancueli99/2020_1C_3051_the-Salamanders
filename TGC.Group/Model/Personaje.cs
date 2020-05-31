@@ -111,6 +111,8 @@ namespace TGC.Group.Model
         /// </summary>
         public float ForwardFactor { get; set; }
 
+        public TGCVector3 vectorDeMovemiento;
+
         /// <summary>
         /// La velocidad actual de la camara.
         /// </summary>
@@ -593,6 +595,9 @@ namespace TGC.Group.Model
                 if (chocoConMonster)
                 {
                     meshPersonaje.Position = lastPos;
+                }
+                if (!chocoConMonster && !chocaron) {
+                    vectorDeMovemiento = movimiento;
                 }
 
                 

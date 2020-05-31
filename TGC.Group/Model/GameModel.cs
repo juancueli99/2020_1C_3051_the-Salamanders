@@ -47,6 +47,8 @@ namespace TGC.Group.Model
         Monster monster = new Monster();
         Escalera escalera = new Escalera();
 
+        public List<Monster> bichos = new List<Monster>();
+
         public List<IInteractuable> objetosInteractuables = new List<IInteractuable>();
  
         //Caja que se muestra en el ejemplo.
@@ -76,6 +78,7 @@ namespace TGC.Group.Model
             //escenario.InstanciarHeightmap(); No los usamos mas
             //escenario.InstanciarSkyBox(); Queda feo
             monster.InstanciarMonster();
+            bichos.Add(monster);
             CrearObjetosEnEscenario();
 
 
@@ -295,11 +298,15 @@ namespace TGC.Group.Model
             personaje.updateCamera(ElapsedTime, Input);
             
             personaje.aumentarTiempoSinLuz();
-            
+
+            var bichosCercanos = bichos.FindAll(bicho => DistanciaA2(bicho.ghost)<1000);
             if (personaje.tieneLuz)
             {
-                monster.Desaparecer();
+                bichosCercanos.ForEach(monsterX => monsterX.HuirDe(personaje,ElapsedTime));
+                //se aleja de la luz porque tiene cuiqui
             }
+                bichosCercanos.ForEach(monsterX => monsterX.MirarA(personaje, ElapsedTime));
+             
 
             if (personaje.TieneItemEnMano())
             {
@@ -311,16 +318,34 @@ namespace TGC.Group.Model
                 }
             }
 
-            bool loAtrapo = monster.Aparecer(personaje);
-
-            if (loAtrapo)
-            {
-                personaje.GameOver();
-            }
-          
-
+            InteraccionMonster();
             personaje.YouWin();
             PostUpdate();
+        }
+
+        private void InteraccionMonster()
+        {
+            if (!personaje.tieneLuz && !personaje.estoyEscondido && personaje.tiempoSinLuz > 3500)
+            {
+                if (personaje.tiempoSinLuz == 4000)
+                {
+                    Monster unBicho = new Monster();
+                    unBicho.InstanciarMonster(personaje);
+                    bichos.Add(unBicho);
+                    //hacer que se escuche un ruido
+                }
+
+                if (personaje.tiempoSinLuz == 5000)
+                {
+                    //El monster aparece detrás del personaje
+                    Monster unBicho = new Monster();
+
+                    unBicho.InstanciarMonster(personaje);
+                    bichos.Add(unBicho);
+                    personaje.setCamera(personaje.eye,unBicho.ghost.Position);
+                    personaje.GameOver();
+                }
+            }
         }
 
         private double DistanciaA(IInteractuable mesh)
@@ -528,8 +553,8 @@ namespace TGC.Group.Model
             
             escenario.RenderEscenario();
             //personaje.RenderPersonaje(ElapsedTime);
-            monster.RenderMonster();
-
+            var bichosRendeables = bichos.FindAll(bicho => DistanciaA2(bicho.ghost) < 5000);
+            bichosRendeables.ForEach(meshRendeable => meshRendeable.RenderMonster());
             //Render de BoundingBox, muy útil para debug de colisiones.
             if (BoundingBox)
             {
