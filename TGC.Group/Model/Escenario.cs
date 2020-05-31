@@ -28,13 +28,7 @@ namespace TGC.Group.Model
         public Escalera escalera = null;
         public List<TgcMesh> listaDePostes = new List<TgcMesh>();
 
-        public Escalera GetEscalera() {
-
-            if (escalera==null) {
-                escalera = new Escalera();
-            }
-            return escalera;
-        }
+     
         public void InstanciarEstructuras()
         {
             TgcSceneLoader loader = new TgcSceneLoader();

@@ -10,9 +10,18 @@ using TGC.Core.SceneLoader;
 
 namespace TGC.Group.Model
 {
-     public class Escalera
+     public class Escalera: IInteractuable
     {
         TgcMesh escalera;
+        TGCVector3 posicionArriba;
+        TGCVector3 posicionAbajo;
+
+
+        public Escalera(TgcMesh meshNuevo) {
+            this.escalera = meshNuevo;
+            posicionAbajo = new TGCVector3(meshNuevo.BoundingBox.PMin.X, 15f, meshNuevo.BoundingBox.PMin.Z);
+            posicionArriba = new TGCVector3(meshNuevo.BoundingBox.PMin.X, 515f, meshNuevo.BoundingBox.PMin.Z);
+        }
 
         public TgcMesh devolverEscalera(Escenario escenario)
         {
@@ -22,6 +31,30 @@ namespace TGC.Group.Model
             return escalera;
         }
 
+        public TGCVector3 getPosition()
+        {
+            return escalera.BoundingBox.PMin;
+        }
 
+        public void Interactuar(Personaje personaje)
+        {
+            this.Usar(personaje);
+        }
+
+        public void Usar(Personaje personaje)
+        {
+
+            TGCVector3 posicion;
+            if (personaje.estoyArriba) 
+            {
+                posicion = posicionAbajo;
+            }
+            else
+            {
+                posicion = posicionArriba;
+            }
+            personaje.estoyArriba = !personaje.estoyArriba;
+            personaje.TeletrasportarmeA(posicion);
+        }
     }
 }

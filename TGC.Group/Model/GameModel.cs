@@ -42,15 +42,16 @@ namespace TGC.Group.Model
             Name = Game.Default.Name;
             Description = Game.Default.Description;
         }
-        Escenario escenario = new Escenario();
-        Personaje personaje = new Personaje();
-        Monster monster = new Monster();
-        Escalera escalera = new Escalera();
+        public Escenario escenario = new Escenario();
+        public Personaje personaje = new Personaje();
+        public Monster monster = new Monster();
+
 
         public List<Monster> bichos = new List<Monster>();
 
         public List<IInteractuable> objetosInteractuables = new List<IInteractuable>();
- 
+        public List<TgcMesh> iluminables= new List<TgcMesh>();
+
         //Caja que se muestra en el ejemplo.
         private TGCBox Box { get; set; }
 
@@ -80,6 +81,8 @@ namespace TGC.Group.Model
             monster.InstanciarMonster();
             bichos.Add(monster);
             CrearObjetosEnEscenario();
+            iluminables.AddRange(bichos.ConvertAll(monster=> monster.ghost));
+            iluminables.AddRange(escenario.tgcScene.Meshes);
 
 
             /*
@@ -149,10 +152,14 @@ namespace TGC.Group.Model
                 interactuable = new Escondite(mesh);
                 objetosInteractuables.Add(interactuable);
             }
- 
-           
+            if (mesh.Name.Equals("EscaleraMetalMovil")|| mesh.Name.Equals("EscaleraMetalFija"))
+            {
+                interactuable = new Escalera(mesh);
+                objetosInteractuables.Add(interactuable);
+            }
 
-           // objetosInteractuables.Add((IInteractuable)escenario.GetEscalera());
+
+            // objetosInteractuables.Add((IInteractuable)escenario.GetEscalera());
         }
 
 
@@ -177,46 +184,36 @@ namespace TGC.Group.Model
                     if (Input.keyDown(Key.W))
                     {
                         //Le digo al wachin que vaya para adelante
-                        //if (!(personaje.key_left == 'W' || DistanciaA2(escenario.GetEscalera().escalonActual) < 100) && !(personaje.key_back == 'W' || DistanciaA2(escenario.GetEscalera().escalonActual) < 100))
-                        //{
-                            personaje.MoverPersonaje('W', ElapsedTime, Input, escenario, monster, escalera);
+                        
+                            personaje.MoverPersonaje('W', ElapsedTime, Input, this);
                             caminar = true;
-                        //}
+
                     }
 
                     if (Input.keyDown(Key.A))
                     {
-                       // if (!(personaje.key_left == 'A' || DistanciaA2(escenario.GetEscalera().escalonActual) < 100) && !(personaje.key_back == 'A' || DistanciaA2(escenario.GetEscalera().escalonActual) < 100))
-                        //{
                             //Le digo al wachin que vaya para la izquierda
-                            personaje.MoverPersonaje('A', ElapsedTime, Input, escenario, monster, escalera);
+                            personaje.MoverPersonaje('A', ElapsedTime, Input, this);
                             caminar = true;
-                        //}
                     }
 
                     if (Input.keyDown(Key.S))
                     {
-                        //if (!(personaje.key_left == 'S' || DistanciaA2(escenario.GetEscalera().escalonActual) < 100) && !(personaje.key_back == 'S' || DistanciaA2(escenario.GetEscalera().escalonActual) < 100))
-                        //{
                             //Le digo al wachin que vaya para la izquierda
-                            personaje.MoverPersonaje('S', ElapsedTime, Input, escenario, monster, escalera);
+                            personaje.MoverPersonaje('S', ElapsedTime, Input, this);
                             caminar = true;
-                       // }
                     }
 
                     if (Input.keyDown(Key.D))
                     {
-                        // if (!(personaje.key_left == 'D' || DistanciaA2(escenario.GetEscalera().escalonActual) < 100) && !(personaje.key_back == 'D' || DistanciaA2(escenario.GetEscalera().escalonActual) < 100))
-                        //{
                         //Le digo al wachin que vaya para la izquierda
-                        personaje.MoverPersonaje('D', ElapsedTime, Input, escenario, monster, escalera);
+                        personaje.MoverPersonaje('D', ElapsedTime, Input, this);
                             caminar = true;
-                            //}
                      }
 
 
 
-                personaje.MoverPersonaje('x', ElapsedTime, Input, escenario, monster, escalera);
+                personaje.MoverPersonaje('x', ElapsedTime, Input, this);
 
                 if (Input.keyDown(Key.E))
                 {
@@ -230,17 +227,24 @@ namespace TGC.Group.Model
                     }
                     else
                     {
-                        if (this.DistanciaA(objetoInteractuable) < 300)
+                        if (objetoInteractuable is Escalera && this.DistanciaA(objetoInteractuable) < 300)
                         {
-                            objetosInteractuables.Remove(objetoInteractuable);
                             objetoInteractuable.Interactuar(personaje);
                         }
-
-                        if (personaje.Entre((int)personaje.getPosition().X, -1300, -800) &&
-                              personaje.Entre((int)personaje.getPosition().Z, -8100, -6800))
+                        else
                         {
-                            Puerta unaPuerta = new Puerta(escenario.tgcScene.Meshes[0]);// esto es para que sea polimorfico nomas
-                            unaPuerta.Interactuar(personaje);
+                            if (this.DistanciaA(objetoInteractuable) < 300)
+                            {
+                                objetosInteractuables.Remove(objetoInteractuable);
+                                objetoInteractuable.Interactuar(personaje);
+                            }
+
+                            if (personaje.Entre((int)personaje.getPosition().X, -1300, -800) &&
+                                  personaje.Entre((int)personaje.getPosition().Z, -8100, -6800))
+                            {
+                                Puerta unaPuerta = new Puerta(escenario.tgcScene.Meshes[0]);// esto es para que sea polimorfico nomas
+                                unaPuerta.Interactuar(personaje);
+                            }
                         }
                     }
                    
@@ -259,6 +263,8 @@ namespace TGC.Group.Model
                 {
                     //Recargar las pilas de la linterna
                     var pila = (Pila)personaje.objetosInteractuables.Find(objeto => objeto is Pila);
+                    //no puedo usar una pila null
+                    if(pila!=null)
                     pila.Usar(personaje);
                 }
 
@@ -290,7 +296,7 @@ namespace TGC.Group.Model
                 if (personaje.chocandoConEscalera && Input.keyDown(Key.Space))
                 {
                     
-                    personaje.MoverPersonaje(' ', ElapsedTime, Input, escenario, monster, escalera);
+                    personaje.MoverPersonaje(' ', ElapsedTime, Input, this);
                 }
 
             }
@@ -327,21 +333,24 @@ namespace TGC.Group.Model
         {
             if (!personaje.tieneLuz && !personaje.estoyEscondido && personaje.tiempoSinLuz > 3500)
             {
+
+                Monster unBicho;
                 if (personaje.tiempoSinLuz == 4000)
                 {
-                    Monster unBicho = new Monster();
+                    unBicho = new Monster();
                     unBicho.InstanciarMonster(personaje);
                     bichos.Add(unBicho);
+                    iluminables.Add(unBicho.ghost);
                     //hacer que se escuche un ruido
                 }
 
                 if (personaje.tiempoSinLuz == 5000)
                 {
                     //El monster aparece detrás del personaje
-                    Monster unBicho = new Monster();
-
+                    unBicho = new Monster();
                     unBicho.InstanciarMonster(personaje);
                     bichos.Add(unBicho);
+                    iluminables.Add(unBicho.ghost);
                     personaje.setCamera(personaje.eye,unBicho.ghost.Position);
                     personaje.GameOver();
                 }
@@ -381,7 +390,7 @@ namespace TGC.Group.Model
             }
 
             //Aplicar a cada mesh el shader actual
-            foreach (TgcMesh mesh in escenario.tgcScene.Meshes)
+            foreach (TgcMesh mesh in iluminables)
             {
                 mesh.Effect = currentShader;
                 mesh.Technique = TGCShaders.Instance.GetTGCMeshTechnique(mesh.RenderType);
@@ -508,7 +517,7 @@ namespace TGC.Group.Model
             }
 
             //Renderizar meshes
-            foreach (TgcMesh mesh in escenario.tgcScene.Meshes)
+            foreach (TgcMesh mesh in iluminables)
             {
                 if (personaje.tieneLuz)
                 {
