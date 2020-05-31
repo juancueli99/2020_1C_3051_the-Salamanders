@@ -282,8 +282,11 @@ namespace TGC.Group.Model
                     personaje.tieneLuz = !personaje.tieneLuz;
                 }
 
-                if(personaje.chocandoConEscalera && Input.keyDown(Key.Space))
+                if(personaje.chocandoConEscalera) Console.WriteLine("Estoy chocando con la escaleraaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+
+                if (personaje.chocandoConEscalera && Input.keyDown(Key.Space))
                 {
+                    
                     personaje.MoverPersonaje(' ', ElapsedTime, Input, escenario, monster, escalera);
                 }
 

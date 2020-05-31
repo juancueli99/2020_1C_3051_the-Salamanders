@@ -16,9 +16,10 @@ namespace TGC.Group.Model
 
         public TgcMesh devolverEscalera(Escenario escenario)
         {
-           escalera = escenario.tgcScene.Meshes.Find(mesh => mesh.Name.Equals("Escalera"));
+           escalera = escenario.tgcScene.Meshes.Find(mesh => mesh.Name.Equals("EscaleraMetalMovil"));
 
-           return escalera;
+            //Console.WriteLine(escalera.Name);
+            return escalera;
         }
 
 

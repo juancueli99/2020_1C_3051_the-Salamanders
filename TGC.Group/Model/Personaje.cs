@@ -585,7 +585,7 @@ namespace TGC.Group.Model
                 if (chocaron)
                 {
                     meshPersonaje.Position = lastPos;
-                    //this.chocandoConEscalera = TgcCollisionUtils.testAABBAABB(escalera.devolverEscalera(escenario).BoundingBox, meshPersonaje.BoundingBox);
+                    this.chocandoConEscalera = TgcCollisionUtils.testAABBAABB(escalera.devolverEscalera(escenario).BoundingBox, meshPersonaje.BoundingBox);
 
                 }
 
