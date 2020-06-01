@@ -596,7 +596,7 @@ namespace TGC.Group.Model
                 
 
                 if (adelante) avanzarYretroceder(elapsedTime, -1*movimiento.Z*800, anguloAbsolutoEnY);
-                if (lateral) DesplazamientoLateral(elapsedTime, movimiento.X * 800,1.57f + anguloAbsolutoEnY);                                
+                if (lateral) DesplazamientoLateral(elapsedTime, -1*movimiento.X * 800, anguloAbsolutoEnY);                                
                 meshPersonaje.updateBoundingBox();
 
                 //COLISIONES
@@ -669,8 +669,8 @@ namespace TGC.Group.Model
         {
             var movimientoReal = MovimientoDelPersonaje * ElapsedTime;
 
-            var x = (float)Math.Cos(AnguloDeGiro) * movimientoReal;
-            var z = -(float)Math.Sin(AnguloDeGiro) * movimientoReal;
+            var x = (float)Math.Sin(AnguloDeGiro) * movimientoReal; 
+            var z = -(float)Math.Cos(AnguloDeGiro) * movimientoReal;
 
             meshPersonaje.Position += new TGCVector3(x, 0, z);
             meshPersonaje.Transform = TGCMatrix.Scaling(meshPersonaje.Scale) *
