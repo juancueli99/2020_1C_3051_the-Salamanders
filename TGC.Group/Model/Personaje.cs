@@ -593,14 +593,29 @@ namespace TGC.Group.Model
                 //movimiento *= MovementSpeed * elapsedTime;
                 //meshPersonaje.Position = meshPersonaje.Position + movimiento;
 
-                
 
-                if (adelante) avanzarYretroceder(elapsedTime, -1*movimiento.Z*800, anguloAbsolutoEnY);
-                if (lateral) DesplazamientoLateral(elapsedTime, -1*movimiento.X * 800, anguloAbsolutoEnY);                                
+                float MovimientoDelPersonaje=0;
+                if (adelante) 
+                {
+                    MovimientoDelPersonaje = (-1) * movimiento.Z * 800;
+                    avanzarYretroceder(elapsedTime, MovimientoDelPersonaje, anguloAbsolutoEnY);
+                    
+                }
+                if (lateral)
+                {
+                    MovimientoDelPersonaje = -1 * movimiento.X * 800;
+                    DesplazamientoLateral(elapsedTime, MovimientoDelPersonaje, anguloAbsolutoEnY);
+                    
+
+                }
+                //RecalcularForward(elapsedTime, MovimientoDelPersonaje, anguloAbsolutoEnY); 
+                //en este metodo hay que poner bien forward y se soluciona el shader
                 meshPersonaje.updateBoundingBox();
 
-                //COLISIONES
                 
+
+                //COLISIONES
+
                 bool chocaron = escenario.tgcScene.Meshes.Any(mesh => TgcCollisionUtils.testAABBAABB(mesh.BoundingBox, meshPersonaje.BoundingBox));
                 if (chocaron)
                 {
@@ -654,6 +669,8 @@ namespace TGC.Group.Model
 
             var x = (float)Math.Cos(AnguloDeGiro) * movimientoReal;
             var z = (float)Math.Sin(AnguloDeGiro) * movimientoReal;
+            
+            
 
             meshPersonaje.Position += new TGCVector3(x, 0, z);
             meshPersonaje.Transform = TGCMatrix.Scaling(meshPersonaje.Scale) *
@@ -662,6 +679,31 @@ namespace TGC.Group.Model
 
             //Camara1.Target = meshCompleto[i].Position;
 
+        }
+
+        public void RecalcularForward(float ElapsedTime, float MovimientoDelPersonaje, float AnguloDeGiro)
+        {
+            TGCMatrix deltaRM =
+                    TGCMatrix.RotationAxis(xAxis, anguloAbsolutoEnY) *
+                    TGCMatrix.RotationAxis(up, anguloAbsolutoEnX);
+
+            TGCVector4 result;
+
+            result = TGCVector3.Transform(xAxis, deltaRM);
+            xAxis = new TGCVector3(result.X, result.Y, result.Z);
+
+            result = TGCVector3.Transform(yAxis, deltaRM);
+            yAxis = new TGCVector3(result.X, result.Y, result.Z);
+
+            result = TGCVector3.Transform(zAxis, deltaRM);
+            zAxis = new TGCVector3(result.X, result.Y, result.Z);
+            
+            //var nuevoForward = puntoDemira(anguloAbsolutoEnX, anguloAbsolutoEnY);
+            forward = TGCVector3.Cross(xAxis, up);
+            forward.Normalize();
+            
+            
+            
         }
 
         // Maneja los desplazamientos laterales
