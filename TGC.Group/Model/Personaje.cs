@@ -608,7 +608,7 @@ namespace TGC.Group.Model
                     
 
                 }
-                //RecalcularForward(elapsedTime, MovimientoDelPersonaje, anguloAbsolutoEnY); 
+                RecalcularForward(elapsedTime, MovimientoDelPersonaje, anguloAbsolutoEnY); 
                 //en este metodo hay que poner bien forward y se soluciona el shader
                 meshPersonaje.updateBoundingBox();
 
@@ -644,20 +644,25 @@ namespace TGC.Group.Model
 
             //float rotY = input.XposRelative * rotationSpeed;
             //float rotX = input.YposRelative * rotationSpeed;
-            
 
+            RecalcularForward(elapsedTime, 1, anguloAbsolutoEnY);
+            //en este metodo hay que poner bien forward y se soluciona el shader
 
             eye = this.Position;
            
             target = puntoDemira(anguloAbsolutoEnY, anguloAbsolutoEnX);//movimiento;
-           /* if (lockMouse)
-            {
-                if (rotY != 0.0f || rotX != 0.0f)
-                    look(rotX, rotY);
+            //forward = target;
 
-                Cursor.Position = windowCenter;
+            //forward = target;
+            //forward.Normalize();
+            /* if (lockMouse)
+             {
+                 if (rotY != 0.0f || rotX != 0.0f)
+                     look(rotX, rotY);
 
-            }*/
+                 Cursor.Position = windowCenter;
+
+             }*/
             this.SetCamera(eye, target);
 
         }
@@ -683,9 +688,20 @@ namespace TGC.Group.Model
 
         public void RecalcularForward(float ElapsedTime, float MovimientoDelPersonaje, float AnguloDeGiro)
         {
+
+            
+            TGCVector3 targerLinterna = new TGCVector3(target.X, target.Y, target.Z); 
+            //posicion.Normalize();
+            xAxis = new TGCVector3(targerLinterna.X, targerLinterna.Y, targerLinterna.Z);
+            xAxis.Normalize();
+            yAxis = new TGCVector3(0, 1, 0);
+            yAxis.Normalize();
+
+            //zAxis = new TGCVector3(0, up, 0);
+
             TGCMatrix deltaRM =
-                    TGCMatrix.RotationAxis(xAxis, anguloAbsolutoEnY) *
-                    TGCMatrix.RotationAxis(up, anguloAbsolutoEnX);
+                    TGCMatrix.RotationAxis(xAxis, anguloAbsolutoEnX) *
+                    TGCMatrix.RotationAxis(yAxis, -1*anguloAbsolutoEnY);
 
             TGCVector4 result;
 
