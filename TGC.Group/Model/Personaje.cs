@@ -679,7 +679,8 @@ namespace TGC.Group.Model
         {
 
             
-            TGCVector3 targerLinterna = new TGCVector3(target.X, target.Y, target.Z); 
+            TGCVector3 targerLinterna = new TGCVector3(target.X-meshPersonaje.Position.X, 0, target.Z-meshPersonaje.Position.Z); 
+            
             
             xAxis = new TGCVector3(targerLinterna.X, 0, targerLinterna.Z);
             xAxis.Normalize();
@@ -690,7 +691,7 @@ namespace TGC.Group.Model
             //zAxis = new TGCVector3(0, up, 0);
 
             TGCMatrix deltaRM =
-                     TGCMatrix.RotationAxis(xAxis, anguloAbsolutoEnX) * TGCMatrix.RotationAxis(yAxis, -1 * anguloAbsolutoEnY);
+                     TGCMatrix.RotationAxis(xAxis, anguloAbsolutoEnX) * TGCMatrix.RotationAxis(yAxis, 1 * anguloAbsolutoEnY);
                     
 
             TGCVector4 result;
@@ -704,8 +705,9 @@ namespace TGC.Group.Model
             result = TGCVector3.Transform(zAxis, deltaRM);
             zAxis = new TGCVector3(result.X, result.Y, result.Z);
             
-            //forward = puntoDemira(anguloAbsolutoEnX, anguloAbsolutoEnY);
-            forward = TGCVector3.Cross(xAxis, up);
+            forward = puntoDemira(anguloAbsolutoEnX, anguloAbsolutoEnY)-meshPersonaje.Position;
+            forward = targerLinterna;
+            //forward = TGCVector3.Cross(forward, up);
             forward.Normalize();
             
             
