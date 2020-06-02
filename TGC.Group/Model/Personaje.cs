@@ -602,13 +602,13 @@ namespace TGC.Group.Model
                 float MovimientoDelPersonaje=0;
                 if (adelante) 
                 {
-                    MovimientoDelPersonaje = (-1) * movimiento.Z * 800;
+                    MovimientoDelPersonaje = (-1) * movimiento.Z * MovementSpeed;
                     avanzarYretroceder(elapsedTime, MovimientoDelPersonaje, anguloAbsolutoEnY);
                     
                 }
                 if (lateral)
                 {
-                    MovimientoDelPersonaje = -1 * movimiento.X * 800;
+                    MovimientoDelPersonaje = -1 * movimiento.X * MovementSpeed;
                     DesplazamientoLateral(elapsedTime, MovimientoDelPersonaje, anguloAbsolutoEnY);
                     
 
@@ -639,19 +639,18 @@ namespace TGC.Group.Model
                     vectorDeMovemiento = movimiento;
                 }
 
+
                 bool chocoConParedInvisible = TgcCollisionUtils.testAABBAABB(gameModel.paredInvisible.paredInvisible.BoundingBox, meshPersonaje.BoundingBox);
                 if (chocoConParedInvisible)
                 {
                     meshPersonaje.Position = lastPos;
                 }
 
-                meshPersonaje.Transform = TGCMatrix.Scaling(meshPersonaje.Scale) *
-                                    TGCMatrix.RotationYawPitchRoll(meshPersonaje.Rotation.Y, meshPersonaje.Rotation.X, meshPersonaje.Rotation.Z) *
-                                    TGCMatrix.Translation(meshPersonaje.Position);
+
+                transformarMesh(); // Hace el mesh transform
 
                 this.Position = meshPersonaje.Position;
-                //Hacer que la camara siga al personaje en su nueva posicion
-                //camaraInterna.Target = this.Position;
+                
             }
 
             //en este metodo hay que poner bien forward y se soluciona el shader
@@ -660,7 +659,9 @@ namespace TGC.Group.Model
             target = puntoDemira(anguloAbsolutoEnY, anguloAbsolutoEnX);//movimiento;
            
             RecalcularForward();
-            
+            //Hacer que la camara siga al personaje en su nueva posicion
+            //camaraInterna.Target = this.Position;
+
             this.SetCamera(eye, target);
 
         }
@@ -676,11 +677,7 @@ namespace TGC.Group.Model
             
 
             meshPersonaje.Position += new TGCVector3(x, 0, z);
-            meshPersonaje.Transform = TGCMatrix.Scaling(meshPersonaje.Scale) *
-                                  TGCMatrix.RotationYawPitchRoll(meshPersonaje.Rotation.Y, meshPersonaje.Rotation.X, meshPersonaje.Rotation.Z) *
-                                  TGCMatrix.Translation(meshPersonaje.Position);
-
-            //Camara1.Target = meshCompleto[i].Position;
+            
 
         }
 
@@ -688,7 +685,8 @@ namespace TGC.Group.Model
         {
 
             
-            TGCVector3 targerLinterna = new TGCVector3(target.X, target.Y, target.Z); 
+            TGCVector3 targerLinterna = new TGCVector3(target.X-meshPersonaje.Position.X, 0, target.Z-meshPersonaje.Position.Z); 
+            
             
             xAxis = new TGCVector3(targerLinterna.X, 0, targerLinterna.Z);
             xAxis.Normalize();
@@ -699,7 +697,7 @@ namespace TGC.Group.Model
             //zAxis = new TGCVector3(0, up, 0);
 
             TGCMatrix deltaRM =
-                     TGCMatrix.RotationAxis(xAxis, anguloAbsolutoEnX) * TGCMatrix.RotationAxis(yAxis, -1 * anguloAbsolutoEnY);
+                     TGCMatrix.RotationAxis(xAxis, anguloAbsolutoEnX) * TGCMatrix.RotationAxis(yAxis, 1 * anguloAbsolutoEnY);
                     
 
             TGCVector4 result;
@@ -713,8 +711,9 @@ namespace TGC.Group.Model
             result = TGCVector3.Transform(zAxis, deltaRM);
             zAxis = new TGCVector3(result.X, result.Y, result.Z);
             
-            //forward = puntoDemira(anguloAbsolutoEnX, anguloAbsolutoEnY);
-            forward = TGCVector3.Cross(xAxis, up);
+            forward = puntoDemira(anguloAbsolutoEnX, anguloAbsolutoEnY)-meshPersonaje.Position;
+            forward = targerLinterna;
+            //forward = TGCVector3.Cross(forward, up);
             forward.Normalize();
             
             
@@ -730,10 +729,7 @@ namespace TGC.Group.Model
             var z = -(float)Math.Cos(AnguloDeGiro) * movimientoReal;
 
             meshPersonaje.Position += new TGCVector3(x, 0, z);
-            meshPersonaje.Transform = TGCMatrix.Scaling(meshPersonaje.Scale) *
-                                  TGCMatrix.RotationYawPitchRoll(meshPersonaje.Rotation.Y, meshPersonaje.Rotation.X, meshPersonaje.Rotation.Z) *
-                                  TGCMatrix.Translation(meshPersonaje.Position);
-
+            
         }
 
         TGCVector3 puntoDemira(float AnguloDeGiroX, float AnguloDeGiroY) {
@@ -744,6 +740,13 @@ namespace TGC.Group.Model
             
             return new TGCVector3(meshPersonaje.Position.X+X, meshPersonaje.Position.Y + Y, meshPersonaje.Position.Z + Z);
         
+        }
+
+        void transformarMesh() {
+
+            meshPersonaje.Transform = TGCMatrix.Scaling(meshPersonaje.Scale) *
+                                    TGCMatrix.RotationYawPitchRoll(meshPersonaje.Rotation.Y, meshPersonaje.Rotation.X, meshPersonaje.Rotation.Z) *
+                                    TGCMatrix.Translation(meshPersonaje.Position);
         }
 
         public void aumentarTiempoSinLuz()
