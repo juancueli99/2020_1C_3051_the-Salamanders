@@ -13,7 +13,7 @@ namespace TGC.Group.Model
      public class Escalera: IInteractuable
     {
         TgcMesh escalera;
-        TGCVector3 posicionArriba;
+        public TGCVector3 posicionArriba;
         TGCVector3 posicionAbajo;
 
 
@@ -52,6 +52,7 @@ namespace TGC.Group.Model
             else
             {
                 posicion = posicionArriba;
+                posicion.Z -= 250;
             }
             personaje.estoyArriba = !personaje.estoyArriba;
             personaje.TeletrasportarmeA(posicion);

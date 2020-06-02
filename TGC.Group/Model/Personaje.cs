@@ -639,7 +639,11 @@ namespace TGC.Group.Model
                     vectorDeMovemiento = movimiento;
                 }
 
-                
+                bool chocoConParedInvisible = TgcCollisionUtils.testAABBAABB(gameModel.paredInvisible.paredInvisible.BoundingBox, meshPersonaje.BoundingBox);
+                if (chocoConParedInvisible)
+                {
+                    meshPersonaje.Position = lastPos;
+                }
 
                 meshPersonaje.Transform = TGCMatrix.Scaling(meshPersonaje.Scale) *
                                     TGCMatrix.RotationYawPitchRoll(meshPersonaje.Rotation.Y, meshPersonaje.Rotation.X, meshPersonaje.Rotation.Z) *

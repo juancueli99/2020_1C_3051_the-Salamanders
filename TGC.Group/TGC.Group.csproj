@@ -111,6 +111,7 @@
     <Compile Include="Model\Linterna.cs" />
     <Compile Include="Model\Monster.cs" />
     <Compile Include="Model\Nota.cs" />
+    <Compile Include="Model\ParedInvisible.cs" />
     <Compile Include="Model\Personaje.cs" />
     <Compile Include="Model\Pila.cs" />
     <Compile Include="Model\Puerta.cs" />

@@ -45,7 +45,9 @@ namespace TGC.Group.Model
         public Escenario escenario = new Escenario();
         public Personaje personaje = new Personaje();
         public Monster monster = new Monster();
-
+         
+        //PARED INVISIBLE
+        public ParedInvisible paredInvisible = new ParedInvisible();
 
         public List<Monster> bichos = new List<Monster>();
 
@@ -79,6 +81,9 @@ namespace TGC.Group.Model
             //escenario.InstanciarHeightmap(); No los usamos mas
             //escenario.InstanciarSkyBox(); Queda feo
             monster.InstanciarMonster();
+
+           
+
             bichos.Add(monster);
             CrearObjetosEnEscenario();
             iluminables.AddRange(bichos.ConvertAll(monster=> monster.ghost));
@@ -156,9 +161,8 @@ namespace TGC.Group.Model
             {
                 interactuable = new Escalera(mesh);
                 objetosInteractuables.Add(interactuable);
+                paredInvisible.InstanciarPared((Escalera)interactuable);
             }
-
-
             // objetosInteractuables.Add((IInteractuable)escenario.GetEscalera());
         }
 
@@ -169,7 +173,6 @@ namespace TGC.Group.Model
             PreUpdate();
             bool caminar = false;
             //Capturar Input teclado
-
 
             if (Input.keyDown(Key.L))
             {
@@ -561,6 +564,7 @@ namespace TGC.Group.Model
             D3DDevice.Instance.Device.Clear(ClearFlags.Target | ClearFlags.ZBuffer, Color.Black, 1.0f, 0);
             
             escenario.RenderEscenario();
+            paredInvisible.RenderPared();
             //personaje.RenderPersonaje(ElapsedTime);
             var bichosRendeables = bichos.FindAll(bicho => DistanciaA2(bicho.ghost) < 5000);
             bichosRendeables.ForEach(meshRendeable => meshRendeable.RenderMonster());
@@ -586,6 +590,8 @@ namespace TGC.Group.Model
             escenario.DisposeEscenario();
             //personaje.DisposePersonaje();
             monster.DisposeMonster();
+
+            paredInvisible.DisposePared();
         }
 
     }
