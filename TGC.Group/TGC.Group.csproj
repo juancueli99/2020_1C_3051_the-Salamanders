@@ -199,6 +199,7 @@
     <Content Include="Media\Modelame\linterna-TgcScene.xml" />
     <Content Include="Media\Modelame\MapaConPinosFarolesVelasPilasMasPinosShelter-TgcScene.xml" />
     <Content Include="Media\Modelame\notas-TgcScene.xml" />
+    <Content Include="Media\Modelame\ParedCastillo-TgcScene.xml" />
     <Content Include="Media\Modelame\pilas-TgcScene.xml" />
     <Content Include="Media\Modelame\posteLuz-TgcScene.xml" />
     <Content Include="Media\Modelame\Textures\Arbusto.png" />
@@ -274,6 +275,7 @@
     <Content Include="Media\Modelame\Textures\RippleDRelief.png" />
     <Content Include="Media\Modelame\Textures\spar.png" />
     <Content Include="Media\Modelame\Textures\stair1.jpg" />
+    <Content Include="Media\Modelame\Textures\stone_wall.jpg" />
     <Content Include="Media\Modelame\Textures\tractor.jpg" />
     <Content Include="Media\Modelame\Textures\wagon.jpg" />
     <Content Include="Media\Modelame\Textures\wastelt1glow.jpg" />

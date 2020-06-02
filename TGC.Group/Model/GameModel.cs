@@ -95,7 +95,7 @@ namespace TGC.Group.Model
             var lookAt = new TGCVector3(0, 0, 0);
             Camara.SetCamera(cameraPosition, lookAt);
             */
-
+            
             //ESTA ORIGINALMENTE FUNCIONA
             // MiCamara camaraInterna = new MiCamara(personaje.PosicionMesh(), 220, 300);
             //Camara = camaraInterna;
@@ -329,6 +329,7 @@ namespace TGC.Group.Model
 
             InteraccionMonster();
             personaje.YouWin();
+
             PostUpdate();
         }
 
@@ -564,7 +565,7 @@ namespace TGC.Group.Model
             D3DDevice.Instance.Device.Clear(ClearFlags.Target | ClearFlags.ZBuffer, Color.Black, 1.0f, 0);
             
             escenario.RenderEscenario();
-            paredInvisible.RenderPared();
+            
             //personaje.RenderPersonaje(ElapsedTime);
             var bichosRendeables = bichos.FindAll(bicho => DistanciaA2(bicho.ghost) < 5000);
             bichosRendeables.ForEach(meshRendeable => meshRendeable.RenderMonster());

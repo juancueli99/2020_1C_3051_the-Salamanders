@@ -27,13 +27,20 @@ namespace TGC.Group.Model
 
             paredInvisible = scene2.Meshes[0];
 
-            paredInvisible.Position = new TGCVector3((escalera.posicionArriba.X) - 850, (escalera.posicionArriba.Y)-250, escalera.posicionArriba.Z);
+            TGCVector3 traslacion = new TGCVector3((escalera.posicionArriba.X) - 850, (escalera.posicionArriba.Y) - 250, escalera.posicionArriba.Z);
 
-            paredInvisible.Transform = TGCMatrix.Scaling(paredInvisible.Scale.X*27, paredInvisible.Scale.Y*5, paredInvisible.Scale.Z) *
-                                  TGCMatrix.RotationYawPitchRoll(paredInvisible.Rotation.Y, paredInvisible.Rotation.X, paredInvisible.Rotation.Z) *
-                                  TGCMatrix.Translation(paredInvisible.Position);
+            TGCVector3 escalado = new TGCVector3(paredInvisible.Scale.X * 27, paredInvisible.Scale.Y * 5, paredInvisible.Scale.Z +10);
 
-            paredInvisible.updateBoundingBox();
+            //paredInvisible.BoundingBox.scaleTranslate(traslacion, escalado);
+
+            paredInvisible.Transform = TGCMatrix.Scaling(escalado) * 
+                TGCMatrix.RotationYawPitchRoll(paredInvisible.Rotation.Y, paredInvisible.Rotation.X, paredInvisible.Rotation.Z) *  
+                TGCMatrix.Translation(traslacion);
+
+            paredInvisible.BoundingBox.transform(paredInvisible.Transform);
+
+            // paredInvisible.updateBoundingBox();
+
         }
 
         public void RenderPared()
