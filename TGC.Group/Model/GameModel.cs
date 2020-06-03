@@ -20,6 +20,7 @@ using TGC.Core.Utils;
 using TGC.Core.BoundingVolumes;
 using System.IO;
 using System.Windows.Forms;
+using static TGC.Core.Collision.TgcCollisionUtils;
 
 namespace TGC.Group.Model
 {
@@ -64,6 +65,8 @@ namespace TGC.Group.Model
         private TgcScene tgcScene { get; set; }
         //Boleano para ver si dibujamos el boundingbox
         private bool BoundingBox { get; set; }
+        public FrustumResult INTERSECT { get; private set; }
+
         private List<LightData> lights;
         /// <summary>
         ///     Se llama una sola vez, al principio cuando se ejecuta el ejemplo.
@@ -93,7 +96,7 @@ namespace TGC.Group.Model
             TgcMesh mesh2 = escenario.tgcScene.Meshes.Find(mesh => mesh.Name.Equals("linterna_2"));
             var linterna = new Linterna(mesh1,mesh2);
             objetosInteractuables.Add(linterna);
-            
+
             /*
             var cameraPosition = new TGCVector3(-2500, 0, -15000);
             var lookAt = new TGCVector3(0, 0, 0);
@@ -106,6 +109,7 @@ namespace TGC.Group.Model
 
             //ESTE VA QUERIENDO
             Camera = personaje;
+            //Frustum.FarPlane;
             //Camara.SetCamera(personaje.PosicionMesh(), new TGCVector3(0, 0, 0));
 
             personaje.LockMouse = true;
@@ -165,7 +169,8 @@ namespace TGC.Group.Model
             {
                 interactuable = new Escalera(mesh);
                 objetosInteractuables.Add(interactuable);
-                paredInvisible.InstanciarPared((Escalera)interactuable);
+                var escalera = (Escalera)interactuable;
+                paredInvisible.InstanciarPared(escalera);
             }
             // objetosInteractuables.Add((IInteractuable)escenario.GetEscalera());
         }
@@ -176,6 +181,7 @@ namespace TGC.Group.Model
         {
             PreUpdate();
             bool caminar = false;
+
             //Capturar Input teclado
 
             if (Input.keyDown(Key.L))
@@ -194,7 +200,6 @@ namespace TGC.Group.Model
                         
                             personaje.MoverPersonaje('W', ElapsedTime, Input, this);
                             caminar = true;
-
                     }
 
                     if (Input.keyDown(Key.A))
@@ -356,7 +361,7 @@ namespace TGC.Group.Model
                     //El monster aparece detrás del personaje
                     unBicho = new Monster();
                     //var posicion = new TGCVector3(personaje.Position.X - 200, -350, personaje.Position.Z - 200);
-                    var posicion = new TGCVector3((-1) * personaje.getLookAt().X, -350, (-1f) * personaje.getLookAt().Z);
+                    var posicion = new TGCVector3((-1) * personaje.getLookAt().X, -350, (-1) * personaje.getLookAt().Z);
                     unBicho.InstanciarMonster(personaje, posicion);
                     monster.DisposeMonster();
                     monster = unBicho;
@@ -570,11 +575,29 @@ namespace TGC.Group.Model
 
             //Pone el fondo negro en vez del azul feo ese
             D3DDevice.Instance.Device.Clear(ClearFlags.Target | ClearFlags.ZBuffer, Color.Black, 1.0f, 0);
-            
-            escenario.RenderEscenario();
-            
+          
+            //Frustum Culling -> OPCION 1
+            var meshesQueChocanConFrustrum = escenario.tgcScene.Meshes.FindAll(mesh => TgcCollisionUtils.classifyFrustumAABB(this.Frustum, mesh.BoundingBox) != TgcCollisionUtils.FrustumResult.OUTSIDE);
+            meshesQueChocanConFrustrum.ForEach(mesh => mesh.Render());
+
+            //Frustum Culling -> OPCION 2
+            /*
+            foreach (var mesh in escenario.tgcScene.Meshes)
+            {
+                //Nos ocupamos solo de las mallas habilitadas
+                //if (mesh.Enabled)
+                //{
+                    //Solo mostrar la malla si colisiona contra el Frustum
+                    var colisionConFrustum = TgcCollisionUtils.classifyFrustumAABB(Frustum, mesh.BoundingBox);
+                    if (colisionConFrustum != TgcCollisionUtils.FrustumResult.OUTSIDE)
+                    {
+                        mesh.Render();
+                    }
+                //}
+            }*/
+
             //personaje.RenderPersonaje(ElapsedTime);
-            if(DistanciaA2(monster.ghost) < 5000)
+            if (DistanciaA2(monster.ghost) < 5000)
             {
                 monster.RenderMonster();
             }
@@ -585,7 +608,7 @@ namespace TGC.Group.Model
                 tgcScene.Meshes.ForEach(mesh => mesh.BoundingBox.Render());
                 //fondo.BoundingBox.Render();
             }
-
+            
             //Finaliza el render y presenta en pantalla, al igual que el preRender se debe para casos puntuales es mejor utilizar a mano las operaciones de EndScene y PresentScene
             PostRender();
         }

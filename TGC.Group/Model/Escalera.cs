@@ -22,8 +22,7 @@ namespace TGC.Group.Model
             this.escalera = meshNuevo;
             posicionAbajo = new TGCVector3(meshNuevo.BoundingBox.PMin.X, 15f, meshNuevo.BoundingBox.PMin.Z);
             posicionArriba = new TGCVector3(meshNuevo.BoundingBox.PMin.X, 515f, meshNuevo.BoundingBox.PMin.Z);
-            //TGCVector3 escalado = new TGCVector3(escalera.Scale.X * 5, escalera.Scale.Y , escalera.Scale.Z * 5);
-            //escalera.BoundingBox.transform(TGCMatrix.Scaling(escalado));
+            
         }
 
         public TgcMesh devolverEscalera(Escenario escenario)
