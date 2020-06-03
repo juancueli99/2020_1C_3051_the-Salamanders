@@ -89,13 +89,17 @@ namespace TGC.Group.Model
             iluminables.AddRange(bichos.ConvertAll(monster=> monster.ghost));
             iluminables.AddRange(escenario.tgcScene.Meshes);
 
-
+            TgcMesh mesh1 = escenario.tgcScene.Meshes.Find(mesh => mesh.Name.Equals("linterna_1"));
+            TgcMesh mesh2 = escenario.tgcScene.Meshes.Find(mesh => mesh.Name.Equals("linterna_2"));
+            var linterna = new Linterna(mesh1,mesh2);
+            objetosInteractuables.Add(linterna);
+            
             /*
             var cameraPosition = new TGCVector3(-2500, 0, -15000);
             var lookAt = new TGCVector3(0, 0, 0);
             Camara.SetCamera(cameraPosition, lookAt);
             */
-            
+
             //ESTA ORIGINALMENTE FUNCIONA
             // MiCamara camaraInterna = new MiCamara(personaje.PosicionMesh(), 220, 300);
             //Camara = camaraInterna;
@@ -410,7 +414,7 @@ namespace TGC.Group.Model
                 mesh.Effect.SetValue("lightColor", ColorValue.FromColor(Color.White));
 
                 unPoste = escenario.listaDePostes.OrderBy(poste => this.DistanciaA2(poste)).First();
-                if (DistanciaA2(unPoste) < 2000)
+                if (!personaje.tieneLuz && DistanciaA2(unPoste) < 2000)
                 {
                     //Se prende el farol mas cercano
                     mesh.Effect.SetValue("lightColor", ColorValue.FromColor(Color.White));

@@ -9,24 +9,25 @@ using TGC.Core.SceneLoader;
 
 namespace TGC.Group.Model
 {
-    class Linterna : IEquipable
+    class Linterna : IEquipable, IInteractuable
 
     {
-        TgcMesh mesh;
+        TgcMesh mesh1;
+        TgcMesh mesh2;
         //12000 = 120 segundos
         public float duracionMax = 12000;
         public float duracion = 12000;
         public bool estaEncendida = false;
 
 
-        public Linterna(TgcMesh nuevoMesh)
+        public Linterna(TgcMesh nuevoMesh, TgcMesh nuevoMesh2)
         {
-
-            this.mesh = nuevoMesh;
+            this.mesh2 = nuevoMesh2;
+            this.mesh1 = nuevoMesh;
         }
         public TGCVector3 getPosition()
         {
-            return mesh.Position;
+            return mesh1.BoundingBox.PMin;
         }
 
         public void Interactuar(Personaje personaje)
@@ -41,9 +42,12 @@ namespace TGC.Group.Model
         private void eliminarMesh()
         {
             TGCVector3 posicionDeBorrado = new TGCVector3(0, -4000, 0);
-            mesh.Move(posicionDeBorrado);
-            mesh.updateBoundingBox();
-            mesh.UpdateMeshTransform();
+            mesh1.Move(posicionDeBorrado);
+            mesh1.updateBoundingBox();
+            mesh1.UpdateMeshTransform();
+            mesh2.Move(posicionDeBorrado);
+            mesh2.updateBoundingBox();
+            mesh2.UpdateMeshTransform();
         }
 
         public void Usar(Personaje personaje)
@@ -109,7 +113,7 @@ namespace TGC.Group.Model
 
         public float getValorAtenuacion()
         {
-            throw new NotImplementedException();
+            return 0.5f;
         }
 
         public Color getLuzColor()

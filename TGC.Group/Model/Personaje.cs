@@ -213,17 +213,16 @@ namespace TGC.Group.Model
 
         public Personaje()
         {
-            estoyAdentro = true;
+            estoyAdentro = false;
             estoyEscondido = false;
             estoyArriba = false;
 
             positionChanged = true;
             rotationChanged = true;
 
-            posicionInicial = new TGCVector3(100f, 15f, 100f); //Estaria piola que arranque afuera del indoor
-
-            target = new TGCVector3(100f, 15f, 150f);
-            eye = new TGCVector3(100f, 15f, 100f);
+            posicionInicial = new TGCVector3(9500f, 15f, -15000f); 
+            target = new TGCVector3(9500f, 15f, -15050f);
+            eye = new TGCVector3(9500f, 15f, -15000f);
 
             ItemVacioDefault itemDefault = new ItemVacioDefault();
 
@@ -238,11 +237,15 @@ namespace TGC.Group.Model
             meshPersonaje = scene2.Meshes[0];
 
             const float cte = 15f;
-            meshPersonaje.Position = new TGCVector3(100f, cte, 100f);
+            meshPersonaje.Position = new TGCVector3(9500f, 15f, -15000f);
             meshPersonaje.Scale = new TGCVector3(0f, 0.5f, 0f);
-
             const int cteY = -570;
             meshPersonaje.BoundingBox = new TgcBoundingAxisAlignBox(new TGCVector3(-20, cteY, -20), new TGCVector3(20, 20, 20));
+            meshPersonaje.Transform = TGCMatrix.Scaling(meshPersonaje.Scale) *
+                TGCMatrix.RotationYawPitchRoll(meshPersonaje.Rotation.Y, meshPersonaje.Rotation.X, meshPersonaje.Rotation.Z) *
+                TGCMatrix.Translation(meshPersonaje.Position);
+
+
 
 
             // \todo: configurable
