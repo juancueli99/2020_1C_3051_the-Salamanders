@@ -20,6 +20,7 @@ using TGC.Core.Utils;
 using TGC.Core.BoundingVolumes;
 using System.IO;
 using System.Windows.Forms;
+using static TGC.Core.Collision.TgcCollisionUtils;
 
 namespace TGC.Group.Model
 {
@@ -42,15 +43,18 @@ namespace TGC.Group.Model
             Name = Game.Default.Name;
             Description = Game.Default.Description;
         }
-        Escenario escenario = new Escenario();
-        Personaje personaje = new Personaje();
-        Monster monster = new Monster();
-        Escalera escalera = new Escalera();
+        public Escenario escenario = new Escenario();
+        public Personaje personaje = new Personaje();
+        public Monster monster = new Monster();
+         
+        //PARED INVISIBLE
+        public ParedInvisible paredInvisible = new ParedInvisible();
 
-        public List<Monster> bichos = new List<Monster>();
+        //public List<Monster> bichos = new List<Monster>();
 
         public List<IInteractuable> objetosInteractuables = new List<IInteractuable>();
- 
+        public List<TgcMesh> iluminables= new List<TgcMesh>();
+
         //Caja que se muestra en el ejemplo.
         private TGCBox Box { get; set; }
 
@@ -61,6 +65,8 @@ namespace TGC.Group.Model
         private TgcScene tgcScene { get; set; }
         //Boleano para ver si dibujamos el boundingbox
         private bool BoundingBox { get; set; }
+        public FrustumResult INTERSECT { get; private set; }
+
         private List<LightData> lights;
         /// <summary>
         ///     Se llama una sola vez, al principio cuando se ejecuta el ejemplo.
@@ -78,9 +84,18 @@ namespace TGC.Group.Model
             //escenario.InstanciarHeightmap(); No los usamos mas
             //escenario.InstanciarSkyBox(); Queda feo
             monster.InstanciarMonster();
-            bichos.Add(monster);
-            CrearObjetosEnEscenario();
 
+           
+
+            //bichos.Add(monster);
+            CrearObjetosEnEscenario();
+            iluminables.Add(monster.ghost);
+            iluminables.AddRange(escenario.tgcScene.Meshes);
+
+            TgcMesh mesh1 = escenario.tgcScene.Meshes.Find(mesh => mesh.Name.Equals("linterna_1"));
+            TgcMesh mesh2 = escenario.tgcScene.Meshes.Find(mesh => mesh.Name.Equals("linterna_2"));
+            var linterna = new Linterna(mesh1,mesh2);
+            objetosInteractuables.Add(linterna);
 
             /*
             var cameraPosition = new TGCVector3(-2500, 0, -15000);
@@ -94,6 +109,7 @@ namespace TGC.Group.Model
 
             //ESTE VA QUERIENDO
             Camera = personaje;
+            //Frustum.FarPlane;
             //Camara.SetCamera(personaje.PosicionMesh(), new TGCVector3(0, 0, 0));
 
             personaje.LockMouse = true;
@@ -149,10 +165,14 @@ namespace TGC.Group.Model
                 interactuable = new Escondite(mesh);
                 objetosInteractuables.Add(interactuable);
             }
- 
-           
-
-           // objetosInteractuables.Add((IInteractuable)escenario.GetEscalera());
+            if (mesh.Name.Equals("EscaleraMetalMovil")|| mesh.Name.Equals("EscaleraMetalFija"))
+            {
+                interactuable = new Escalera(mesh);
+                objetosInteractuables.Add(interactuable);
+                var escalera = (Escalera)interactuable;
+                paredInvisible.InstanciarPared(escalera);
+            }
+            // objetosInteractuables.Add((IInteractuable)escenario.GetEscalera());
         }
 
 
@@ -161,8 +181,8 @@ namespace TGC.Group.Model
         {
             PreUpdate();
             bool caminar = false;
-            //Capturar Input teclado
 
+            //Capturar Input teclado
 
             if (Input.keyDown(Key.L))
             {
@@ -177,46 +197,35 @@ namespace TGC.Group.Model
                     if (Input.keyDown(Key.W))
                     {
                         //Le digo al wachin que vaya para adelante
-                        //if (!(personaje.key_left == 'W' || DistanciaA2(escenario.GetEscalera().escalonActual) < 100) && !(personaje.key_back == 'W' || DistanciaA2(escenario.GetEscalera().escalonActual) < 100))
-                        //{
-                            personaje.MoverPersonaje('W', ElapsedTime, Input, escenario, monster, escalera);
+                        
+                            personaje.MoverPersonaje('W', ElapsedTime, Input, this);
                             caminar = true;
-                        //}
                     }
 
                     if (Input.keyDown(Key.A))
                     {
-                       // if (!(personaje.key_left == 'A' || DistanciaA2(escenario.GetEscalera().escalonActual) < 100) && !(personaje.key_back == 'A' || DistanciaA2(escenario.GetEscalera().escalonActual) < 100))
-                        //{
                             //Le digo al wachin que vaya para la izquierda
-                            personaje.MoverPersonaje('A', ElapsedTime, Input, escenario, monster, escalera);
+                            personaje.MoverPersonaje('A', ElapsedTime, Input, this);
                             caminar = true;
-                        //}
                     }
 
                     if (Input.keyDown(Key.S))
                     {
-                        //if (!(personaje.key_left == 'S' || DistanciaA2(escenario.GetEscalera().escalonActual) < 100) && !(personaje.key_back == 'S' || DistanciaA2(escenario.GetEscalera().escalonActual) < 100))
-                        //{
                             //Le digo al wachin que vaya para la izquierda
-                            personaje.MoverPersonaje('S', ElapsedTime, Input, escenario, monster, escalera);
+                            personaje.MoverPersonaje('S', ElapsedTime, Input, this);
                             caminar = true;
-                       // }
                     }
 
                     if (Input.keyDown(Key.D))
                     {
-                        // if (!(personaje.key_left == 'D' || DistanciaA2(escenario.GetEscalera().escalonActual) < 100) && !(personaje.key_back == 'D' || DistanciaA2(escenario.GetEscalera().escalonActual) < 100))
-                        //{
                         //Le digo al wachin que vaya para la izquierda
-                        personaje.MoverPersonaje('D', ElapsedTime, Input, escenario, monster, escalera);
+                        personaje.MoverPersonaje('D', ElapsedTime, Input, this);
                             caminar = true;
-                            //}
                      }
 
 
 
-                personaje.MoverPersonaje('x', ElapsedTime, Input, escenario, monster, escalera);
+                personaje.MoverPersonaje('x', ElapsedTime, Input, this);
 
                 if (Input.keyDown(Key.E))
                 {
@@ -224,24 +233,26 @@ namespace TGC.Group.Model
                     Console.WriteLine("x: {0} \ny: {1} \nz: {2}", personaje.getPosition().X, personaje.getPosition().Y, personaje.getPosition().Z);
 
                     var objetoInteractuable = this.objetosInteractuables.OrderBy(mesh => this.DistanciaA(mesh)).First();
-                    if(objetoInteractuable is Escondite && this.DistanciaA(objetoInteractuable) < 300)
+                    if((objetoInteractuable is Escondite || objetoInteractuable is Escalera) && this.DistanciaA(objetoInteractuable) < 300)
                     {
                         objetoInteractuable.Interactuar(personaje);
                     }
                     else
                     {
-                        if (this.DistanciaA(objetoInteractuable) < 300)
-                        {
-                            objetosInteractuables.Remove(objetoInteractuable);
-                            objetoInteractuable.Interactuar(personaje);
-                        }
+                        
+                            if (this.DistanciaA(objetoInteractuable) < 300)
+                            {
+                                objetosInteractuables.Remove(objetoInteractuable);
+                                objetoInteractuable.Interactuar(personaje);
+                            }
 
-                        if (personaje.Entre((int)personaje.getPosition().X, -1300, -800) &&
-                              personaje.Entre((int)personaje.getPosition().Z, -8100, -6800))
-                        {
-                            Puerta unaPuerta = new Puerta(escenario.tgcScene.Meshes[0]);// esto es para que sea polimorfico nomas
-                            unaPuerta.Interactuar(personaje);
-                        }
+                            if (personaje.Entre((int)personaje.getPosition().X, -1300, -800) &&
+                                  personaje.Entre((int)personaje.getPosition().Z, -8100, -6800))
+                            {
+                                Puerta unaPuerta = new Puerta(escenario.tgcScene.Meshes[0]);// esto es para que sea polimorfico nomas
+                                unaPuerta.Interactuar(personaje);
+                            }
+                        
                     }
                    
                 }
@@ -259,6 +270,8 @@ namespace TGC.Group.Model
                 {
                     //Recargar las pilas de la linterna
                     var pila = (Pila)personaje.objetosInteractuables.Find(objeto => objeto is Pila);
+                    //no puedo usar una pila null
+                    if(pila!=null)
                     pila.Usar(personaje);
                 }
 
@@ -290,7 +303,7 @@ namespace TGC.Group.Model
                 if (personaje.chocandoConEscalera && Input.keyDown(Key.Space))
                 {
                     
-                    personaje.MoverPersonaje(' ', ElapsedTime, Input, escenario, monster, escalera);
+                    personaje.MoverPersonaje(' ', ElapsedTime, Input, this);
                 }
 
             }
@@ -299,14 +312,16 @@ namespace TGC.Group.Model
             
             personaje.aumentarTiempoSinLuz();
 
-            var bichosCercanos = bichos.FindAll(bicho => DistanciaA2(bicho.ghost)<1000);
-            if (personaje.tieneLuz)
+            if (DistanciaA2(monster.ghost) < 5000)
             {
-                bichosCercanos.ForEach(monsterX => monsterX.HuirDe(personaje,ElapsedTime));
+
+             if (personaje.tieneLuz)
+            {
+                monster.HuirDe(personaje,ElapsedTime);
                 //se aleja de la luz porque tiene cuiqui
             }
-                bichosCercanos.ForEach(monsterX => monsterX.MirarA(personaje, ElapsedTime));
-             
+                monster.MirarA(personaje, ElapsedTime);
+            }
 
             if (personaje.TieneItemEnMano())
             {
@@ -320,6 +335,7 @@ namespace TGC.Group.Model
 
             InteraccionMonster();
             personaje.YouWin();
+
             PostUpdate();
         }
 
@@ -327,22 +343,31 @@ namespace TGC.Group.Model
         {
             if (!personaje.tieneLuz && !personaje.estoyEscondido && personaje.tiempoSinLuz > 3500)
             {
+
+                Monster unBicho;
                 if (personaje.tiempoSinLuz == 4000)
                 {
-                    Monster unBicho = new Monster();
-                    unBicho.InstanciarMonster(personaje);
-                    bichos.Add(unBicho);
+                    unBicho = new Monster();
+                    var posicion = new TGCVector3((1.1f)*personaje.getLookAt().X, -350, (1.1f) * personaje.getLookAt().Z);
+                    unBicho.InstanciarMonster(personaje, posicion);
+                    monster.DisposeMonster();
+                    monster = unBicho;
+                    iluminables.Add(unBicho.ghost);
                     //hacer que se escuche un ruido
                 }
 
                 if (personaje.tiempoSinLuz == 5000)
                 {
                     //El monster aparece detrás del personaje
-                    Monster unBicho = new Monster();
-
-                    unBicho.InstanciarMonster(personaje);
-                    bichos.Add(unBicho);
-                    personaje.setCamera(personaje.eye,unBicho.ghost.Position);
+                    unBicho = new Monster();
+                    //var posicion = new TGCVector3(personaje.Position.X - 200, -350, personaje.Position.Z - 200);
+                    var posicion = new TGCVector3((-1) * personaje.getLookAt().X, -350, (-1) * personaje.getLookAt().Z);
+                    unBicho.InstanciarMonster(personaje, posicion);
+                    monster.DisposeMonster();
+                    monster = unBicho;
+                    iluminables.Add(unBicho.ghost);
+                    var targetNuevo = new TGCVector3(unBicho.ghost.Position.X, 15, unBicho.ghost.Position.Z);
+                    personaje.setCamera(personaje.eye,targetNuevo);
                     personaje.GameOver();
                 }
             }
@@ -381,7 +406,7 @@ namespace TGC.Group.Model
             }
 
             //Aplicar a cada mesh el shader actual
-            foreach (TgcMesh mesh in escenario.tgcScene.Meshes)
+            foreach (TgcMesh mesh in iluminables)
             {
                 mesh.Effect = currentShader;
                 mesh.Technique = TGCShaders.Instance.GetTGCMeshTechnique(mesh.RenderType);
@@ -397,7 +422,7 @@ namespace TGC.Group.Model
                 mesh.Effect.SetValue("lightColor", ColorValue.FromColor(Color.White));
 
                 unPoste = escenario.listaDePostes.OrderBy(poste => this.DistanciaA2(poste)).First();
-                if (DistanciaA2(unPoste) < 2000)
+                if (!personaje.tieneLuz && DistanciaA2(unPoste) < 2000)
                 {
                     //Se prende el farol mas cercano
                     mesh.Effect.SetValue("lightColor", ColorValue.FromColor(Color.White));
@@ -508,7 +533,7 @@ namespace TGC.Group.Model
             }
 
             //Renderizar meshes
-            foreach (TgcMesh mesh in escenario.tgcScene.Meshes)
+            foreach (TgcMesh mesh in iluminables)
             {
                 if (personaje.tieneLuz)
                 {
@@ -550,11 +575,32 @@ namespace TGC.Group.Model
 
             //Pone el fondo negro en vez del azul feo ese
             D3DDevice.Instance.Device.Clear(ClearFlags.Target | ClearFlags.ZBuffer, Color.Black, 1.0f, 0);
-            
-            escenario.RenderEscenario();
+          
+            //Frustum Culling -> OPCION 1
+            var meshesQueChocanConFrustrum = escenario.tgcScene.Meshes.FindAll(mesh => TgcCollisionUtils.classifyFrustumAABB(this.Frustum, mesh.BoundingBox) != TgcCollisionUtils.FrustumResult.OUTSIDE);
+            meshesQueChocanConFrustrum.ForEach(mesh => mesh.Render());
+
+            //Frustum Culling -> OPCION 2
+            /*
+            foreach (var mesh in escenario.tgcScene.Meshes)
+            {
+                //Nos ocupamos solo de las mallas habilitadas
+                //if (mesh.Enabled)
+                //{
+                    //Solo mostrar la malla si colisiona contra el Frustum
+                    var colisionConFrustum = TgcCollisionUtils.classifyFrustumAABB(Frustum, mesh.BoundingBox);
+                    if (colisionConFrustum != TgcCollisionUtils.FrustumResult.OUTSIDE)
+                    {
+                        mesh.Render();
+                    }
+                //}
+            }*/
+
             //personaje.RenderPersonaje(ElapsedTime);
-            var bichosRendeables = bichos.FindAll(bicho => DistanciaA2(bicho.ghost) < 5000);
-            bichosRendeables.ForEach(meshRendeable => meshRendeable.RenderMonster());
+            if (DistanciaA2(monster.ghost) < 5000)
+            {
+                monster.RenderMonster();
+            }
             //Render de BoundingBox, muy útil para debug de colisiones.
             if (BoundingBox)
             {
@@ -562,7 +608,7 @@ namespace TGC.Group.Model
                 tgcScene.Meshes.ForEach(mesh => mesh.BoundingBox.Render());
                 //fondo.BoundingBox.Render();
             }
-
+            
             //Finaliza el render y presenta en pantalla, al igual que el preRender se debe para casos puntuales es mejor utilizar a mano las operaciones de EndScene y PresentScene
             PostRender();
         }
@@ -577,6 +623,8 @@ namespace TGC.Group.Model
             escenario.DisposeEscenario();
             //personaje.DisposePersonaje();
             monster.DisposeMonster();
+
+            paredInvisible.DisposePared();
         }
 
     }

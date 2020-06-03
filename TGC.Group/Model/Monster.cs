@@ -50,6 +50,7 @@ namespace TGC.Group.Model
 
         public void DisposeMonster()
         {
+            this.Desaparecer();
             ghost.Dispose();
         }
 
@@ -77,7 +78,9 @@ namespace TGC.Group.Model
         //Cuando el player usa una fuente luminosa o llega a un refugio
         public void Desaparecer()
         {
-            ghost.Position = new TGCVector3(0, -2000, 0); //Lo mando abajo del mapa 
+            //ghost.Position = new TGCVector3(0, -2000, 0);
+            ghost.Transform = TGCMatrix.Translation(new TGCVector3(0, -2000, 0));
+             //Lo mando abajo del mapa 
         }
 
         public void ModificarPosicion(Personaje personaje)
@@ -145,7 +148,7 @@ namespace TGC.Group.Model
             }
         }
 
-        internal void InstanciarMonster(Personaje personaje)
+        internal void InstanciarMonster(Personaje personaje, TGCVector3 posicionDeAlejamiento)
         {
             var loader = new TgcSceneLoader();
             var scene2 = loader.loadSceneFromFile(MediaDir + "Modelame\\GhostGrande-TgcScene.xml"); //Con demon no funca, aca rompe
@@ -153,7 +156,7 @@ namespace TGC.Group.Model
             //Solo nos interesa el primer modelo de esta escena (tiene solo uno)
             ghost = scene2.Meshes[0];
             var posicionPersonaje = personaje.Position;
-            ghost.Position = new TGCVector3(posicionPersonaje.X - 200, -350, posicionPersonaje.Z-200);
+            ghost.Position = new TGCVector3(posicionDeAlejamiento);
             this.lookAt= new TGCVector3(ghost.Rotation);
             RotarMesh(personaje);
             

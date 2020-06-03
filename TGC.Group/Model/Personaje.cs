@@ -206,18 +206,23 @@ namespace TGC.Group.Model
         TGCVector3 posicionInicial;
         internal bool estoyUsandoEscaleras=false;
 
+        public bool estoyArriba;
+
+        float anguloAbsolutoEnY;
+        float anguloAbsolutoEnX;
+
         public Personaje()
         {
-            estoyAdentro = true;
+            estoyAdentro = false;
             estoyEscondido = false;
+            estoyArriba = false;
 
             positionChanged = true;
             rotationChanged = true;
 
-            posicionInicial = new TGCVector3(100f, 15f, 100f); //Estaria piola que arranque afuera del indoor
-
-            target = new TGCVector3(100f, 15f, 150f);
-            eye = new TGCVector3(100f, 15f, 100f);
+            posicionInicial = new TGCVector3(9500f, 15f, -15000f); 
+            target = new TGCVector3(9500f, 15f, -15050f);
+            eye = new TGCVector3(9500f, 15f, -15000f);
 
             ItemVacioDefault itemDefault = new ItemVacioDefault();
 
@@ -232,11 +237,15 @@ namespace TGC.Group.Model
             meshPersonaje = scene2.Meshes[0];
 
             const float cte = 15f;
-            meshPersonaje.Position = new TGCVector3(100f, cte, 100f);
+            meshPersonaje.Position = new TGCVector3(9500f, 15f, -15000f);
             meshPersonaje.Scale = new TGCVector3(0f, 0.5f, 0f);
-
             const int cteY = -570;
             meshPersonaje.BoundingBox = new TgcBoundingAxisAlignBox(new TGCVector3(-20, cteY, -20), new TGCVector3(20, 20, 20));
+            meshPersonaje.Transform = TGCMatrix.Scaling(meshPersonaje.Scale) *
+                TGCMatrix.RotationYawPitchRoll(meshPersonaje.Rotation.Y, meshPersonaje.Rotation.X, meshPersonaje.Rotation.Z) *
+                TGCMatrix.Translation(meshPersonaje.Position);
+
+
 
 
             // \todo: configurable
@@ -257,6 +266,7 @@ namespace TGC.Group.Model
              key_forward = 'W';
 
             absoluteRotationX = 0.0f;
+            anguloAbsolutoEnY = 0f;
 
             MovementSpeed = 50.0f;
             ForwardFactor = 1.5f;
@@ -351,8 +361,8 @@ namespace TGC.Group.Model
             float rotY = input.XposRelative * rotationSpeed;
             float rotX = input.YposRelative * rotationSpeed;
 
-            if (rotY != 0.0f || rotX != 0.0f)
-                look(rotX, rotY);
+            /*if (rotY != 0.0f || rotX != 0.0f)
+                look(rotX, rotY);*/
 
             if (lockMouse)
                 Cursor.Position = windowCenter;
@@ -530,7 +540,7 @@ namespace TGC.Group.Model
            // MovementSound.dispose();
         }
 
-        public void MoverPersonaje(char key, float elapsedTime, TgcD3dInput input, Escenario escenario, Monster monster, Escalera escalera)
+        public void MoverPersonaje(char key, float elapsedTime, TgcD3dInput input, GameModel gameModel)
         {
             MovementSpeed = 800.0f;
             var movimiento = TGCVector3.Empty;
@@ -538,23 +548,33 @@ namespace TGC.Group.Model
 
             var moving = false;
             var estoyFlotando = false;
+            var adelante = false;
+            var lateral = false;
+
+            float rotY1 = input.XposRelative * 5 * elapsedTime;
+            float rotX1 = input.YposRelative * 5 * elapsedTime;
+            anguloAbsolutoEnY -= rotY1;
+            anguloAbsolutoEnX += rotX1;
 
             if (key == key_forward)
             {
                 movimiento.Z = -1;
                 moving = true;
+                adelante = true;
             }
 
             if (key == key_left)
             {
                 movimiento.X = 1;
                 moving = true;
+                lateral = true;
             }
 
             if (key == key_back)
             {
                 movimiento.Z = 1;
                 moving = true;
+                adelante = true;
             }
 
 
@@ -562,6 +582,7 @@ namespace TGC.Group.Model
             {
                 movimiento.X = -1;
                 moving = true;
+                lateral = true;
             }
 
             if (key == ' ')
@@ -577,21 +598,42 @@ namespace TGC.Group.Model
 
                 var lastPos = meshPersonaje.Position;
 
-                movimiento *= MovementSpeed * elapsedTime;
-                meshPersonaje.Position = meshPersonaje.Position + movimiento;
+                //movimiento *= MovementSpeed * elapsedTime;
+                //meshPersonaje.Position = meshPersonaje.Position + movimiento;
+
+
+                float MovimientoDelPersonaje=0;
+                if (adelante) 
+                {
+                    MovimientoDelPersonaje = (-1) * movimiento.Z * MovementSpeed;
+                    avanzarYretroceder(elapsedTime, MovimientoDelPersonaje, anguloAbsolutoEnY);
+                    
+                }
+                if (lateral)
+                {
+                    MovimientoDelPersonaje = -1 * movimiento.X * MovementSpeed;
+                    DesplazamientoLateral(elapsedTime, MovimientoDelPersonaje, anguloAbsolutoEnY);
+                    
+
+                }
+                //RecalcularForward(); 
+                //en este metodo hay que poner bien forward y se soluciona el shader
                 meshPersonaje.updateBoundingBox();
+
+                
 
                 //COLISIONES
 
-                bool chocaron = escenario.tgcScene.Meshes.Any(mesh => TgcCollisionUtils.testAABBAABB(mesh.BoundingBox, meshPersonaje.BoundingBox));
+                bool chocaron = gameModel.escenario.tgcScene.Meshes.Any(mesh => TgcCollisionUtils.testAABBAABB(mesh.BoundingBox, meshPersonaje.BoundingBox));
                 if (chocaron)
                 {
                     meshPersonaje.Position = lastPos;
-                    this.chocandoConEscalera = TgcCollisionUtils.testAABBAABB(escalera.devolverEscalera(escenario).BoundingBox, meshPersonaje.BoundingBox);
+                    var escalera=gameModel.escenario.tgcScene.Meshes.Find(mesh => mesh.Name.Contains("Escalera"));
+                    this.chocandoConEscalera = TgcCollisionUtils.testAABBAABB(escalera.BoundingBox, meshPersonaje.BoundingBox);
 
                 }
 
-                bool chocoConMonster = TgcCollisionUtils.testAABBAABB(monster.ghost.BoundingBox, meshPersonaje.BoundingBox);
+                bool chocoConMonster = TgcCollisionUtils.testAABBAABB(gameModel.monster.ghost.BoundingBox, meshPersonaje.BoundingBox);
                 if (chocoConMonster)
                 {
                     meshPersonaje.Position = lastPos;
@@ -600,31 +642,114 @@ namespace TGC.Group.Model
                     vectorDeMovemiento = movimiento;
                 }
 
-                
 
-                meshPersonaje.Transform = TGCMatrix.Scaling(meshPersonaje.Scale) *
-                                    TGCMatrix.RotationYawPitchRoll(meshPersonaje.Rotation.Y, meshPersonaje.Rotation.X, meshPersonaje.Rotation.Z) *
-                                    TGCMatrix.Translation(meshPersonaje.Position);
+                bool chocoConParedInvisible = TgcCollisionUtils.testAABBAABB(gameModel.paredInvisible.paredInvisible.BoundingBox, meshPersonaje.BoundingBox);
+                if (chocoConParedInvisible)
+                {
+                    meshPersonaje.Position = lastPos;
+                }
+
+
+                transformarMesh(); // Hace el mesh transform
 
                 this.Position = meshPersonaje.Position;
-                //Hacer que la camara siga al personaje en su nueva posicion
-                //camaraInterna.Target = this.Position;
+                
             }
 
-            float rotY = input.XposRelative * rotationSpeed;
-            float rotX = input.YposRelative * rotationSpeed;
+            //en este metodo hay que poner bien forward y se soluciona el shader
+
             eye = this.Position;
-            target += movimiento;
-            if (lockMouse)
-            {
-                if (rotY != 0.0f || rotX != 0.0f)
-                    look(rotX, rotY);
+            target = puntoDemira(anguloAbsolutoEnY, anguloAbsolutoEnX);//movimiento;
+           
+            RecalcularForward();
+            //Hacer que la camara siga al personaje en su nueva posicion
+            //camaraInterna.Target = this.Position;
 
-                Cursor.Position = windowCenter;
-
-            }
             this.SetCamera(eye, target);
 
+        }
+
+        // Maneja el avance y retroceso del personaje
+        public void avanzarYretroceder(float ElapsedTime, float MovimientoDelPersonaje, float AnguloDeGiro ) {
+            
+            var movimientoReal = MovimientoDelPersonaje * ElapsedTime;
+
+            var x = (float)Math.Cos(AnguloDeGiro) * movimientoReal;
+            var z = (float)Math.Sin(AnguloDeGiro) * movimientoReal;
+            
+            
+
+            meshPersonaje.Position += new TGCVector3(x, 0, z);
+            
+
+        }
+
+        public void RecalcularForward()
+        {
+
+            
+            TGCVector3 targerLinterna = new TGCVector3(target.X-meshPersonaje.Position.X, 0, target.Z-meshPersonaje.Position.Z); 
+            
+            
+            xAxis = new TGCVector3(targerLinterna.X, 0, targerLinterna.Z);
+            xAxis.Normalize();
+
+            yAxis = new TGCVector3(0, 1, 0);
+            yAxis.Normalize();
+
+            //zAxis = new TGCVector3(0, up, 0);
+
+            TGCMatrix deltaRM =
+                     TGCMatrix.RotationAxis(xAxis, anguloAbsolutoEnX) * TGCMatrix.RotationAxis(yAxis, 1 * anguloAbsolutoEnY);
+                    
+
+            TGCVector4 result;
+
+            result = TGCVector3.Transform(xAxis, deltaRM);
+            xAxis = new TGCVector3(result.X, result.Y, result.Z);
+
+            result = TGCVector3.Transform(yAxis, deltaRM);
+            yAxis = new TGCVector3(result.X, result.Y, result.Z);
+
+            result = TGCVector3.Transform(zAxis, deltaRM);
+            zAxis = new TGCVector3(result.X, result.Y, result.Z);
+            
+            forward = puntoDemira(anguloAbsolutoEnX, anguloAbsolutoEnY)-meshPersonaje.Position;
+            forward = targerLinterna;
+            //forward = TGCVector3.Cross(forward, up);
+            forward.Normalize();
+            
+            
+            
+        }
+
+        // Maneja los desplazamientos laterales
+        public void DesplazamientoLateral(float ElapsedTime, float MovimientoDelPersonaje, float AnguloDeGiro)
+        {
+            var movimientoReal = MovimientoDelPersonaje * ElapsedTime;
+
+            var x = (float)Math.Sin(AnguloDeGiro) * movimientoReal; 
+            var z = -(float)Math.Cos(AnguloDeGiro) * movimientoReal;
+
+            meshPersonaje.Position += new TGCVector3(x, 0, z);
+            
+        }
+
+        TGCVector3 puntoDemira(float AnguloDeGiroX, float AnguloDeGiroY) {
+
+            float Y = 10*(float)Math.Cos(AnguloDeGiroY);
+            float X = 10*(float)Math.Sin(AnguloDeGiroY) * (float)Math.Cos(AnguloDeGiroX); 
+            float Z= 10*(float)Math.Sin(AnguloDeGiroY) * (float)Math.Sin(AnguloDeGiroX);
+            
+            return new TGCVector3(meshPersonaje.Position.X+X, meshPersonaje.Position.Y + Y, meshPersonaje.Position.Z + Z);
+        
+        }
+
+        void transformarMesh() {
+
+            meshPersonaje.Transform = TGCMatrix.Scaling(meshPersonaje.Scale) *
+                                    TGCMatrix.RotationYawPitchRoll(meshPersonaje.Rotation.Y, meshPersonaje.Rotation.X, meshPersonaje.Rotation.Z) *
+                                    TGCMatrix.Translation(meshPersonaje.Position);
         }
 
         public void aumentarTiempoSinLuz()
