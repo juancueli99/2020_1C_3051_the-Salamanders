@@ -14,21 +14,30 @@ using TGC.Core.Example;
 using TGC.Core.Utils;
 using TGC.Core.SceneLoader;
 using TGC.Core.Text;
+using Microsoft.DirectX.Direct3D;
+using System.Security.Cryptography;
+using BulletSharp.SoftBody;
 
-/*
+
 namespace TGC.Group.Model
 {
     class Menu
     {
+        String MediaDir = "..\\..\\..\\Media\\";
         private TextBox drawer2D;
-        private CustomSprite sprite;
+        //private CustomSprite sprite;
+        Sprite sprite;
+        
+        TgcText2D texto;
+        
         public void instanciarMenu()
         {
             drawer2D = new TextBox();
-
             //Crear Sprite
-            sprite = new CustomSprite();
-            sprite.Bitmap = new CustomBitmap(MediaDir + "\\Texturas\\LogoTGC.png", D3DDevice.Instance.Device);
+            //sprite = new CustomSprite();
+            sprite = new Sprite(D3DDevice.Instance.Device);
+            sprite.Draw2D(MediaDir + "\\cajaMadera4.jpg", new PointF(0,0), 0, new PointF(10, 10), Color.Blue);
+            //sprite.Bitmap = new CustomBitmap(MediaDir + "\\Texturas\\LogoTGC.png", D3DDevice.Instance.Device);
 
             //Ubicarlo centrado en la pantalla
             var textureSize = sprite.Bitmap.Size;
@@ -44,7 +53,8 @@ namespace TGC.Group.Model
         public void renderSprite()
         {
             //Iniciar dibujado de todos los Sprites de la escena (en este caso es solo uno)
-            drawer2D.BeginDrawSprite();
+            //drawer2D.BeginDrawSprite();
+            sprite.Begin(0);
 
             //Dibujar sprite (si hubiese mas, deberian ir todos aquí)
             drawer2D.DrawSprite(sprite);
@@ -59,4 +69,3 @@ namespace TGC.Group.Model
         }
     }
 }
-*/

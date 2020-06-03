@@ -109,6 +109,7 @@
     <Compile Include="Model\IInteractuable.cs" />
     <Compile Include="Model\ItemVacioDefault.cs" />
     <Compile Include="Model\Linterna.cs" />
+    <Compile Include="Model\Menu.cs" />
     <Compile Include="Model\Monster.cs" />
     <Compile Include="Model\Nota.cs" />
     <Compile Include="Model\ParedInvisible.cs" />
