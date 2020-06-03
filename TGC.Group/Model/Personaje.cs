@@ -633,7 +633,7 @@ namespace TGC.Group.Model
 
                 }
 
-                bool chocoConMonster = gameModel.bichos.Any(monster => TgcCollisionUtils.testAABBAABB(monster.ghost.BoundingBox, meshPersonaje.BoundingBox));
+                bool chocoConMonster = TgcCollisionUtils.testAABBAABB(gameModel.monster.ghost.BoundingBox, meshPersonaje.BoundingBox);
                 if (chocoConMonster)
                 {
                     meshPersonaje.Position = lastPos;

@@ -49,7 +49,7 @@ namespace TGC.Group.Model
         //PARED INVISIBLE
         public ParedInvisible paredInvisible = new ParedInvisible();
 
-        public List<Monster> bichos = new List<Monster>();
+        //public List<Monster> bichos = new List<Monster>();
 
         public List<IInteractuable> objetosInteractuables = new List<IInteractuable>();
         public List<TgcMesh> iluminables= new List<TgcMesh>();
@@ -84,9 +84,9 @@ namespace TGC.Group.Model
 
            
 
-            bichos.Add(monster);
+            //bichos.Add(monster);
             CrearObjetosEnEscenario();
-            iluminables.AddRange(bichos.ConvertAll(monster=> monster.ghost));
+            iluminables.Add(monster.ghost);
             iluminables.AddRange(escenario.tgcScene.Meshes);
 
             TgcMesh mesh1 = escenario.tgcScene.Meshes.Find(mesh => mesh.Name.Equals("linterna_1"));
@@ -228,18 +228,13 @@ namespace TGC.Group.Model
                     Console.WriteLine("x: {0} \ny: {1} \nz: {2}", personaje.getPosition().X, personaje.getPosition().Y, personaje.getPosition().Z);
 
                     var objetoInteractuable = this.objetosInteractuables.OrderBy(mesh => this.DistanciaA(mesh)).First();
-                    if(objetoInteractuable is Escondite && this.DistanciaA(objetoInteractuable) < 300)
+                    if((objetoInteractuable is Escondite || objetoInteractuable is Escalera) && this.DistanciaA(objetoInteractuable) < 300)
                     {
                         objetoInteractuable.Interactuar(personaje);
                     }
                     else
                     {
-                        if (objetoInteractuable is Escalera && this.DistanciaA(objetoInteractuable) < 300)
-                        {
-                            objetoInteractuable.Interactuar(personaje);
-                        }
-                        else
-                        {
+                        
                             if (this.DistanciaA(objetoInteractuable) < 300)
                             {
                                 objetosInteractuables.Remove(objetoInteractuable);
@@ -252,7 +247,7 @@ namespace TGC.Group.Model
                                 Puerta unaPuerta = new Puerta(escenario.tgcScene.Meshes[0]);// esto es para que sea polimorfico nomas
                                 unaPuerta.Interactuar(personaje);
                             }
-                        }
+                        
                     }
                    
                 }
@@ -312,14 +307,16 @@ namespace TGC.Group.Model
             
             personaje.aumentarTiempoSinLuz();
 
-            var bichosCercanos = bichos.FindAll(bicho => DistanciaA2(bicho.ghost)<1000);
-            if (personaje.tieneLuz)
+            if (DistanciaA2(monster.ghost) < 5000)
             {
-                bichosCercanos.ForEach(monsterX => monsterX.HuirDe(personaje,ElapsedTime));
+
+             if (personaje.tieneLuz)
+            {
+                monster.HuirDe(personaje,ElapsedTime);
                 //se aleja de la luz porque tiene cuiqui
             }
-                bichosCercanos.ForEach(monsterX => monsterX.MirarA(personaje, ElapsedTime));
-             
+                monster.MirarA(personaje, ElapsedTime);
+            }
 
             if (personaje.TieneItemEnMano())
             {
@@ -346,8 +343,10 @@ namespace TGC.Group.Model
                 if (personaje.tiempoSinLuz == 4000)
                 {
                     unBicho = new Monster();
-                    unBicho.InstanciarMonster(personaje);
-                    bichos.Add(unBicho);
+                    var posicion = new TGCVector3((1.1f)*personaje.getLookAt().X, -350, (1.1f) * personaje.getLookAt().Z);
+                    unBicho.InstanciarMonster(personaje, posicion);
+                    monster.DisposeMonster();
+                    monster = unBicho;
                     iluminables.Add(unBicho.ghost);
                     //hacer que se escuche un ruido
                 }
@@ -356,10 +355,14 @@ namespace TGC.Group.Model
                 {
                     //El monster aparece detrás del personaje
                     unBicho = new Monster();
-                    unBicho.InstanciarMonster(personaje);
-                    bichos.Add(unBicho);
+                    //var posicion = new TGCVector3(personaje.Position.X - 200, -350, personaje.Position.Z - 200);
+                    var posicion = new TGCVector3((-1) * personaje.getLookAt().X, -350, (-1f) * personaje.getLookAt().Z);
+                    unBicho.InstanciarMonster(personaje, posicion);
+                    monster.DisposeMonster();
+                    monster = unBicho;
                     iluminables.Add(unBicho.ghost);
-                    personaje.setCamera(personaje.eye,unBicho.ghost.Position);
+                    var targetNuevo = new TGCVector3(unBicho.ghost.Position.X, 15, unBicho.ghost.Position.Z);
+                    personaje.setCamera(personaje.eye,targetNuevo);
                     personaje.GameOver();
                 }
             }
@@ -571,8 +574,10 @@ namespace TGC.Group.Model
             escenario.RenderEscenario();
             
             //personaje.RenderPersonaje(ElapsedTime);
-            var bichosRendeables = bichos.FindAll(bicho => DistanciaA2(bicho.ghost) < 5000);
-            bichosRendeables.ForEach(meshRendeable => meshRendeable.RenderMonster());
+            if(DistanciaA2(monster.ghost) < 5000)
+            {
+                monster.RenderMonster();
+            }
             //Render de BoundingBox, muy útil para debug de colisiones.
             if (BoundingBox)
             {
