@@ -8,53 +8,54 @@ using System.Windows.Forms;
 using TGC.Core.Direct3D;
 using TGC.Core.Geometry;
 using TGC.Core.Mathematica;
-using TGC.Core.Textures;
-using TGC.Core.Camara;
-using TGC.Core.Example;
-using TGC.Core.Utils;
-using TGC.Core.SceneLoader;
 using TGC.Core.Text;
-using Microsoft.DirectX.Direct3D;
-using System.Security.Cryptography;
-using BulletSharp.SoftBody;
+
 
 
 namespace TGC.Group.Model
 {
-    class Menu
+    public class Menu
     {
         String MediaDir = "..\\..\\..\\Media\\";
-        private TextBox drawer2D;
-        //private CustomSprite sprite;
-        Sprite sprite;
-        
+        private TextBox textBox;
+        private Drawer2D drawer2D;
+        private CustomSprite sprite;       
         TgcText2D texto;
         
         public void instanciarMenu()
         {
-            drawer2D = new TextBox();
+            drawer2D = new Drawer2D();
             //Crear Sprite
-            //sprite = new CustomSprite();
-            sprite = new Sprite(D3DDevice.Instance.Device);
-            sprite.Draw2D(MediaDir + "\\cajaMadera4.jpg", new PointF(0,0), 0, new PointF(10, 10), Color.Blue);
-            //sprite.Bitmap = new CustomBitmap(MediaDir + "\\Texturas\\LogoTGC.png", D3DDevice.Instance.Device);
+            sprite = new CustomSprite();
+
+            sprite.Bitmap = new CustomBitmap(MediaDir + "Sky.jpg", D3DDevice.Instance.Device);
 
             //Ubicarlo centrado en la pantalla
             var textureSize = sprite.Bitmap.Size;
             sprite.Position = new TGCVector2(FastMath.Max(D3DDevice.Instance.Width / 2 - textureSize.Width / 2, 0), FastMath.Max(D3DDevice.Instance.Height / 2 - textureSize.Height / 2, 0));
 
-            //Modifiers para variar parametros del sprite
+            //Esto se instancia aca o en el update?
+            sprite.Position = new TGCVector2(D3DDevice.Instance.Width, D3DDevice.Instance.Height);
+            sprite.Scaling = new TGCVector2(100, 100);
+
+            /*
             positionModifier = AddVertex2f("position", TGCVector2.Zero, new TGCVector2(D3DDevice.Instance.Width, D3DDevice.Instance.Height), sprite.Position);
             scalingModifier = AddVertex2f("scaling", TGCVector2.Zero, new TGCVector2(4, 4), sprite.Scaling);
             rotationModifier = AddFloat("rotation", 0, 360, 0);
+            */
+        }
 
+        public void updateSprite()
+        {
+            //Modifiers para variar parametros del sprite
+            sprite.Position = new TGCVector2(D3DDevice.Instance.Width, D3DDevice.Instance.Height);
+            sprite.Scaling = new TGCVector2(100, 100);
         }
 
         public void renderSprite()
         {
             //Iniciar dibujado de todos los Sprites de la escena (en este caso es solo uno)
-            //drawer2D.BeginDrawSprite();
-            sprite.Begin(0);
+            drawer2D.BeginDrawSprite();
 
             //Dibujar sprite (si hubiese mas, deberian ir todos aquí)
             drawer2D.DrawSprite(sprite);

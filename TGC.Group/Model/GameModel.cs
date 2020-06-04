@@ -46,6 +46,7 @@ namespace TGC.Group.Model
         public Escenario escenario = new Escenario();
         public Personaje personaje = new Personaje();
         public Monster monster = new Monster();
+        public Menu menu = new Menu();
          
         //PARED INVISIBLE
         public ParedInvisible paredInvisible = new ParedInvisible();
@@ -84,7 +85,7 @@ namespace TGC.Group.Model
             //escenario.InstanciarHeightmap(); No los usamos mas
             //escenario.InstanciarSkyBox(); Queda feo
             monster.InstanciarMonster();
-
+            menu.instanciarMenu();
            
 
             //bichos.Add(monster);
@@ -182,6 +183,7 @@ namespace TGC.Group.Model
             PreUpdate();
             bool caminar = false;
 
+            menu.updateSprite();
             //Capturar Input teclado
 
             if (Input.keyDown(Key.L))
@@ -572,7 +574,7 @@ namespace TGC.Group.Model
             PreRender();
 
             this.updateLighting();
-
+            menu.renderSprite();
             //Pone el fondo negro en vez del azul feo ese
             D3DDevice.Instance.Device.Clear(ClearFlags.Target | ClearFlags.ZBuffer, Color.Black, 1.0f, 0);
           
@@ -623,7 +625,7 @@ namespace TGC.Group.Model
             escenario.DisposeEscenario();
             //personaje.DisposePersonaje();
             monster.DisposeMonster();
-
+            menu.disposeSprite();
             paredInvisible.DisposePared();
         }
 

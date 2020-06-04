@@ -101,6 +101,9 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Game.settings</DependentUpon>
     </Compile>
+    <Compile Include="Model\CustomBitmap.cs" />
+    <Compile Include="Model\CustomSprite.cs" />
+    <Compile Include="Model\Drawer2D.cs" />
     <Compile Include="Model\Escalera.cs" />
     <Compile Include="Model\Escenario.cs" />
     <Compile Include="Model\Escondite.cs" />
