@@ -68,7 +68,7 @@ namespace TGC.Group.Model
         /// <summary>
         /// Hacia donde mira la camara, desde los ejes del mundo.
         /// </summary>
-        TGCVector3 target;
+        public TGCVector3 target;
 
         /// <summary>
         /// Donde esta la camara, desde los ejes del mundo.
@@ -208,8 +208,8 @@ namespace TGC.Group.Model
 
         public bool estoyArriba;
 
-        float anguloAbsolutoEnY;
-        float anguloAbsolutoEnX;
+        public float anguloAbsolutoEnY;
+        public float anguloAbsolutoEnX;
 
         public Personaje()
         {
@@ -584,14 +584,7 @@ namespace TGC.Group.Model
                 moving = true;
                 lateral = true;
             }
-
-            if (key == ' ')
-            {
-                movimiento.Y = 1;
-                moving = true;
-            }
             
-
             if (moving)
             {
                 this.posicionAnterior = this.Position;
@@ -648,7 +641,6 @@ namespace TGC.Group.Model
                 {
                     meshPersonaje.Position = lastPos;
                 }
-
 
                 transformarMesh(); // Hace el mesh transform
 
@@ -719,8 +711,6 @@ namespace TGC.Group.Model
             //forward = TGCVector3.Cross(forward, up);
             forward.Normalize();
             
-            
-            
         }
 
         // Maneja los desplazamientos laterales
@@ -735,7 +725,7 @@ namespace TGC.Group.Model
             
         }
 
-        TGCVector3 puntoDemira(float AnguloDeGiroX, float AnguloDeGiroY) {
+        public TGCVector3 puntoDemira(float AnguloDeGiroX, float AnguloDeGiroY) {
 
             float Y = 10*(float)Math.Cos(AnguloDeGiroY);
             float X = 10*(float)Math.Sin(AnguloDeGiroY) * (float)Math.Cos(AnguloDeGiroX); 
