@@ -24,23 +24,9 @@ namespace TGC.Group.Model
 
         public void InstanciarMonster()
         {
-            var loader = new TgcSceneLoader();
-            var scene2 = loader.loadSceneFromFile(MediaDir + "Modelame\\GhostGrande-TgcScene.xml"); //Con demon no funca, aca rompe
+            ghost = ConfiguradorMonstruo.configurarFantasma();
 
-            //Solo nos interesa el primer modelo de esta escena (tiene solo uno)
-            ghost = scene2.Meshes[0];
-
-
-            ghost.Position = new TGCVector3(200, -350, 100);
-            this.lookAt= new TGCVector3(200, -350, 100);
-            //ghost.Position = new TGCVector3(200, -350, 100);
-
-            //ASI SE SOLUCIONA. LA IDEA ES HACER LA ROTACION Y LA TRASLACION AL MISMO TIEMPO. CONVENDRIA HACER UN METODO QUE
-            //HAGA LAS DOS COSAS AL MISMO TIEMPO CADA VEZ QUE QUIERA MOVER Y ROTAR. DE NADA :D
-            float asd = 90;
-            ghost.Transform = TGCMatrix.Translation(100, -350, 0) * TGCMatrix.RotationY(asd); //ASI SE SOLUCIONA, JORGE IMPLEMENTALO
-            //ghost.Transform = TGCMatrix.RotationY(asd);
-            //ghost.Transform = TGCMatrix.Translation(0, 5, 0);
+            this.lookAt = new TGCVector3(ghost.Position);
         }
 
         public void RenderMonster()
