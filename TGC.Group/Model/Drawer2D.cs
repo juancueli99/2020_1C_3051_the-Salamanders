@@ -7,7 +7,7 @@ namespace TGC.Group.Model
 {
     public class Drawer2D
     {
-        private readonly Sprite DxSprite;
+        private readonly Microsoft.DirectX.Direct3D.Sprite DxSprite;
         private readonly Line line;
 
         private readonly CustomVertex.PositionColoredTextured[] LineVertexData =
@@ -15,7 +15,7 @@ namespace TGC.Group.Model
 
         public Drawer2D()
         {
-            DxSprite = new Sprite(D3DDevice.Instance.Device);
+            DxSprite = new Microsoft.DirectX.Direct3D.Sprite(D3DDevice.Instance.Device);
             line = new Line(D3DDevice.Instance.Device);
         }
 

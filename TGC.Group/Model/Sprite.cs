@@ -14,42 +14,29 @@ using TGC.Core.Text;
 
 namespace TGC.Group.Model
 {
-    public class Menu
+    public class Sprite
     {
         String MediaDir = "..\\..\\..\\Media\\";
-        private TextBox textBox;
         private Drawer2D drawer2D;
         private CustomSprite sprite;       
-        TgcText2D texto;
         
         public void instanciarMenu()
         {
             drawer2D = new Drawer2D();
-            //Crear Sprite
+
             sprite = new CustomSprite();
 
-            sprite.Bitmap = new CustomBitmap(MediaDir + "Sky.jpg", D3DDevice.Instance.Device);
+            sprite.Bitmap = new CustomBitmap(MediaDir + "Earphones Info.jpg", D3DDevice.Instance.Device);
 
-            //Ubicarlo centrado en la pantalla
             var textureSize = sprite.Bitmap.Size;
             sprite.Position = new TGCVector2(FastMath.Max(D3DDevice.Instance.Width / 2 - textureSize.Width / 2, 0), FastMath.Max(D3DDevice.Instance.Height / 2 - textureSize.Height / 2, 0));
 
-            //Esto se instancia aca o en el update?
-            sprite.Position = new TGCVector2(D3DDevice.Instance.Width, D3DDevice.Instance.Height);
-            sprite.Scaling = new TGCVector2(100, 100);
+            sprite.Scaling = new TGCVector2(0.69f, 0.69f);
 
-            /*
-            positionModifier = AddVertex2f("position", TGCVector2.Zero, new TGCVector2(D3DDevice.Instance.Width, D3DDevice.Instance.Height), sprite.Position);
-            scalingModifier = AddVertex2f("scaling", TGCVector2.Zero, new TGCVector2(4, 4), sprite.Scaling);
-            rotationModifier = AddFloat("rotation", 0, 360, 0);
-            */
         }
 
         public void updateSprite()
         {
-            //Modifiers para variar parametros del sprite
-            sprite.Position = new TGCVector2(D3DDevice.Instance.Width, D3DDevice.Instance.Height);
-            sprite.Scaling = new TGCVector2(100, 100);
         }
 
         public void renderSprite()
