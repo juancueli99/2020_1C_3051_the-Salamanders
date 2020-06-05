@@ -83,24 +83,48 @@
     </Reference>
     <Reference Include="Microsoft.VisualC" />
     <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.DirectoryServices" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
     <Reference Include="TGC.Core, Version=2.4.1.0, Culture=neutral, processorArchitecture=x86">
       <HintPath>..\packages\TGC.Core.2.4.1\lib\net48\TGC.Core.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Form\CreditsUserControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Form\CreditsUserControl.Designer.cs">
+      <DependentUpon>CreditsUserControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Form\GameForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Form\GameForm.Designer.cs">
       <DependentUpon>GameForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Form\MenuUserControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Form\MenuUserControl.Designer.cs">
+      <DependentUpon>MenuUserControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Form\OptionsUserControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Form\OptionsUserControl.Designer.cs">
+      <DependentUpon>OptionsUserControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Game.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Game.settings</DependentUpon>
     </Compile>
+    <Compile Include="Model\CustomBitmap.cs" />
+    <Compile Include="Model\CustomSprite.cs" />
+    <Compile Include="Model\Drawer2D.cs" />
     <Compile Include="Model\Escalera.cs" />
     <Compile Include="Model\Escenario.cs" />
     <Compile Include="Model\Escondite.cs" />
@@ -109,6 +133,7 @@
     <Compile Include="Model\IInteractuable.cs" />
     <Compile Include="Model\ItemVacioDefault.cs" />
     <Compile Include="Model\Linterna.cs" />
+    <Compile Include="Model\Sprite.cs" />
     <Compile Include="Model\Monster.cs" />
     <Compile Include="Model\Nota.cs" />
     <Compile Include="Model\ParedInvisible.cs" />
@@ -119,8 +144,17 @@
     <Compile Include="Model\Vela.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Form\CreditsUserControl.resx">
+      <DependentUpon>CreditsUserControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Form\GameForm.resx">
       <DependentUpon>GameForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form\MenuUserControl.resx">
+      <DependentUpon>MenuUserControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form\OptionsUserControl.resx">
+      <DependentUpon>OptionsUserControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -188,8 +222,11 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Media\cajaMadera4.jpg" />
+    <Content Include="Media\Earphones Info.jpg" />
     <Content Include="Media\Heighmaps\alfajorGrandote.jpg" />
     <Content Include="Media\Heighmaps\heightmapUsarEsteDeBase.jpg" />
+    <Content Include="Media\Into the Mist Blur.jpg" />
+    <Content Include="Media\Into the Mist Menu.jpg" />
     <Content Include="Media\LogoTGC-TgcScene.xml" />
     <Content Include="Media\Modelame\adasdads-TgcScene.xml" />
     <Content Include="Media\Modelame\Demon-TgcScene.xml" />
@@ -459,12 +496,14 @@
     <Content Include="Media\NuestrosModelos\Textures\[Color_A01]1.jpg" />
     <Content Include="Media\NuestrosModelos\Textures\_Black_1.jpg" />
     <Content Include="Media\NuestrosModelos\Textures\_Blue_.jpg" />
+    <Content Include="Media\Real Into the Mist.jpg" />
     <Content Include="Media\Sky 1.png" />
     <Content Include="Media\Sky 2.png" />
     <Content Include="Media\Sky 3.png" />
     <Content Include="Media\Sky 4.png" />
     <Content Include="Media\Sky.jpg" />
     <Content Include="Media\SkyBoxPiolasa.jpg" />
+    <Content Include="Media\START_GAME.png" />
     <Content Include="Shaders\LinternaShader.fx" />
     <Content Include="Shaders\VelaShader.fx" />
   </ItemGroup>

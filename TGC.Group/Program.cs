@@ -14,7 +14,7 @@ namespace TGC.Group
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new GameForm());
+            Application.Run(new Form.GameForm());
         }
     }
 }
