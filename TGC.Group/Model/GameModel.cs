@@ -27,7 +27,7 @@ namespace TGC.Group.Model
 {
     /// <summary>
     ///     Ejemplo para implementar el TP.
-    ///     Inicialmente puede ser renombrado o copiado para hacer más ejemplos chicos, en el caso de copiar para que se
+    ///     Inicialmente puede ser renombrado o copiado para hacer mÃ¡s ejemplos chicos, en el caso de copiar para que se
     ///     ejecute el nuevo ejemplo deben cambiar el modelo que instancia GameForm <see cref="Form.GameForm.InitGraphics()" />
     ///     line 97.
     /// </summary>
@@ -74,7 +74,7 @@ namespace TGC.Group.Model
         private List<LightData> lights;
         /// <summary>
         ///     Se llama una sola vez, al principio cuando se ejecuta el ejemplo.
-        ///     Escribir aquí todo el código de inicialización: cargar modelos, texturas, estructuras de optimización, todo
+        ///     Escribir aquÃ­ todo el cÃ³digo de inicializaciÃ³n: cargar modelos, texturas, estructuras de optimizaciÃ³n, todo
         ///     procesamiento que podemos pre calcular para nuestro juego.
         ///     Borrar el codigo ejemplo no utilizado.
         /// </summary>
@@ -84,18 +84,16 @@ namespace TGC.Group.Model
         {
             personaje.LockMouse = false;
             //Device de DirectX para crear primitivas.
+    
+        public override void Init()
+        {
+
             var d3dDevice = D3DDevice.Instance.Device;
             this.FixedTickEnable = false;
 
             menu.instanciarMenu();
             escenario.InstanciarEstructuras();
-            //escenario.InstanciarHeightmap(); No los usamos mas
-            //escenario.InstanciarSkyBox(); Queda feo
             monster.InstanciarMonster();
-           
-           
-
-            //bichos.Add(monster);
             CrearObjetosEnEscenario();
             iluminables.Add(monster.ghost);
             iluminables.AddRange(escenario.tgcScene.Meshes);
@@ -104,18 +102,6 @@ namespace TGC.Group.Model
             TgcMesh mesh2 = escenario.tgcScene.Meshes.Find(mesh => mesh.Name.Equals("linterna_2"));
             var linterna = new Linterna(mesh1,mesh2);
             objetosInteractuables.Add(linterna);
-
-            /*
-            var cameraPosition = new TGCVector3(-2500, 0, -15000);
-            var lookAt = new TGCVector3(0, 0, 0);
-            Camara.SetCamera(cameraPosition, lookAt);
-            */
-
-            //ESTA ORIGINALMENTE FUNCIONA
-            // MiCamara camaraInterna = new MiCamara(personaje.PosicionMesh(), 220, 300);
-            //Camara = camaraInterna;
-
-            //ESTE VA QUERIENDO
             Camera = personaje;
             //Frustum.FarPlane;
             //Camara.SetCamera(personaje.PosicionMesh(), new TGCVector3(0, 0, 0));
@@ -123,17 +109,9 @@ namespace TGC.Group.Model
             //personaje.LockMouse = true;
 
             //Internamente el framework construye la matriz de view con estos dos vectores.
-            //Luego en nuestro juego tendremos que crear una cámara que cambie la matriz de view con variables como movimientos o animaciones de escenas
+            //Luego en nuestro juego tendremos que crear una cÃ¡mara que cambie la matriz de view con variables como movimientos o animaciones de escenas
 
         }
-
-
-        /// <summary>
-        ///     Se llama en cada frame.
-        ///     Se debe escribir toda la lógica de computo del modelo, así como también verificar entradas del usuario y reacciones
-        ///     ante ellas.
-        /// </summary>
-        /// 
 
         private void CrearObjetosEnEscenario()
         {
@@ -180,7 +158,6 @@ namespace TGC.Group.Model
                 var escalera = (Escalera)interactuable;
                 paredInvisible.InstanciarPared(escalera);
             }
-            // objetosInteractuables.Add((IInteractuable)escenario.GetEscalera());
         }
 
 
@@ -323,6 +300,7 @@ namespace TGC.Group.Model
 
                         personaje.MoverPersonaje(' ', ElapsedTime, Input, this);
                     }
+            }
 
                 }
 
@@ -367,27 +345,49 @@ namespace TGC.Group.Model
                 if (personaje.tiempoSinLuz == 4000)
                 {
                     unBicho = new Monster();
-                    var posicion = new TGCVector3((1.1f)*personaje.getLookAt().X, -350, (1.1f) * personaje.getLookAt().Z);
-                    unBicho.InstanciarMonster(personaje, posicion);
-                    monster.DisposeMonster();
+                    var posicion = personaje.puntoDemira(personaje.anguloAbsolutoEnY, personaje.anguloAbsolutoEnX);
+                    var nuevaPosicion = new TGCVector3(posicion.X, -350, posicion.Z);
+                    var delta = new TGCVector3(1000,0,1000);
+
+                    if (nuevaPosicion.X > 0 )
+                    {
+                        delta = new TGCVector3(-1000, 0, 1000);
+                    }
+
+                    if (nuevaPosicion.Z > 0)
+                    {
+                        delta = new TGCVector3(delta.X, 0, -1000);
+                    }
+
+                    nuevaPosicion += delta;
+
+                    unBicho.InstanciarMonster(personaje, nuevaPosicion);
+                    //monster.DisposeMonster();
                     monster = unBicho;
                     iluminables.Add(unBicho.ghost);
-                    //hacer que se escuche un ruido
-                }
+                    //Agregar un sonido
 
+                }
                 if (personaje.tiempoSinLuz == 5000)
                 {
-                    //El monster aparece detrás del personaje
-                    unBicho = new Monster();
-                    //var posicion = new TGCVector3(personaje.Position.X - 200, -350, personaje.Position.Z - 200);
-                    var posicion = new TGCVector3((-1) * personaje.getLookAt().X, -350, (-1) * personaje.getLookAt().Z);
-                    unBicho.InstanciarMonster(personaje, posicion);
                     monster.DisposeMonster();
+                    //El monster aparece detrÃ¡s del personaje
+                    unBicho = new Monster();
+                    var anguloDeRotacion = FastMath.PI;
+
+                    var posicion = personaje.puntoDemira(personaje.anguloAbsolutoEnY + anguloDeRotacion, personaje.anguloAbsolutoEnX);
+                    var nuevaPosicion = new TGCVector3(posicion.X + 300, -350, posicion.Z + 300);
+
+                    unBicho.InstanciarMonster(personaje, nuevaPosicion);
                     monster = unBicho;
                     iluminables.Add(unBicho.ghost);
-                    var targetNuevo = new TGCVector3(unBicho.ghost.Position.X, 15, unBicho.ghost.Position.Z);
-                    personaje.setCamera(personaje.eye,targetNuevo);
-                    personaje.GameOver();
+
+                    personaje.LockMouse = false;
+
+                    var newTarget = new TGCVector3(nuevaPosicion.X, nuevaPosicion.Y + 350, nuevaPosicion.Z);
+                    personaje.SetCamera(personaje.eye, newTarget);
+
+                    personaje.GameOver(); 
                 }
             }
         }
@@ -466,7 +466,7 @@ namespace TGC.Group.Model
 
         public void AplicarShaderSpotLight(TgcMesh mesh)
         {
-            //Actualizar posición de la luz
+            //Actualizar posiciÃ³n de la luz
             TGCVector3 lightPos = personaje.getPosition() + new TGCVector3(0, 100, 0) + new TGCVector3(FastMath.Sin(5.5f) * -150, 0, FastMath.Cos(5.5f) * -150);
 
             //Normalizar direccion de la luz
@@ -481,113 +481,11 @@ namespace TGC.Group.Model
             mesh.Effect.SetValue("spotLightExponent", 25);
             mesh.Effect.SetValue("lightColor", ColorValue.FromColor(personaje.itemEnMano.getLuzColor()));
         }
-        public void AplicarShaderAlHeightmap()
-        {
-            Microsoft.DirectX.Direct3D.Effect currentShader;
-            currentShader = TGCShaders.Instance.TgcMeshPointLightShader;
-            escenario.heightmap.Effect = currentShader;
-            escenario.heightmap.Technique = TGCShaders.Instance.GetTGCMeshTechnique(TgcMesh.MeshRenderType.DIFFUSE_MAP_AND_LIGHTMAP);
+        
 
-            // Estos son paramentros del current shader, si cambias el shader chequear los parametros o rompe
-            escenario.heightmap.Effect.SetValue("materialEmissiveColor", ColorValue.FromColor(Color.Black));
-            escenario.heightmap.Effect.SetValue("materialAmbientColor", ColorValue.FromColor(Color.White));
-            escenario.heightmap.Effect.SetValue("materialDiffuseColor", ColorValue.FromColor(Color.White));
-            escenario.heightmap.Effect.SetValue("materialSpecularColor", ColorValue.FromColor(Color.White));
-            escenario.heightmap.Effect.SetValue("materialSpecularExp", 9f);
-            escenario.heightmap.Effect.SetValue("eyePosition", TGCVector3.TGCVector3ToFloat4Array(personaje.eye));
-            escenario.heightmap.Effect.SetValue("lightAttenuation", 0.3f);
-            escenario.heightmap.Effect.SetValue("lightColor", ColorValue.FromColor(Color.White));
-            escenario.heightmap.Effect.SetValue("lightIntensity", 50f);
-            escenario.heightmap.Effect.SetValue("lightPosition", TGCVector3.TGCVector3ToFloat4Array(personaje.getPosition()));
-        }
-
-
-        /// ////////////////////////////////////////////////////////77
-        /// /////////////////////////////////////////////////////////
-        public class LightData
-        {
-            public TgcBoundingAxisAlignBox aabb;
-            public Color color;
-            public TGCVector3 pos;
-        }
-
-        private LightData getClosestLight(TGCVector3 pos)
-        {
-            var minDist = float.MaxValue;
-            LightData minLight = null;
-
-            foreach (var light in lights)
-            {
-                var distSq = TGCVector3.LengthSq(pos - light.pos);
-                if (distSq < minDist)
-                {
-                    minDist = distSq;
-                    minLight = light;
-                }
-            }
-
-            return minLight;
-        }
-        public void RenderMultiplesLuces()
-        {
-            //Habilitar luz
-            Microsoft.DirectX.Direct3D.Effect currentShader;
-            if (personaje.tieneLuz)
-            {
-                //Con luz: Cambiar el shader actual por el shader default que trae el framework para iluminacion dinamica con PointLight
-                currentShader = TGCShaders.Instance.TgcMeshPointLightShader;
-            }
-            else
-            {
-                //Sin luz: Restaurar shader default
-                currentShader = TGCShaders.Instance.TgcMeshShader;
-            }
-
-            //Aplicar a cada mesh el shader actual
-            foreach (TgcMesh mesh in escenario.tgcScene.Meshes)
-            {
-                mesh.Effect = currentShader;
-                //El Technique depende del tipo RenderType del mesh
-                mesh.Technique = TGCShaders.Instance.GetTGCMeshTechnique(mesh.RenderType);
-            }
-
-            //Renderizar meshes
-            foreach (TgcMesh mesh in iluminables)
-            {
-                if (personaje.tieneLuz)
-                {
-                    var light = getClosestLight(mesh.BoundingBox.calculateBoxCenter());
-
-                    //Cargar variables shader de la luz
-
-                    mesh.Effect.SetValue("eyePosition", TGCVector3.TGCVector3ToFloat4Array(personaje.eye));
-                    mesh.Effect.SetValue("lightAttenuation", personaje.itemEnMano.getValorAtenuacion());
-                    mesh.Effect.SetValue("lightPosition", TGCVector3.TGCVector3ToFloat4Array(light.pos));
-                    mesh.Effect.SetValue("lightIntensity", personaje.itemEnMano.getValorLuminico());
-                    mesh.Effect.SetValue("lightColor", ColorValue.FromColor(personaje.itemEnMano.getLuzColor()));
-
-                    //Cargar variables de shader de Material. El Material en realidad deberia ser propio de cada mesh. Pero en este ejemplo se simplifica con uno comun para todos
-                    
-                    mesh.Effect.SetValue("materialEmissiveColor", ColorValue.FromColor(Color.Black));
-                    mesh.Effect.SetValue("materialAmbientColor", ColorValue.FromColor(Color.White));
-                    mesh.Effect.SetValue("materialDiffuseColor", ColorValue.FromColor(Color.White));
-                    mesh.Effect.SetValue("materialSpecularColor", ColorValue.FromColor(Color.White));
-                    mesh.Effect.SetValue("materialSpecularExp", 9f);
-                }
-
-                //Renderizar modelo
-                mesh.Render();
-            }
-        }
-
-        /// <summary>
-        ///     Se llama cada vez que hay que refrescar la pantalla.
-        ///     Escribir aquí todo el código referido al renderizado.
-        ///     Borrar todo lo que no haga falta.
-        /// </summary>
         public override void Render()
         {
-            //Inicio el render de la escena, para ejemplos simples. Cuando tenemos postprocesado o shaders es mejor realizar las operaciones según nuestra conveniencia.
+            //Inicio el render de la escena, para ejemplos simples. Cuando tenemos postprocesado o shaders es mejor realizar las operaciones segÃºn nuestra conveniencia.
             PreRender();
 
             if (!estoyJugando)
@@ -609,7 +507,7 @@ namespace TGC.Group.Model
                 {
                     monster.RenderMonster();
                 }
-                //Render de BoundingBox, muy útil para debug de colisiones.
+                //Render de BoundingBox, muy Ãºtil para debug de colisiones.
                 if (BoundingBox)
                 {
                     Box.BoundingBox.Render();
@@ -641,9 +539,9 @@ namespace TGC.Group.Model
         }
 
         /// <summary>
-        ///     Se llama cuando termina la ejecución del ejemplo.
+        ///     Se llama cuando termina la ejecuciÃ³n del ejemplo.
         ///     Hacer Dispose() de todos los objetos creados.
-        ///     Es muy importante liberar los recursos, sobretodo los gráficos ya que quedan bloqueados en el device de video.
+        ///     Es muy importante liberar los recursos, sobretodo los grÃ¡ficos ya que quedan bloqueados en el device de video.
         /// </summary>
         public override void Dispose()
         {
