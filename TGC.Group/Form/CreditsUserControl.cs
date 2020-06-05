@@ -16,21 +16,6 @@ namespace TGC.Group.Form
         {
             InitializeComponent();
 
-            creditsLabel.Parent = pictureBox1;
-            creditsLabel.BackColor = Color.Transparent;
-
-            jjfLabel.Parent = pictureBox1;
-            jjfLabel.BackColor = Color.Transparent;
-
-            jfcLabel.Parent = pictureBox1;
-            jfcLabel.BackColor = Color.Transparent;
-
-            jmjLabel.Parent = pictureBox1;
-            jmjLabel.BackColor = Color.Transparent;
-
-            miunLabel.Parent = pictureBox1;
-            miunLabel.BackColor = Color.Transparent;
-
             Pipe1.Parent = pictureBox1;
             Pipe1.BackColor = Color.Transparent;
 

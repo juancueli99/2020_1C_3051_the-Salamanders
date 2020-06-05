@@ -40,11 +40,6 @@ namespace TGC.Group.Form
             returnButton.Parent = pictureBox1;
             returnButton.BackColor = Color.Transparent;
 
-            //Labels
-
-            optionsLabel.Parent = pictureBox1;
-            optionsLabel.BackColor = Color.Transparent;
-
         }
 
         private void returnButton_Click(object sender, EventArgs e)

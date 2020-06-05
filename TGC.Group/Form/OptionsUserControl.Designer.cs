@@ -35,8 +35,6 @@
             this.Pipe1 = new System.Windows.Forms.Label();
             this.monstersAvailableButton = new System.Windows.Forms.Button();
             this.Pipe2 = new System.Windows.Forms.Label();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.optionsLabel = new System.Windows.Forms.Label();
             this.impossibleButton = new System.Windows.Forms.Button();
             this.easyButton = new System.Windows.Forms.Button();
             this.Pipe6 = new System.Windows.Forms.Label();
@@ -49,6 +47,7 @@
             this.Pipe7 = new System.Windows.Forms.Label();
             this.demonButton = new System.Windows.Forms.Button();
             this.Pipe8 = new System.Windows.Forms.Label();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -141,29 +140,6 @@
             this.Pipe2.TabIndex = 32;
             this.Pipe2.Text = "|";
             this.Pipe2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // pictureBox1
-            // 
-            this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
-            this.pictureBox1.Location = new System.Drawing.Point(0, 0);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(1370, 705);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBox1.TabIndex = 0;
-            this.pictureBox1.TabStop = false;
-            // 
-            // optionsLabel
-            // 
-            this.optionsLabel.AutoSize = true;
-            this.optionsLabel.BackColor = System.Drawing.Color.Transparent;
-            this.optionsLabel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.optionsLabel.Font = new System.Drawing.Font("Who asks Satan", 27.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.optionsLabel.ForeColor = System.Drawing.Color.Maroon;
-            this.optionsLabel.Location = new System.Drawing.Point(15, 488);
-            this.optionsLabel.Name = "optionsLabel";
-            this.optionsLabel.Size = new System.Drawing.Size(97, 40);
-            this.optionsLabel.TabIndex = 42;
-            this.optionsLabel.Text = "OPTIONS";
             // 
             // impossibleButton
             // 
@@ -345,11 +321,20 @@
             this.Pipe8.Text = "|";
             this.Pipe8.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
+            this.pictureBox1.Location = new System.Drawing.Point(0, 0);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(1370, 705);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox1.TabIndex = 57;
+            this.pictureBox1.TabStop = false;
+            // 
             // OptionsUserControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.optionsLabel);
             this.Controls.Add(this.returnButton);
             this.Controls.Add(this.setDifficultyButton);
             this.Controls.Add(this.Pipe3);
@@ -364,8 +349,8 @@
             this.Controls.Add(this.normalButton);
             this.Controls.Add(this.Pipe5);
             this.Controls.Add(this.alienButton);
-            this.Controls.Add(this.ghostButton);
             this.Controls.Add(this.Pipe9);
+            this.Controls.Add(this.ghostButton);
             this.Controls.Add(this.Pipe7);
             this.Controls.Add(this.demonButton);
             this.Controls.Add(this.Pipe8);
@@ -378,15 +363,12 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Button returnButton;
         private System.Windows.Forms.Button setDifficultyButton;
         private System.Windows.Forms.Label Pipe3;
         private System.Windows.Forms.Label Pipe1;
         private System.Windows.Forms.Button monstersAvailableButton;
         private System.Windows.Forms.Label Pipe2;
-        private System.Windows.Forms.Label optionsLabel;
         private System.Windows.Forms.Button impossibleButton;
         private System.Windows.Forms.Button easyButton;
         private System.Windows.Forms.Label Pipe6;
@@ -399,5 +381,6 @@
         private System.Windows.Forms.Label Pipe7;
         private System.Windows.Forms.Button demonButton;
         private System.Windows.Forms.Label Pipe8;
+        private System.Windows.Forms.PictureBox pictureBox1;
     }
 }

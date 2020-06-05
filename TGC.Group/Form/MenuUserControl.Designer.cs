@@ -38,9 +38,8 @@
             this.optionsButton = new System.Windows.Forms.Button();
             this.Pipe2 = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.intoTheMistLabel = new System.Windows.Forms.Label();
-            this.optionsUserControl1 = new TGC.Group.Form.OptionsUserControl();
             this.creditsUserControl1 = new TGC.Group.Form.CreditsUserControl();
+            this.optionsUserControl1 = new TGC.Group.Form.OptionsUserControl();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -171,28 +170,8 @@
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(1370, 705);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBox1.TabIndex = 0;
+            this.pictureBox1.TabIndex = 43;
             this.pictureBox1.TabStop = false;
-            // 
-            // intoTheMistLabel
-            // 
-            this.intoTheMistLabel.AutoSize = true;
-            this.intoTheMistLabel.BackColor = System.Drawing.Color.Transparent;
-            this.intoTheMistLabel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.intoTheMistLabel.Font = new System.Drawing.Font("Who asks Satan", 27.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.intoTheMistLabel.ForeColor = System.Drawing.Color.Maroon;
-            this.intoTheMistLabel.Location = new System.Drawing.Point(15, 488);
-            this.intoTheMistLabel.Name = "intoTheMistLabel";
-            this.intoTheMistLabel.Size = new System.Drawing.Size(179, 40);
-            this.intoTheMistLabel.TabIndex = 41;
-            this.intoTheMistLabel.Text = "INTO THE MIST";
-            // 
-            // optionsUserControl1
-            // 
-            this.optionsUserControl1.Location = new System.Drawing.Point(2, 0);
-            this.optionsUserControl1.Name = "optionsUserControl1";
-            this.optionsUserControl1.Size = new System.Drawing.Size(1370, 705);
-            this.optionsUserControl1.TabIndex = 40;
             // 
             // creditsUserControl1
             // 
@@ -201,11 +180,17 @@
             this.creditsUserControl1.Size = new System.Drawing.Size(1370, 705);
             this.creditsUserControl1.TabIndex = 42;
             // 
+            // optionsUserControl1
+            // 
+            this.optionsUserControl1.Location = new System.Drawing.Point(2, 0);
+            this.optionsUserControl1.Name = "optionsUserControl1";
+            this.optionsUserControl1.Size = new System.Drawing.Size(1370, 705);
+            this.optionsUserControl1.TabIndex = 40;
+            // 
             // MenuUserControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.intoTheMistLabel);
             this.Controls.Add(this.exitButton);
             this.Controls.Add(this.creditsButton);
             this.Controls.Add(this.startGameButton);
@@ -226,8 +211,6 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Button exitButton;
         private System.Windows.Forms.Button creditsButton;
         private System.Windows.Forms.Button startGameButton;
@@ -237,7 +220,7 @@
         private System.Windows.Forms.Button optionsButton;
         private System.Windows.Forms.Label Pipe2;
         private OptionsUserControl optionsUserControl1;
-        private System.Windows.Forms.Label intoTheMistLabel;
         private CreditsUserControl creditsUserControl1;
+        private System.Windows.Forms.PictureBox pictureBox1;
     }
 }

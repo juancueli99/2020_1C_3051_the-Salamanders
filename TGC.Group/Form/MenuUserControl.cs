@@ -44,8 +44,6 @@ namespace TGC.Group.Form
             exitButton.Parent = pictureBox1;
             exitButton.BackColor = Color.Transparent;
 
-            intoTheMistLabel.Parent = pictureBox1;
-            intoTheMistLabel.BackColor = Color.Transparent;
         }
 
         private void startGameButton_Click(object sender, EventArgs e)
