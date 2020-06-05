@@ -71,7 +71,6 @@ namespace TGC.Group.Model
         private bool BoundingBox { get; set; }
         public FrustumResult INTERSECT { get; private set; }
 
-        private List<LightData> lights;
         /// <summary>
         ///     Se llama una sola vez, al principio cuando se ejecuta el ejemplo.
         ///     Escribir aquí todo el código de inicialización: cargar modelos, texturas, estructuras de optimización, todo
@@ -80,10 +79,6 @@ namespace TGC.Group.Model
         /// </summary>
 
         bool estoyJugando = false;
-        public override void Init()
-        {
-            personaje.LockMouse = false;
-            //Device de DirectX para crear primitivas.
     
         public override void Init()
         {
@@ -331,7 +326,7 @@ namespace TGC.Group.Model
 
                 InteraccionMonster();
                 personaje.YouWin();
-            }
+            
 
             PostUpdate();
         }
