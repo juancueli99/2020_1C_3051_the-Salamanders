@@ -222,10 +222,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Media\cajaMadera4.jpg" />
+    <Content Include="Media\Credits.jpg" />
     <Content Include="Media\Earphones Info.jpg" />
     <Content Include="Media\Heighmaps\alfajorGrandote.jpg" />
     <Content Include="Media\Heighmaps\heightmapUsarEsteDeBase.jpg" />
     <Content Include="Media\Into the Mist Blur.jpg" />
+    <Content Include="Media\Into the Mist Menu Final.jpg" />
     <Content Include="Media\Into the Mist Menu.jpg" />
     <Content Include="Media\LogoTGC-TgcScene.xml" />
     <Content Include="Media\Modelame\adasdads-TgcScene.xml" />
@@ -496,6 +498,7 @@
     <Content Include="Media\NuestrosModelos\Textures\[Color_A01]1.jpg" />
     <Content Include="Media\NuestrosModelos\Textures\_Black_1.jpg" />
     <Content Include="Media\NuestrosModelos\Textures\_Blue_.jpg" />
+    <Content Include="Media\Options.jpg" />
     <Content Include="Media\Real Into the Mist.jpg" />
     <Content Include="Media\Sky 1.png" />
     <Content Include="Media\Sky 2.png" />
