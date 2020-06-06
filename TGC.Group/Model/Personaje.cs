@@ -793,7 +793,7 @@ namespace TGC.Group.Model
         }
         public void YouWin()
         {
-            if (this.notasRequeridas == 4 && this.getPosition() == posicionInicial)
+            if (this.notasRequeridas == GameModel.notasParaGanar && this.getPosition() == posicionInicial)
             {
                 //Por ahora lo dejamos asi hasta que tengamos una interfaz grafica
                 Console.WriteLine("Ganaste!!");

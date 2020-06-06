@@ -134,14 +134,10 @@ namespace TGC.Group.Model
             }
         }
 
-        internal void InstanciarMonster(Personaje personaje, TGCVector3 posicionDeAlejamiento)
+        internal void InstanciarMonster(Personaje personaje, TGCVector3 posicionDeAlejamiento, monstruos tipo)
         {
-            var loader = new TgcSceneLoader();
-            var scene2 = loader.loadSceneFromFile(MediaDir + "Modelame\\GhostGrande-TgcScene.xml"); //Con demon no funca, aca rompe
-
             //Solo nos interesa el primer modelo de esta escena (tiene solo uno)
-            ghost = scene2.Meshes[0];
-            var posicionPersonaje = personaje.Position;
+            ghost = ConfiguradorMonstruo.ConfigurarMonstruo(tipo);
             ghost.Position = new TGCVector3(posicionDeAlejamiento);
             this.lookAt= new TGCVector3(ghost.Rotation);
             RotarMesh(personaje);
