@@ -22,9 +22,9 @@ namespace TGC.Group.Model
         TGCVector3 lookAt = new TGCVector3();
         private float velocidad=2;
 
-        public void InstanciarMonster()
+        public void InstanciarMonster(monstruos tipo)
         {
-            ghost = ConfiguradorMonstruo.configurarFantasma();
+            ghost = ConfiguradorMonstruo.ConfigurarMonstruo(tipo);
 
             this.lookAt = new TGCVector3(ghost.Position);
         }

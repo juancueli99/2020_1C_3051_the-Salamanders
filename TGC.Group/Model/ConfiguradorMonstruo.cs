@@ -78,26 +78,30 @@ namespace TGC.Group.Model
             return alien;
         }
 
-        public static void ConfigurarMonstruo(monstruos monstruo)
+        public static TgcMesh ConfigurarMonstruo(monstruos monstruo)
         {
-            //TgcMesh monster = new TgcMesh();
+            TgcMesh monster=null;
 
             switch (monstruo)
             {
                 case monstruos.GHOST:
+                    monster = configurarFantasma();
                     break;
 
                 case monstruos.CLOWN:
+                    monster = configurarPayaso();
                     break;
 
                 case monstruos.SECTARIAN:
+                    monster = configurarSectario();
                     break;
 
                 case monstruos.ALIEN:
+                    monster = configurarAlien();
                     break;
             }
 
-            //return monster;
+            return monster;
         }
     }
 }

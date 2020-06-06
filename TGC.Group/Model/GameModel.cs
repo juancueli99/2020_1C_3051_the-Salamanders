@@ -79,7 +79,8 @@ namespace TGC.Group.Model
         /// </summary>
 
         bool estoyJugando = false;
-    
+
+        public static monstruos monstruoActual= monstruos.GHOST;
         public override void Init()
         {
 
@@ -88,7 +89,7 @@ namespace TGC.Group.Model
 
             menu.instanciarMenu();
             escenario.InstanciarEstructuras();
-            monster.InstanciarMonster();
+            monster.InstanciarMonster(monstruoActual);
             CrearObjetosEnEscenario();
             iluminables.Add(monster.ghost);
             iluminables.AddRange(escenario.tgcScene.Meshes);

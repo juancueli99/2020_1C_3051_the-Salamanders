@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TGC.Group.Model
 {
-        enum monstruos
+        public enum monstruos
         {
             GHOST,
             CLOWN,
