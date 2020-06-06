@@ -83,24 +83,50 @@
     </Reference>
     <Reference Include="Microsoft.VisualC" />
     <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.DirectoryServices" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
     <Reference Include="TGC.Core, Version=2.4.1.0, Culture=neutral, processorArchitecture=x86">
       <HintPath>..\packages\TGC.Core.2.4.1\lib\net48\TGC.Core.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Form\CreditsUserControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Form\CreditsUserControl.Designer.cs">
+      <DependentUpon>CreditsUserControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Form\GameForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Form\GameForm.Designer.cs">
       <DependentUpon>GameForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Form\MenuUserControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Form\MenuUserControl.Designer.cs">
+      <DependentUpon>MenuUserControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Form\OptionsUserControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Form\OptionsUserControl.Designer.cs">
+      <DependentUpon>OptionsUserControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Game.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Game.settings</DependentUpon>
     </Compile>
+    <Compile Include="Model\ConfiguradorMonstruo.cs" />
+    <Compile Include="Model\CustomBitmap.cs" />
+    <Compile Include="Model\CustomSprite.cs" />
+    <Compile Include="Model\Drawer2D.cs" />
+    <Compile Include="Model\EnumMonstruos.cs" />
     <Compile Include="Model\Escalera.cs" />
     <Compile Include="Model\Escenario.cs" />
     <Compile Include="Model\Escondite.cs" />
@@ -109,6 +135,7 @@
     <Compile Include="Model\IInteractuable.cs" />
     <Compile Include="Model\ItemVacioDefault.cs" />
     <Compile Include="Model\Linterna.cs" />
+    <Compile Include="Model\Sprite.cs" />
     <Compile Include="Model\Monster.cs" />
     <Compile Include="Model\Nota.cs" />
     <Compile Include="Model\ParedInvisible.cs" />
@@ -119,8 +146,17 @@
     <Compile Include="Model\Vela.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Form\CreditsUserControl.resx">
+      <DependentUpon>CreditsUserControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Form\GameForm.resx">
       <DependentUpon>GameForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form\MenuUserControl.resx">
+      <DependentUpon>MenuUserControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form\OptionsUserControl.resx">
+      <DependentUpon>OptionsUserControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -188,12 +224,22 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Media\cajaMadera4.jpg" />
+    <Content Include="Media\Credits.jpg" />
+    <Content Include="Media\Earphones Info.jpg" />
     <Content Include="Media\Heighmaps\alfajorGrandote.jpg" />
+    <Content Include="Media\Heighmaps\Grass.JPG" />
     <Content Include="Media\Heighmaps\heightmapUsarEsteDeBase.jpg" />
+    <Content Include="Media\Into the Mist Blur.jpg" />
+    <Content Include="Media\Into the Mist Menu Final.jpg" />
+    <Content Include="Media\Into the Mist Menu.jpg" />
     <Content Include="Media\LogoTGC-TgcScene.xml" />
     <Content Include="Media\Modelame\adasdads-TgcScene.xml" />
+    <Content Include="Media\Modelame\Alien-TgcScene.xml" />
+    <Content Include="Media\Modelame\Clown-TgcScene.xml" />
     <Content Include="Media\Modelame\Demon-TgcScene.xml" />
     <Content Include="Media\Modelame\DemonChico-TgcScene.xml" />
+    <Content Include="Media\Modelame\FatSpider-TgcScene.xml" />
+    <Content Include="Media\Modelame\FiloGiorgiosCat-TgcScene.xml" />
     <Content Include="Media\Modelame\Ghost-TgcScene.xml" />
     <Content Include="Media\Modelame\GhostGrande-TgcScene.xml" />
     <Content Include="Media\Modelame\linterna-TgcScene.xml" />
@@ -202,6 +248,13 @@
     <Content Include="Media\Modelame\ParedCastillo-TgcScene.xml" />
     <Content Include="Media\Modelame\pilas-TgcScene.xml" />
     <Content Include="Media\Modelame\posteLuz-TgcScene.xml" />
+    <Content Include="Media\Modelame\Reaper-TgcScene.xml" />
+    <Content Include="Media\Modelame\Sectarian-TgcScene.xml" />
+    <Content Include="Media\Modelame\SlimSpider-TgcScene.xml" />
+    <Content Include="Media\Modelame\Textures\3.png" />
+    <Content Include="Media\Modelame\Textures\4.png" />
+    <Content Include="Media\Modelame\Textures\AlienQueenbody1.jpg" />
+    <Content Include="Media\Modelame\Textures\AlienQueenhead1.jpg" />
     <Content Include="Media\Modelame\Textures\Arbusto.png" />
     <Content Include="Media\Modelame\Textures\armyback.bmp" />
     <Content Include="Media\Modelame\Textures\armyfront.bmp" />
@@ -209,42 +262,69 @@
     <Content Include="Media\Modelame\Textures\brick3_5.jpg" />
     <Content Include="Media\Modelame\Textures\Buff.jpg" />
     <Content Include="Media\Modelame\Textures\Cardboard Texture.jpg" />
+    <Content Include="Media\Modelame\Textures\cat.jpg" />
     <Content Include="Media\Modelame\Textures\Cladding_Stucco_White.jpg" />
     <Content Include="Media\Modelame\Textures\clr0-0-0.bmp" />
+    <Content Include="Media\Modelame\Textures\clr0-102-0.bmp" />
+    <Content Include="Media\Modelame\Textures\clr0-128-0.bmp" />
     <Content Include="Media\Modelame\Textures\clr100-102-120.bmp" />
     <Content Include="Media\Modelame\Textures\clr100-149-237.bmp" />
     <Content Include="Media\Modelame\Textures\clr105-105-105.bmp" />
     <Content Include="Media\Modelame\Textures\clr112-100-74.bmp" />
+    <Content Include="Media\Modelame\Textures\clr119-88-54.bmp" />
     <Content Include="Media\Modelame\Textures\clr123-118-118.bmp" />
+    <Content Include="Media\Modelame\Textures\clr124-54-80.bmp" />
     <Content Include="Media\Modelame\Textures\clr127-127-127.bmp" />
     <Content Include="Media\Modelame\Textures\clr128-128-128.bmp" />
     <Content Include="Media\Modelame\Textures\clr140-129-125.bmp" />
     <Content Include="Media\Modelame\Textures\clr147-103-74.bmp" />
+    <Content Include="Media\Modelame\Textures\clr153-50-255.bmp" />
     <Content Include="Media\Modelame\Textures\clr160-135-94.bmp" />
     <Content Include="Media\Modelame\Textures\clr165-29-37.bmp" />
+    <Content Include="Media\Modelame\Textures\clr165-42-42.bmp" />
+    <Content Include="Media\Modelame\Textures\clr167-101-82.bmp" />
     <Content Include="Media\Modelame\Textures\clr169-169-169.bmp" />
+    <Content Include="Media\Modelame\Textures\clr169-186-100.bmp" />
     <Content Include="Media\Modelame\Textures\clr170-152-116.bmp" />
     <Content Include="Media\Modelame\Textures\clr170-26-30.bmp" />
+    <Content Include="Media\Modelame\Textures\clr179-217-185.bmp" />
     <Content Include="Media\Modelame\Textures\clr183-255-242.bmp" />
+    <Content Include="Media\Modelame\Textures\clr184-134-11.bmp" />
     <Content Include="Media\Modelame\Textures\clr189-183-107.bmp" />
     <Content Include="Media\Modelame\Textures\clr192-164-115.bmp" />
+    <Content Include="Media\Modelame\Textures\clr198-223-134.bmp" />
+    <Content Include="Media\Modelame\Textures\clr204-0-0.bmp" />
+    <Content Include="Media\Modelame\Textures\clr205-92-92.bmp" />
+    <Content Include="Media\Modelame\Textures\clr206-200-179.bmp" />
     <Content Include="Media\Modelame\Textures\clr210-184-168.bmp" />
+    <Content Include="Media\Modelame\Textures\clr211-189-144.bmp" />
     <Content Include="Media\Modelame\Textures\clr211-211-211.bmp" />
+    <Content Include="Media\Modelame\Textures\clr218-165-32.bmp" />
+    <Content Include="Media\Modelame\Textures\clr22-22-22.bmp" />
     <Content Include="Media\Modelame\Textures\clr225-225-200.bmp" />
     <Content Include="Media\Modelame\Textures\clr23-22-22.bmp" />
+    <Content Include="Media\Modelame\Textures\clr248-248-255.bmp" />
     <Content Include="Media\Modelame\Textures\clr25-28-26.bmp" />
     <Content Include="Media\Modelame\Textures\clr255-0-0.bmp" />
     <Content Include="Media\Modelame\Textures\clr255-216-101.bmp" />
+    <Content Include="Media\Modelame\Textures\clr255-237-0.bmp" />
     <Content Include="Media\Modelame\Textures\clr255-250-250.bmp" />
+    <Content Include="Media\Modelame\Textures\clr255-255-255.bmp" />
+    <Content Include="Media\Modelame\Textures\clr255-7-2.bmp" />
+    <Content Include="Media\Modelame\Textures\clr30-144-255.bmp" />
+    <Content Include="Media\Modelame\Textures\clr30-30-30.bmp" />
     <Content Include="Media\Modelame\Textures\clr35-35-35.bmp" />
     <Content Include="Media\Modelame\Textures\clr36-47-66.bmp" />
     <Content Include="Media\Modelame\Textures\clr40-38-52.bmp" />
     <Content Include="Media\Modelame\Textures\clr40-61-76.bmp" />
     <Content Include="Media\Modelame\Textures\clr47-79-79.bmp" />
+    <Content Include="Media\Modelame\Textures\clr51-35-30.bmp" />
     <Content Include="Media\Modelame\Textures\clr52-73-104.bmp" />
     <Content Include="Media\Modelame\Textures\clr7-3-2.bmp" />
     <Content Include="Media\Modelame\Textures\clr71-76-74.bmp" />
+    <Content Include="Media\Modelame\Textures\clr81-81-81.bmp" />
     <Content Include="Media\Modelame\Textures\clr87-18-22.bmp" />
+    <Content Include="Media\Modelame\Textures\clr90-119-29.bmp" />
     <Content Include="Media\Modelame\Textures\clr90-81-78.bmp" />
     <Content Include="Media\Modelame\Textures\clr91-91-91.bmp" />
     <Content Include="Media\Modelame\Textures\clr95-75-62.bmp" />
@@ -255,17 +335,25 @@
     <Content Include="Media\Modelame\Textures\fiets.jpg" />
     <Content Include="Media\Modelame\Textures\floor1_4.jpg" />
     <Content Include="Media\Modelame\Textures\floor2_3.jpg" />
+    <Content Include="Media\Modelame\Textures\Formica Laminate Dark.jpg" />
     <Content Include="Media\Modelame\Textures\FumDallage02_outgame.png" />
     <Content Include="Media\Modelame\Textures\FumDallage05_outgame.png" />
     <Content Include="Media\Modelame\Textures\FumGridDark_outgame.png" />
     <Content Include="Media\Modelame\Textures\FyAccCaisse_outgame.png" />
     <Content Include="Media\Modelame\Textures\F_tapis_carre_outgame.png" />
     <Content Include="Media\Modelame\Textures\gunpowder.bmp" />
+    <Content Include="Media\Modelame\Textures\MaulkillerEye.jpg" />
+    <Content Include="Media\Modelame\Textures\MaulkillerEyelash.jpg" />
+    <Content Include="Media\Modelame\Textures\MaulkillerEyeRef.jpg" />
+    <Content Include="Media\Modelame\Textures\MaulkillerHead.jpg" />
+    <Content Include="Media\Modelame\Textures\MaulkillerLegs.jpg" />
+    <Content Include="Media\Modelame\Textures\MaulkillerTorso.jpg" />
     <Content Include="Media\Modelame\Textures\Metal textura.jpg" />
     <Content Include="Media\Modelame\Textures\MetalMech1.jpg" />
     <Content Include="Media\Modelame\Textures\Metal_Aluminum_Anodized.jpg" />
     <Content Include="Media\Modelame\Textures\Metal_Corrogated_Shiny.jpg" />
     <Content Include="Media\Modelame\Textures\Metal_Rough.jpg" />
+    <Content Include="Media\Modelame\Textures\Metal_Seamed.jpg" />
     <Content Include="Media\Modelame\Textures\PF Notes Texture 2.jpg" />
     <Content Include="Media\Modelame\Textures\PF Notes Texture.jpg" />
     <Content Include="Media\Modelame\Textures\Piedra3.jpg" />
@@ -279,10 +367,13 @@
     <Content Include="Media\Modelame\Textures\tractor.jpg" />
     <Content Include="Media\Modelame\Textures\wagon.jpg" />
     <Content Include="Media\Modelame\Textures\wastelt1glow.jpg" />
+    <Content Include="Media\Modelame\Textures\Wood_Cherry_Original.jpg" />
+    <Content Include="Media\Modelame\Textures\Wood_Cork.jpg" />
     <Content Include="Media\Modelame\Textures\Yellow Note Paper Texture.jpg" />
     <Content Include="Media\Modelame\Textures\[Blue]1.jpg" />
     <Content Include="Media\Modelame\Textures\_Blue_.jpg" />
     <Content Include="Media\Modelame\vela-TgcScene.xml" />
+    <Content Include="Media\Modelame\Worm-TgcScene.xml" />
     <Content Include="Media\NuestrosModelos\esteclaveee-TgcScene.xml" />
     <Content Include="Media\NuestrosModelos\MapaChicheBombon-TgcScene.xml" />
     <Content Include="Media\NuestrosModelos\MapaCompleto-TgcScene.xml" />
@@ -323,6 +414,8 @@
     <Content Include="Media\NuestrosModelos\Textures\axe14.bmp" />
     <Content Include="Media\NuestrosModelos\Textures\battery-label.jpg" />
     <Content Include="Media\NuestrosModelos\Textures\body.bmp" />
+    <Content Include="Media\NuestrosModelos\Textures\box.png" />
+    <Content Include="Media\NuestrosModelos\Textures\box1.png" />
     <Content Include="Media\NuestrosModelos\Textures\brick3_5.jpg" />
     <Content Include="Media\NuestrosModelos\Textures\Brick_Antique.jpg" />
     <Content Include="Media\NuestrosModelos\Textures\Brick_Basket_Two.jpg" />
@@ -459,12 +552,16 @@
     <Content Include="Media\NuestrosModelos\Textures\[Color_A01]1.jpg" />
     <Content Include="Media\NuestrosModelos\Textures\_Black_1.jpg" />
     <Content Include="Media\NuestrosModelos\Textures\_Blue_.jpg" />
+    <Content Include="Media\Options.jpg" />
+    <Content Include="Media\Real Into the Mist.jpg" />
     <Content Include="Media\Sky 1.png" />
     <Content Include="Media\Sky 2.png" />
     <Content Include="Media\Sky 3.png" />
     <Content Include="Media\Sky 4.png" />
     <Content Include="Media\Sky.jpg" />
     <Content Include="Media\SkyBoxPiolasa.jpg" />
+    <Content Include="Media\START_GAME.png" />
+    <Content Include="Shaders\IndicadorEscondite.fx" />
     <Content Include="Shaders\LinternaShader.fx" />
     <Content Include="Shaders\VelaShader.fx" />
   </ItemGroup>

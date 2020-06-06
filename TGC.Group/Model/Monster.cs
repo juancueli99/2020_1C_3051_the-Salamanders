@@ -22,25 +22,11 @@ namespace TGC.Group.Model
         TGCVector3 lookAt = new TGCVector3();
         private float velocidad=2;
 
-        public void InstanciarMonster()
+        public void InstanciarMonster(monstruos tipo)
         {
-            var loader = new TgcSceneLoader();
-            var scene2 = loader.loadSceneFromFile(MediaDir + "Modelame\\GhostGrande-TgcScene.xml"); //Con demon no funca, aca rompe
+            ghost = ConfiguradorMonstruo.ConfigurarMonstruo(tipo);
 
-            //Solo nos interesa el primer modelo de esta escena (tiene solo uno)
-            ghost = scene2.Meshes[0];
-
-
-            ghost.Position = new TGCVector3(200, -350, 100);
-            this.lookAt= new TGCVector3(200, -350, 100);
-            //ghost.Position = new TGCVector3(200, -350, 100);
-
-            //ASI SE SOLUCIONA. LA IDEA ES HACER LA ROTACION Y LA TRASLACION AL MISMO TIEMPO. CONVENDRIA HACER UN METODO QUE
-            //HAGA LAS DOS COSAS AL MISMO TIEMPO CADA VEZ QUE QUIERA MOVER Y ROTAR. DE NADA :D
-            float asd = 90;
-            ghost.Transform = TGCMatrix.Translation(100, -350, 0) * TGCMatrix.RotationY(asd); //ASI SE SOLUCIONA, JORGE IMPLEMENTALO
-            //ghost.Transform = TGCMatrix.RotationY(asd);
-            //ghost.Transform = TGCMatrix.Translation(0, 5, 0);
+            this.lookAt = new TGCVector3(ghost.Position);
         }
 
         public void RenderMonster()
@@ -148,15 +134,12 @@ namespace TGC.Group.Model
             }
         }
 
-        internal void InstanciarMonster(Personaje personaje, TGCVector3 posicionDeAlejamiento)
+        internal void InstanciarMonster(Personaje personaje, TGCVector3 posicionDeAlejamiento, monstruos tipo)
         {
-            var loader = new TgcSceneLoader();
-            var scene2 = loader.loadSceneFromFile(MediaDir + "Modelame\\GhostGrande-TgcScene.xml"); //Con demon no funca, aca rompe
-
             //Solo nos interesa el primer modelo de esta escena (tiene solo uno)
-            ghost = scene2.Meshes[0];
-            var posicionPersonaje = personaje.Position;
+            ghost = ConfiguradorMonstruo.ConfigurarMonstruo(tipo);
             ghost.Position = new TGCVector3(posicionDeAlejamiento);
+            ghost.Transform = TGCMatrix.Translation(posicionDeAlejamiento.X, posicionDeAlejamiento.Y- 100, posicionDeAlejamiento.Z);
             this.lookAt= new TGCVector3(ghost.Rotation);
             RotarMesh(personaje);
             

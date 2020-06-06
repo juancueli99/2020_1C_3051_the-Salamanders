@@ -29,15 +29,25 @@
         private void InitializeComponent()
         {
             this.panel3D = new System.Windows.Forms.Panel();
+            this.menuUserControl1 = new TGC.Group.Form.MenuUserControl();
+            this.panel3D.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel3D
             // 
+            this.panel3D.Controls.Add(this.menuUserControl1);
             this.panel3D.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel3D.Location = new System.Drawing.Point(0, 0);
             this.panel3D.Name = "panel3D";
             this.panel3D.Size = new System.Drawing.Size(784, 561);
             this.panel3D.TabIndex = 0;
+            // 
+            // menuUserControl1
+            // 
+            this.menuUserControl1.Location = new System.Drawing.Point(0, 0);
+            this.menuUserControl1.Name = "menuUserControl1";
+            this.menuUserControl1.Size = new System.Drawing.Size(1370, 705);
+            this.menuUserControl1.TabIndex = 0;
             // 
             // GameForm
             // 
@@ -51,6 +61,7 @@
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.GameForm_FormClosing);
             this.Load += new System.EventHandler(this.GameForm_Load);
+            this.panel3D.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -58,6 +69,7 @@
         #endregion
 
         private System.Windows.Forms.Panel panel3D;
+        private MenuUserControl menuUserControl1;
     }
 }
 

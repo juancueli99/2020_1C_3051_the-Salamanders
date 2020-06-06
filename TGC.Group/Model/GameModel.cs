@@ -22,11 +22,12 @@ using System.IO;
 using System.Windows.Forms;
 using static TGC.Core.Collision.TgcCollisionUtils;
 
+
 namespace TGC.Group.Model
 {
     /// <summary>
     ///     Ejemplo para implementar el TP.
-    ///     Inicialmente puede ser renombrado o copiado para hacer más ejemplos chicos, en el caso de copiar para que se
+    ///     Inicialmente puede ser renombrado o copiado para hacer mÃ¡s ejemplos chicos, en el caso de copiar para que se
     ///     ejecute el nuevo ejemplo deben cambiar el modelo que instancia GameForm <see cref="Form.GameForm.InitGraphics()" />
     ///     line 97.
     /// </summary>
@@ -46,7 +47,10 @@ namespace TGC.Group.Model
         public Escenario escenario = new Escenario();
         public Personaje personaje = new Personaje();
         public Monster monster = new Monster();
-         
+        public Sprite menu = new Sprite();
+
+        public static bool estoyCorriendo = false;
+
         //PARED INVISIBLE
         public ParedInvisible paredInvisible = new ParedInvisible();
 
@@ -66,28 +70,31 @@ namespace TGC.Group.Model
         //Boleano para ver si dibujamos el boundingbox
         private bool BoundingBox { get; set; }
         public FrustumResult INTERSECT { get; private set; }
+        public static float TiempoDeGameOver = 5000;
+        public static float TiempoDeAdvertencia = 4000;
+        public static float TiempoSinAdvertencia = 3500;
 
-        private List<LightData> lights;
+        public static int notasParaGanar = 4;
+
         /// <summary>
         ///     Se llama una sola vez, al principio cuando se ejecuta el ejemplo.
-        ///     Escribir aquí todo el código de inicialización: cargar modelos, texturas, estructuras de optimización, todo
+        ///     Escribir aquÃ­ todo el cÃ³digo de inicializaciÃ³n: cargar modelos, texturas, estructuras de optimizaciÃ³n, todo
         ///     procesamiento que podemos pre calcular para nuestro juego.
         ///     Borrar el codigo ejemplo no utilizado.
         /// </summary>
+
+        public bool estoyJugando = false;
+
+        public static monstruos monstruoActual= monstruos.SECTARIAN;
         public override void Init()
         {
-            //Device de DirectX para crear primitivas.
+
             var d3dDevice = D3DDevice.Instance.Device;
             this.FixedTickEnable = false;
 
+            menu.instanciarMenu();
             escenario.InstanciarEstructuras();
-            //escenario.InstanciarHeightmap(); No los usamos mas
-            //escenario.InstanciarSkyBox(); Queda feo
-            monster.InstanciarMonster();
-
-           
-
-            //bichos.Add(monster);
+            monster.InstanciarMonster(monstruoActual);
             CrearObjetosEnEscenario();
             iluminables.Add(monster.ghost);
             iluminables.AddRange(escenario.tgcScene.Meshes);
@@ -96,36 +103,16 @@ namespace TGC.Group.Model
             TgcMesh mesh2 = escenario.tgcScene.Meshes.Find(mesh => mesh.Name.Equals("linterna_2"));
             var linterna = new Linterna(mesh1,mesh2);
             objetosInteractuables.Add(linterna);
-
-            /*
-            var cameraPosition = new TGCVector3(-2500, 0, -15000);
-            var lookAt = new TGCVector3(0, 0, 0);
-            Camara.SetCamera(cameraPosition, lookAt);
-            */
-
-            //ESTA ORIGINALMENTE FUNCIONA
-            // MiCamara camaraInterna = new MiCamara(personaje.PosicionMesh(), 220, 300);
-            //Camara = camaraInterna;
-
-            //ESTE VA QUERIENDO
             Camera = personaje;
             //Frustum.FarPlane;
             //Camara.SetCamera(personaje.PosicionMesh(), new TGCVector3(0, 0, 0));
 
-            personaje.LockMouse = true;
+            //personaje.LockMouse = true;
 
             //Internamente el framework construye la matriz de view con estos dos vectores.
-            //Luego en nuestro juego tendremos que crear una cámara que cambie la matriz de view con variables como movimientos o animaciones de escenas
+            //Luego en nuestro juego tendremos que crear una cÃ¡mara que cambie la matriz de view con variables como movimientos o animaciones de escenas
 
         }
-
-
-        /// <summary>
-        ///     Se llama en cada frame.
-        ///     Se debe escribir toda la lógica de computo del modelo, así como también verificar entradas del usuario y reacciones
-        ///     ante ellas.
-        /// </summary>
-        /// 
 
         private void CrearObjetosEnEscenario()
         {
@@ -172,7 +159,6 @@ namespace TGC.Group.Model
                 var escalera = (Escalera)interactuable;
                 paredInvisible.InstanciarPared(escalera);
             }
-            // objetosInteractuables.Add((IInteractuable)escenario.GetEscalera());
         }
 
 
@@ -180,195 +166,257 @@ namespace TGC.Group.Model
         public override void Update()
         {
             PreUpdate();
-            bool caminar = false;
+           
 
-            //Capturar Input teclado
-
-            if (Input.keyDown(Key.L))
+            if (!estoyJugando)
             {
-                personaje.LockMouse = !personaje.LockMouse;
+                estoyJugando = Input.keyDown(Key.Space);
+            }
+            else
+            {
+                UpdateGame();
             }
 
+            PostUpdate();
+        }
 
+        private void UpdateGame()
+        {
+            //Capturar Input teclado
+
+            RevisarLockeoMouse();
 
             if (personaje.LockMouse)
             {
-            
-                    if (Input.keyDown(Key.W))
-                    {
-                        //Le digo al wachin que vaya para adelante
-                        
-                            personaje.MoverPersonaje('W', ElapsedTime, Input, this);
-                            caminar = true;
-                    }
-
-                    if (Input.keyDown(Key.A))
-                    {
-                            //Le digo al wachin que vaya para la izquierda
-                            personaje.MoverPersonaje('A', ElapsedTime, Input, this);
-                            caminar = true;
-                    }
-
-                    if (Input.keyDown(Key.S))
-                    {
-                            //Le digo al wachin que vaya para la izquierda
-                            personaje.MoverPersonaje('S', ElapsedTime, Input, this);
-                            caminar = true;
-                    }
-
-                    if (Input.keyDown(Key.D))
-                    {
-                        //Le digo al wachin que vaya para la izquierda
-                        personaje.MoverPersonaje('D', ElapsedTime, Input, this);
-                            caminar = true;
-                     }
-
-
-
-                personaje.MoverPersonaje('x', ElapsedTime, Input, this);
+                UpdateAccionesDeMovimientoYCamara();
 
                 if (Input.keyDown(Key.E))
                 {
-                    //Interacuar con meshes
-                    Console.WriteLine("x: {0} \ny: {1} \nz: {2}", personaje.getPosition().X, personaje.getPosition().Y, personaje.getPosition().Z);
+                    InteraccionPersonajeYMesh();
 
-                    var objetoInteractuable = this.objetosInteractuables.OrderBy(mesh => this.DistanciaA(mesh)).First();
-                    if((objetoInteractuable is Escondite || objetoInteractuable is Escalera) && this.DistanciaA(objetoInteractuable) < 300)
-                    {
-                        objetoInteractuable.Interactuar(personaje);
-                    }
-                    else
-                    {
-                        
-                            if (this.DistanciaA(objetoInteractuable) < 300)
-                            {
-                                objetosInteractuables.Remove(objetoInteractuable);
-                                objetoInteractuable.Interactuar(personaje);
-                            }
-
-                            if (personaje.Entre((int)personaje.getPosition().X, -1300, -800) &&
-                                  personaje.Entre((int)personaje.getPosition().Z, -8100, -6800))
-                            {
-                                Puerta unaPuerta = new Puerta(escenario.tgcScene.Meshes[0]);// esto es para que sea polimorfico nomas
-                                unaPuerta.Interactuar(personaje);
-                            }
-                        
-                    }
-                   
                 }
 
-                if (Input.keyDown(Key.F))
-                {
-                    //Prende/apaga la luz de la linterna
-                    if(personaje.getItemEnMano() is Linterna)
-                    {
-                        personaje.getItemEnMano().Usar(personaje);
-                    }
-                }
-
-                if (Input.keyDown(Key.R))
-                {
-                    //Recargar las pilas de la linterna
-                    var pila = (Pila)personaje.objetosInteractuables.Find(objeto => objeto is Pila);
-                    //no puedo usar una pila null
-                    if(pila!=null)
-                    pila.Usar(personaje);
-                }
-
-                if (Input.keyDown(Key.Q))
-                {
-                    //Cambiar entre vela y linterna (si hubiere)
-                    if ((personaje.getItemEnMano() is Linterna || personaje.getItemEnMano() is ItemVacioDefault) && personaje.objetosInteractuables.Any(objeto => objeto is Vela))
-                    {
-                        var vela = (Vela)personaje.objetosInteractuables.Find(objeto => objeto is Vela);
-                        personaje.setItemEnMano(vela);
-                    }
-                    else
-                    { 
-                        if ((personaje.getItemEnMano() is Vela || personaje.getItemEnMano() is ItemVacioDefault) && personaje.objetosInteractuables.Any(objeto => objeto is Linterna))
-                        {
-                            var linterna = (Linterna)personaje.objetosInteractuables.Find(objeto => objeto is Linterna);
-                            personaje.setItemEnMano(linterna);
-                        }
-                    }
-                }
+                RealizarAccionesDeInventario();
 
                 if (Input.keyDown(Key.H))
                 {
                     personaje.tieneLuz = !personaje.tieneLuz;
                 }
 
-                if(personaje.chocandoConEscalera) Console.WriteLine("Estoy chocando con la escaleraaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
-
                 if (personaje.chocandoConEscalera && Input.keyDown(Key.Space))
                 {
-                    
-                    personaje.MoverPersonaje(' ', ElapsedTime, Input, this);
+                    personaje.MoverPersonaje(' ', ElapsedTime, Input, this);//lo dejo asi porque no se que hace esto
+                    // #TinchoHaceteCargo
                 }
-
             }
-
             personaje.updateCamera(ElapsedTime, Input);
-            
+
             personaje.aumentarTiempoSinLuz();
 
+            AccionesPersonajeMonstruo();
+
+            personaje.YouWin();
+
+        }
+
+        private void AccionesPersonajeMonstruo()
+        {
             if (DistanciaA2(monster.ghost) < 5000)
             {
 
-             if (personaje.tieneLuz)
-            {
-                monster.HuirDe(personaje,ElapsedTime);
-                //se aleja de la luz porque tiene cuiqui
-            }
-                monster.MirarA(personaje, ElapsedTime);
+                if (personaje.tieneLuz)
+                {
+                    monster.HuirDe(personaje, ElapsedTime);
+                    //se aleja de la luz porque tiene cuiqui
+                }
+                else 
+                {
+                    monster.MirarA(personaje, ElapsedTime);
+                }
+                
             }
 
             if (personaje.TieneItemEnMano())
             {
                 personaje.getItemEnMano().DisminuirDuracion();
 
-                if(personaje.getItemEnMano().getDuracion() <= 0)
+                if (personaje.getItemEnMano().getDuracion() <= 0)
                 {
                     personaje.getItemEnMano().FinDuracion(personaje);
                 }
             }
 
             InteraccionMonster();
-            personaje.YouWin();
+        }
 
-            PostUpdate();
+        private void RealizarAccionesDeInventario()
+        {
+            if (Input.keyDown(Key.F))
+            {
+                //Prende/apaga la luz de la linterna
+                if (personaje.getItemEnMano() is Linterna)
+                {
+                    personaje.getItemEnMano().Usar(personaje);
+                }
+            }
+
+            if (Input.keyDown(Key.R))
+            {
+                //Recargar las pilas de la linterna
+                var pila = (Pila)personaje.objetosInteractuables.Find(objeto => objeto is Pila);
+                //no puedo usar una pila null
+                if (pila != null)
+                    pila.Usar(personaje);
+            }
+
+            if (Input.keyDown(Key.Q))
+            {
+                //Cambiar entre vela y linterna (si hubiere)
+                if ((personaje.getItemEnMano() is Linterna || personaje.getItemEnMano() is ItemVacioDefault) && personaje.objetosInteractuables.Any(objeto => objeto is Vela))
+                {
+                    var vela = (Vela)personaje.objetosInteractuables.Find(objeto => objeto is Vela);
+                    personaje.setItemEnMano(vela);
+                }
+                else
+                {
+                    if ((personaje.getItemEnMano() is Vela || personaje.getItemEnMano() is ItemVacioDefault) && personaje.objetosInteractuables.Any(objeto => objeto is Linterna))
+                    {
+                        var linterna = (Linterna)personaje.objetosInteractuables.Find(objeto => objeto is Linterna);
+                        personaje.setItemEnMano(linterna);
+                    }
+                }
+            }
+        }
+
+        private void InteraccionPersonajeYMesh()
+        {
+            //Interacuar con meshes
+
+            var objetoInteractuable = this.objetosInteractuables.OrderBy(mesh => this.DistanciaA(mesh)).First();
+            if ((objetoInteractuable is Escondite || objetoInteractuable is Escalera) && this.DistanciaA(objetoInteractuable) < 300)
+            {
+                objetoInteractuable.Interactuar(personaje);
+            }
+            else
+            {
+
+                if (this.DistanciaA(objetoInteractuable) < 300)
+                {
+                    objetosInteractuables.Remove(objetoInteractuable);
+                    objetoInteractuable.Interactuar(personaje);
+                }
+
+                if (personaje.Entre((int)personaje.getPosition().X, -1300, -800) &&
+                      personaje.Entre((int)personaje.getPosition().Z, -8100, -6800))
+                {
+                    Puerta unaPuerta = new Puerta(escenario.tgcScene.Meshes[0]);// esto es para que sea polimorfico nomas
+                    unaPuerta.Interactuar(personaje);
+                }
+
+            }
+        }
+
+        private void UpdateAccionesDeMovimientoYCamara()
+        {
+            bool caminar = false;
+            if (Input.keyDown(Key.W))
+            {
+                //Le digo al wachin que vaya para adelante
+
+                personaje.MoverPersonaje('W', ElapsedTime, Input, this);
+                caminar = true;
+            }
+
+            if (Input.keyDown(Key.A))
+            {
+                //Le digo al wachin que vaya para la izquierda
+                personaje.MoverPersonaje('A', ElapsedTime, Input, this);
+                caminar = true;
+            }
+
+            if (Input.keyDown(Key.S))
+            {
+                //Le digo al wachin que vaya para la izquierda
+                personaje.MoverPersonaje('S', ElapsedTime, Input, this);
+                caminar = true;
+            }
+
+            if (Input.keyDown(Key.D))
+            {
+                //Le digo al wachin que vaya para la izquierda
+                personaje.MoverPersonaje('D', ElapsedTime, Input, this);
+                caminar = true;
+            }
+
+
+
+            personaje.MoverPersonaje('x', ElapsedTime, Input, this);
+        }
+
+        private void RevisarLockeoMouse()
+        {
+            if (Input.keyDown(Key.Escape))
+            {
+                personaje.LockMouse = !personaje.LockMouse;
+            }
+            else
+            {
+                personaje.LockMouse = true;
+            }
         }
 
         private void InteraccionMonster()
         {
-            if (!personaje.tieneLuz && !personaje.estoyEscondido && personaje.tiempoSinLuz > 3500)
+            if (!personaje.tieneLuz && !personaje.estoyEscondido && personaje.tiempoSinLuz > GameModel.TiempoSinAdvertencia)
             {
 
                 Monster unBicho;
-                if (personaje.tiempoSinLuz == 4000)
+                if (personaje.tiempoSinLuz == GameModel.TiempoDeAdvertencia)
                 {
                     unBicho = new Monster();
-                    var posicion = new TGCVector3((1.1f)*personaje.getLookAt().X, -350, (1.1f) * personaje.getLookAt().Z);
-                    unBicho.InstanciarMonster(personaje, posicion);
-                    monster.DisposeMonster();
-                    monster = unBicho;
-                    iluminables.Add(unBicho.ghost);
-                    //hacer que se escuche un ruido
-                }
+                    var posicion = personaje.puntoDemira(personaje.anguloAbsolutoEnY, personaje.anguloAbsolutoEnX);
+                    var nuevaPosicion = new TGCVector3(posicion.X, -350, posicion.Z);
+                    var delta = new TGCVector3(1000,0,1000);
 
-                if (personaje.tiempoSinLuz == 5000)
-                {
-                    //El monster aparece detrás del personaje
-                    unBicho = new Monster();
-                    //var posicion = new TGCVector3(personaje.Position.X - 200, -350, personaje.Position.Z - 200);
-                    var posicion = new TGCVector3((-1) * personaje.getLookAt().X, -350, (-1) * personaje.getLookAt().Z);
-                    unBicho.InstanciarMonster(personaje, posicion);
-                    monster.DisposeMonster();
+                    if (nuevaPosicion.X > 0 )
+                    {
+                        delta = new TGCVector3(-1000, 0, 1000);
+                    }
+
+                    if (nuevaPosicion.Z > 0)
+                    {
+                        delta = new TGCVector3(delta.X, 0, -1000);
+                    }
+
+                    nuevaPosicion += delta;
+
+                    unBicho.InstanciarMonster(personaje, nuevaPosicion,monstruoActual);
+                    //monster.DisposeMonster();
                     monster = unBicho;
                     iluminables.Add(unBicho.ghost);
-                    var targetNuevo = new TGCVector3(unBicho.ghost.Position.X, 15, unBicho.ghost.Position.Z);
-                    personaje.setCamera(personaje.eye,targetNuevo);
-                    personaje.GameOver();
+                    //Agregar un sonido
+
+                }
+                if (personaje.tiempoSinLuz == GameModel.TiempoDeGameOver)
+                {
+                    monster.DisposeMonster();
+                    //El monster aparece detrÃ¡s del personaje
+                    unBicho = new Monster();
+                    var anguloDeRotacion = FastMath.PI;
+
+                    var posicion = personaje.puntoDemira(personaje.anguloAbsolutoEnY + anguloDeRotacion, personaje.anguloAbsolutoEnX);
+                    var nuevaPosicion = new TGCVector3(posicion.X + 300, -350, posicion.Z + 300);
+
+                    unBicho.InstanciarMonster(personaje, nuevaPosicion,monstruoActual);
+                    monster = unBicho;
+                    iluminables.Add(unBicho.ghost);
+
+                    personaje.LockMouse = false;
+
+                    var newTarget = new TGCVector3(nuevaPosicion.X, nuevaPosicion.Y + 350, nuevaPosicion.Z);
+                    personaje.SetCamera(personaje.eye, newTarget);
+
+                    personaje.GameOver(this); 
                 }
             }
         }
@@ -447,7 +495,7 @@ namespace TGC.Group.Model
 
         public void AplicarShaderSpotLight(TgcMesh mesh)
         {
-            //Actualizar posición de la luz
+            //Actualizar posiciÃ³n de la luz
             TGCVector3 lightPos = personaje.getPosition() + new TGCVector3(0, 100, 0) + new TGCVector3(FastMath.Sin(5.5f) * -150, 0, FastMath.Cos(5.5f) * -150);
 
             //Normalizar direccion de la luz
@@ -462,123 +510,40 @@ namespace TGC.Group.Model
             mesh.Effect.SetValue("spotLightExponent", 25);
             mesh.Effect.SetValue("lightColor", ColorValue.FromColor(personaje.itemEnMano.getLuzColor()));
         }
-        public void AplicarShaderAlHeightmap()
+        
+
+        public override void Render()
         {
-            Microsoft.DirectX.Direct3D.Effect currentShader;
-            currentShader = TGCShaders.Instance.TgcMeshPointLightShader;
-            escenario.heightmap.Effect = currentShader;
-            escenario.heightmap.Technique = TGCShaders.Instance.GetTGCMeshTechnique(TgcMesh.MeshRenderType.DIFFUSE_MAP_AND_LIGHTMAP);
+            //Inicio el render de la escena, para ejemplos simples. Cuando tenemos postprocesado o shaders es mejor realizar las operaciones segÃºn nuestra conveniencia.
+            PreRender();
 
-            // Estos son paramentros del current shader, si cambias el shader chequear los parametros o rompe
-            escenario.heightmap.Effect.SetValue("materialEmissiveColor", ColorValue.FromColor(Color.Black));
-            escenario.heightmap.Effect.SetValue("materialAmbientColor", ColorValue.FromColor(Color.White));
-            escenario.heightmap.Effect.SetValue("materialDiffuseColor", ColorValue.FromColor(Color.White));
-            escenario.heightmap.Effect.SetValue("materialSpecularColor", ColorValue.FromColor(Color.White));
-            escenario.heightmap.Effect.SetValue("materialSpecularExp", 9f);
-            escenario.heightmap.Effect.SetValue("eyePosition", TGCVector3.TGCVector3ToFloat4Array(personaje.eye));
-            escenario.heightmap.Effect.SetValue("lightAttenuation", 0.3f);
-            escenario.heightmap.Effect.SetValue("lightColor", ColorValue.FromColor(Color.White));
-            escenario.heightmap.Effect.SetValue("lightIntensity", 50f);
-            escenario.heightmap.Effect.SetValue("lightPosition", TGCVector3.TGCVector3ToFloat4Array(personaje.getPosition()));
-        }
-
-
-        /// ////////////////////////////////////////////////////////77
-        /// /////////////////////////////////////////////////////////
-        public class LightData
-        {
-            public TgcBoundingAxisAlignBox aabb;
-            public Color color;
-            public TGCVector3 pos;
-        }
-
-        private LightData getClosestLight(TGCVector3 pos)
-        {
-            var minDist = float.MaxValue;
-            LightData minLight = null;
-
-            foreach (var light in lights)
+            if (!estoyJugando)
             {
-                var distSq = TGCVector3.LengthSq(pos - light.pos);
-                if (distSq < minDist)
-                {
-                    minDist = distSq;
-                    minLight = light;
-                }
-            }
-
-            return minLight;
-        }
-        public void RenderMultiplesLuces()
-        {
-            //Habilitar luz
-            Microsoft.DirectX.Direct3D.Effect currentShader;
-            if (personaje.tieneLuz)
-            {
-                //Con luz: Cambiar el shader actual por el shader default que trae el framework para iluminacion dinamica con PointLight
-                currentShader = TGCShaders.Instance.TgcMeshPointLightShader;
+                menu.renderSprite();
             }
             else
             {
-                //Sin luz: Restaurar shader default
-                currentShader = TGCShaders.Instance.TgcMeshShader;
-            }
+                this.updateLighting();
 
-            //Aplicar a cada mesh el shader actual
-            foreach (TgcMesh mesh in escenario.tgcScene.Meshes)
-            {
-                mesh.Effect = currentShader;
-                //El Technique depende del tipo RenderType del mesh
-                mesh.Technique = TGCShaders.Instance.GetTGCMeshTechnique(mesh.RenderType);
-            }
+                //Pone el fondo negro en vez del azul feo ese
+                D3DDevice.Instance.Device.Clear(ClearFlags.Target | ClearFlags.ZBuffer, Color.Black, 1.0f, 0);
 
-            //Renderizar meshes
-            foreach (TgcMesh mesh in iluminables)
-            {
-                if (personaje.tieneLuz)
+                //Frustum Culling -> OPCION 1
+                var meshesQueChocanConFrustrum = escenario.tgcScene.Meshes.FindAll(mesh => TgcCollisionUtils.classifyFrustumAABB(this.Frustum, mesh.BoundingBox) != TgcCollisionUtils.FrustumResult.OUTSIDE);
+                meshesQueChocanConFrustrum.ForEach(mesh => mesh.Render());
+
+                if (DistanciaA2(monster.ghost) < 5000)
                 {
-                    var light = getClosestLight(mesh.BoundingBox.calculateBoxCenter());
-
-                    //Cargar variables shader de la luz
-
-                    mesh.Effect.SetValue("eyePosition", TGCVector3.TGCVector3ToFloat4Array(personaje.eye));
-                    mesh.Effect.SetValue("lightAttenuation", personaje.itemEnMano.getValorAtenuacion());
-                    mesh.Effect.SetValue("lightPosition", TGCVector3.TGCVector3ToFloat4Array(light.pos));
-                    mesh.Effect.SetValue("lightIntensity", personaje.itemEnMano.getValorLuminico());
-                    mesh.Effect.SetValue("lightColor", ColorValue.FromColor(personaje.itemEnMano.getLuzColor()));
-
-                    //Cargar variables de shader de Material. El Material en realidad deberia ser propio de cada mesh. Pero en este ejemplo se simplifica con uno comun para todos
-                    
-                    mesh.Effect.SetValue("materialEmissiveColor", ColorValue.FromColor(Color.Black));
-                    mesh.Effect.SetValue("materialAmbientColor", ColorValue.FromColor(Color.White));
-                    mesh.Effect.SetValue("materialDiffuseColor", ColorValue.FromColor(Color.White));
-                    mesh.Effect.SetValue("materialSpecularColor", ColorValue.FromColor(Color.White));
-                    mesh.Effect.SetValue("materialSpecularExp", 9f);
+                    monster.RenderMonster();
                 }
-
-                //Renderizar modelo
-                mesh.Render();
+                //Render de BoundingBox, muy Ãºtil para debug de colisiones.
+                if (BoundingBox)
+                {
+                    Box.BoundingBox.Render();
+                    tgcScene.Meshes.ForEach(mesh => mesh.BoundingBox.Render());
+                    fondo.BoundingBox.Render();
+                }
             }
-        }
-
-        /// <summary>
-        ///     Se llama cada vez que hay que refrescar la pantalla.
-        ///     Escribir aquí todo el código referido al renderizado.
-        ///     Borrar todo lo que no haga falta.
-        /// </summary>
-        public override void Render()
-        {
-            //Inicio el render de la escena, para ejemplos simples. Cuando tenemos postprocesado o shaders es mejor realizar las operaciones según nuestra conveniencia.
-            PreRender();
-
-            this.updateLighting();
-
-            //Pone el fondo negro en vez del azul feo ese
-            D3DDevice.Instance.Device.Clear(ClearFlags.Target | ClearFlags.ZBuffer, Color.Black, 1.0f, 0);
-          
-            //Frustum Culling -> OPCION 1
-            var meshesQueChocanConFrustrum = escenario.tgcScene.Meshes.FindAll(mesh => TgcCollisionUtils.classifyFrustumAABB(this.Frustum, mesh.BoundingBox) != TgcCollisionUtils.FrustumResult.OUTSIDE);
-            meshesQueChocanConFrustrum.ForEach(mesh => mesh.Render());
 
             //Frustum Culling -> OPCION 2
             /*
@@ -597,33 +562,22 @@ namespace TGC.Group.Model
             }*/
 
             //personaje.RenderPersonaje(ElapsedTime);
-            if (DistanciaA2(monster.ghost) < 5000)
-            {
-                monster.RenderMonster();
-            }
-            //Render de BoundingBox, muy útil para debug de colisiones.
-            if (BoundingBox)
-            {
-                Box.BoundingBox.Render();
-                tgcScene.Meshes.ForEach(mesh => mesh.BoundingBox.Render());
-                //fondo.BoundingBox.Render();
-            }
-            
+
             //Finaliza el render y presenta en pantalla, al igual que el preRender se debe para casos puntuales es mejor utilizar a mano las operaciones de EndScene y PresentScene
             PostRender();
         }
 
         /// <summary>
-        ///     Se llama cuando termina la ejecución del ejemplo.
+        ///     Se llama cuando termina la ejecuciÃ³n del ejemplo.
         ///     Hacer Dispose() de todos los objetos creados.
-        ///     Es muy importante liberar los recursos, sobretodo los gráficos ya que quedan bloqueados en el device de video.
+        ///     Es muy importante liberar los recursos, sobretodo los grÃ¡ficos ya que quedan bloqueados en el device de video.
         /// </summary>
         public override void Dispose()
         {
             escenario.DisposeEscenario();
             //personaje.DisposePersonaje();
             monster.DisposeMonster();
-
+            menu.disposeSprite();
             paredInvisible.DisposePared();
         }
 
