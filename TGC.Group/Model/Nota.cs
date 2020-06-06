@@ -11,15 +11,19 @@ namespace TGC.Group.Model
     class Nota : IInteractuable
     {
         private TgcMesh mesh;
+        private GameModel gameModel;
 
-        public Nota(TgcMesh mesh)
+        public Nota(TgcMesh mesh, GameModel gameModel)
         {
             this.mesh = mesh;
+            this.gameModel = gameModel;
         }
 
         public void Interactuar(Personaje personaje)
         {
             personaje.cantidadNotas++;
+            gameModel.nota.instanciarNotas(personaje.cantidadNotas);
+            //Agregar un sonido
             eliminarMesh();
         }
         public TGCVector3 getPosition()

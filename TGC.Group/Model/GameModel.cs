@@ -48,6 +48,8 @@ namespace TGC.Group.Model
         public Personaje personaje = new Personaje();
         public Monster monster = new Monster();
         public Sprite menu = new Sprite();
+        public HUD nota = new HUD();
+        public HUD vidaUtilVela = new HUD();
 
         public static bool estoyCorriendo = false;
 
@@ -93,6 +95,9 @@ namespace TGC.Group.Model
             this.FixedTickEnable = false;
 
             menu.instanciarMenu();
+            nota.instanciarNotas(0);
+            vidaUtilVela.instanciarVelas(0);
+
             escenario.InstanciarEstructuras();
             monster.InstanciarMonster(monstruoActual);
             CrearObjetosEnEscenario();
@@ -125,12 +130,12 @@ namespace TGC.Group.Model
             IInteractuable interactuable;
             if (mesh.Name.Equals("notas"))
             {
-                interactuable = new Nota(mesh);
+                interactuable = new Nota(mesh,this);
                 objetosInteractuables.Add(interactuable);
             }
             if (mesh.Name.Equals("vela"))
             {
-                interactuable = new Vela(mesh);
+                interactuable = new Vela(mesh,this);
                 objetosInteractuables.Add(interactuable);
             }
             if (mesh.Name.Equals("pilas"))
@@ -520,10 +525,12 @@ namespace TGC.Group.Model
             if (!estoyJugando)
             {
                 menu.renderSprite();
+                
             }
             else
             {
                 this.updateLighting();
+                
 
                 //Pone el fondo negro en vez del azul feo ese
                 D3DDevice.Instance.Device.Clear(ClearFlags.Target | ClearFlags.ZBuffer, Color.Black, 1.0f, 0);
@@ -543,6 +550,9 @@ namespace TGC.Group.Model
                     tgcScene.Meshes.ForEach(mesh => mesh.BoundingBox.Render());
                     fondo.BoundingBox.Render();
                 }
+
+                nota.renderSprite();
+                vidaUtilVela.renderSprite();
             }
 
             //Frustum Culling -> OPCION 2
@@ -577,7 +587,11 @@ namespace TGC.Group.Model
             escenario.DisposeEscenario();
             //personaje.DisposePersonaje();
             monster.DisposeMonster();
+            
             menu.disposeSprite();
+            nota.disposeSprite();
+            vidaUtilVela.disposeSprite();
+
             paredInvisible.DisposePared();
         }
 
