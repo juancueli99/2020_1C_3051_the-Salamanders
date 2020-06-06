@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using TGC.Group.Model;
 
 namespace TGC.Group.Form
 {
@@ -89,19 +90,48 @@ namespace TGC.Group.Form
         private void easyButton_Click(object sender, EventArgs e)
         {
             //Guardar la opcion elegida
+            this.setDifficultyTo("easy");
             this.hideDifficultyButtons();
         }
 
         private void normalButton_Click(object sender, EventArgs e)
         {
             //Guardar la opcion elegida
+            this.setDifficultyTo("normal");
             this.hideDifficultyButtons();
         }
 
         private void impossibleButton_Click(object sender, EventArgs e)
         {
             //Guardar la opcion elegida
+            this.setDifficultyTo("impossible");
             this.hideDifficultyButtons();
+        }
+
+        private void setDifficultyTo(string level)
+        {
+            if (level.Equals("easy"))
+            {
+                //este seria el default
+                GameModel.notasParaGanar = 4;
+                GameModel.TiempoDeAdvertencia = 4000;
+                GameModel.TiempoDeGameOver = 5000;
+                GameModel.TiempoSinAdvertencia = 3500;
+            }
+            if (level.Equals("normal"))
+            {
+                GameModel.notasParaGanar = 4;
+                GameModel.TiempoDeAdvertencia = 2500;
+                GameModel.TiempoDeGameOver = 3000;
+                GameModel.TiempoSinAdvertencia = 2000;
+            }
+            if (level.Equals("impossible")) 
+            {
+                GameModel.notasParaGanar = 6;
+                GameModel.TiempoDeAdvertencia=1500;
+                GameModel.TiempoDeGameOver=2000;
+                GameModel.TiempoSinAdvertencia=1000;
+            }
         }
 
         private void hideDifficultyButtons()
@@ -158,6 +188,7 @@ namespace TGC.Group.Form
         private void ghostButton_Click(object sender, EventArgs e)
         {
             //Guardar la opcion elegida
+            GameModel.monstruoActual = monstruos.CLOWN;//hay que cambiarle el nombre de ghost a Clown
             this.hideMonstersButtons();
             
         }
@@ -165,12 +196,15 @@ namespace TGC.Group.Form
         private void demonButton_Click(object sender, EventArgs e)
         {
             //Guardar la opcion elegida
+
+            GameModel.monstruoActual = monstruos.SECTARIAN;//hay que cambiarle el nombre de demon a sectarian
             this.hideMonstersButtons();
         }
 
         private void alienButton_Click(object sender, EventArgs e)
         {
             //Guardar la opcion elegida
+            GameModel.monstruoActual = monstruos.ALIEN;
             this.hideMonstersButtons();
         }
 

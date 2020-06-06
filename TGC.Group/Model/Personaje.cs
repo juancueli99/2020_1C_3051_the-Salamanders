@@ -786,10 +786,12 @@ namespace TGC.Group.Model
             this.setCamera(eye, vectorDesfasaje);
         }
 
-        public void GameOver()
+        public void GameOver(GameModel modelo)
         {
             //Por ahora lo dejamos asi hasta que tengamos una interfaz grafica
-            Console.WriteLine("Game Over");
+            
+            modelo.estoyJugando = false;
+            //tendria que mandarme de vuelta al menu
         }
         public void YouWin()
         {

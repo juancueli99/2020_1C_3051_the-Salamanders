@@ -139,6 +139,7 @@ namespace TGC.Group.Model
             //Solo nos interesa el primer modelo de esta escena (tiene solo uno)
             ghost = ConfiguradorMonstruo.ConfigurarMonstruo(tipo);
             ghost.Position = new TGCVector3(posicionDeAlejamiento);
+            ghost.Transform = TGCMatrix.Translation(posicionDeAlejamiento.X, posicionDeAlejamiento.Y- 100, posicionDeAlejamiento.Z);
             this.lookAt= new TGCVector3(ghost.Rotation);
             RotarMesh(personaje);
             

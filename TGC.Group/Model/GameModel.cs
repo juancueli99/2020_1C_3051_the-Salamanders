@@ -83,9 +83,9 @@ namespace TGC.Group.Model
         ///     Borrar el codigo ejemplo no utilizado.
         /// </summary>
 
-        bool estoyJugando = false;
+        public bool estoyJugando = false;
 
-        public static monstruos monstruoActual= monstruos.GHOST;
+        public static monstruos monstruoActual= monstruos.SECTARIAN;
         public override void Init()
         {
 
@@ -416,7 +416,7 @@ namespace TGC.Group.Model
                     var newTarget = new TGCVector3(nuevaPosicion.X, nuevaPosicion.Y + 350, nuevaPosicion.Z);
                     personaje.SetCamera(personaje.eye, newTarget);
 
-                    personaje.GameOver(); 
+                    personaje.GameOver(this); 
                 }
             }
         }

@@ -73,7 +73,7 @@ namespace TGC.Group.Model
 
             alien.Position = new TGCVector3(200, -100, 100);
 
-            alien.Transform = TGCMatrix.Translation(0, -100, 0) * TGCMatrix.Scaling(5, 5, 5);
+            alien.Transform = TGCMatrix.Translation(0, -100, 0) * TGCMatrix.Scaling(100, 100, 100);
 
             return alien;
         }
@@ -81,6 +81,10 @@ namespace TGC.Group.Model
         public static TgcMesh ConfigurarMonstruo(monstruos monstruo)
         {
             TgcMesh monster=null;
+            var ran = new Random();
+            if (ran.Next() % 1000 == 57) {
+                return configurarFantasma();
+            }
 
             switch (monstruo)
             {
