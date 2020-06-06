@@ -70,6 +70,10 @@ namespace TGC.Group.Model
         //Boleano para ver si dibujamos el boundingbox
         private bool BoundingBox { get; set; }
         public FrustumResult INTERSECT { get; private set; }
+        public static float TiempoDeGameOver = 5000;
+        public static float TiempoDeAdvertencia = 4000;
+        public static float TiempoSinAdvertencia = 3500;
+
         public static int notasParaGanar = 4;
 
         /// <summary>
@@ -363,11 +367,11 @@ namespace TGC.Group.Model
 
         private void InteraccionMonster()
         {
-            if (!personaje.tieneLuz && !personaje.estoyEscondido && personaje.tiempoSinLuz > 3500)
+            if (!personaje.tieneLuz && !personaje.estoyEscondido && personaje.tiempoSinLuz > GameModel.TiempoSinAdvertencia)
             {
 
                 Monster unBicho;
-                if (personaje.tiempoSinLuz == 4000)
+                if (personaje.tiempoSinLuz == GameModel.TiempoDeAdvertencia)
                 {
                     unBicho = new Monster();
                     var posicion = personaje.puntoDemira(personaje.anguloAbsolutoEnY, personaje.anguloAbsolutoEnX);
@@ -393,7 +397,7 @@ namespace TGC.Group.Model
                     //Agregar un sonido
 
                 }
-                if (personaje.tiempoSinLuz == 5000)
+                if (personaje.tiempoSinLuz == GameModel.TiempoDeGameOver)
                 {
                     monster.DisposeMonster();
                     //El monster aparece detrás del personaje
