@@ -67,13 +67,13 @@ namespace TGC.Group.Model
             TgcMesh alien;
 
             var loader = new TgcSceneLoader();
-            var scene2 = loader.loadSceneFromFile(MediaDir + "Modelame\\Alien-TgcScene.xml");
+            var scene2 = loader.loadSceneFromFile(MediaDir + "Modelame\\AlienV8-TgcScene.xml");
 
             alien = scene2.Meshes[0];
 
-            alien.Position = new TGCVector3(200, -100, 100);
+            alien.Position = new TGCVector3(200, 0, 100);
 
-            alien.Transform = TGCMatrix.Translation(0, -100, 0) * TGCMatrix.Scaling(100, 100, 100);
+            alien.Transform = TGCMatrix.Translation(0, 0, 0) * TGCMatrix.Scaling(100, 100, 100);
 
             return alien;
         }
