@@ -64,6 +64,7 @@ namespace TGC.Group.Model
 
         public List<IInteractuable> objetosInteractuables = new List<IInteractuable>();
         public List<TgcMesh> iluminables= new List<TgcMesh>();
+        public List<Sonido> sonidosRandoms = new List<Sonido>();
 
         //Caja que se muestra en el ejemplo.
         private TGCBox Box { get; set; }
@@ -92,6 +93,7 @@ namespace TGC.Group.Model
         public bool estoyJugando = false;
         public Sonido musicaMenu ;
         public Sonido sonidoBarra;
+        
 
         public static monstruos monstruoActual= monstruos.SECTARIAN;
         public static Microsoft.DirectX.DirectSound.Device deviceMusica;
@@ -113,6 +115,7 @@ namespace TGC.Group.Model
             velita.instanciarVelita();
             vidaUtilLinterna.instanciarLinternas(0);
             linternita.instanciarLinternita();
+            InstanciarSonidosRandoms();
 
             escenario.InstanciarEstructuras();
             monster.InstanciarMonster(monstruoActual);
@@ -133,6 +136,11 @@ namespace TGC.Group.Model
             //Internamente el framework construye la matriz de view con estos dos vectores.
             //Luego en nuestro juego tendremos que crear una cámara que cambie la matriz de view con variables como movimientos o animaciones de escenas
 
+        }
+
+        private void InstanciarSonidosRandoms()
+        {
+            sonidosRandoms.Add(new Sonido("",false));
         }
 
         private void CrearObjetosEnEscenario()
@@ -195,6 +203,7 @@ namespace TGC.Group.Model
                 if (estoyJugando) 
                 {
                     sonidoBarra = new Sonido("AllAroundYou.wav", false);
+
                 }
             }
             else
