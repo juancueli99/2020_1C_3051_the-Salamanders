@@ -94,7 +94,8 @@ namespace TGC.Group.Model
         public bool estoyJugando = false;
         public Sonido musicaMenu ;
         public Sonido sonidoBarra;
-        
+        public Sonido musicaFondoOutdoor = new Sonido("nocturno, continuo.wav",-4000, true);
+
 
         public static monstruos monstruoActual= monstruos.SECTARIAN;
         public static Microsoft.DirectX.DirectSound.Device deviceMusica;
@@ -291,6 +292,7 @@ namespace TGC.Group.Model
             else 
             {
                 reproducirSonidoRandomOutdoor();
+                musicaFondoOutdoor.escucharSonidoActual(true);
             }
 
             reproducirSonidoRandomAmbiental();
@@ -314,10 +316,10 @@ namespace TGC.Group.Model
         private void reproducirRandomDeLista(List<Sonido> listaSonidos)
         {
             var ran = new Random();
-            if (ran.Next() % 10 == 7)
+            if (ran.Next() % 100 == 7)
             {
                 int indice = ran.Next() % (sonidosRandoms.Count());
-                listaSonidos[indice].escucharSonidoActual(false);
+                listaSonidos[indice-1].escucharSonidoActual(false);
             }
         }
 
