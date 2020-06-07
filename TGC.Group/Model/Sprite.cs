@@ -23,8 +23,8 @@ namespace TGC.Group.Model
         public void instanciarMenu()
         {
             drawer2D = new Drawer2D();
-
             sprite = new CustomSprite();
+
 
             sprite.Bitmap = new CustomBitmap(MediaDir + "Earphones Info.jpg", D3DDevice.Instance.Device);
 

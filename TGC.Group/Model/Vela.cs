@@ -18,10 +18,12 @@ namespace TGC.Group.Model
         public float duracion = 6000;
         public bool estaEncendida = true;
         private TgcMesh mesh;
+        private GameModel gameModel;
 
-        public Vela(TgcMesh mesh)
+        public Vela(TgcMesh mesh, GameModel gameModel)
         {
             this.mesh = mesh;
+            this.gameModel = gameModel;
         }
         public TGCVector3 getPosition()
         {
@@ -63,13 +65,20 @@ namespace TGC.Group.Model
         public void AumentarDuracion()
         {
             this.duracion = duracionMax;
+            this.ActualizarHUD();
         }
 
         public void DisminuirDuracion()
         {
             this.duracion -= 1;
+            this.ActualizarHUD();
         }
 
+        public void ActualizarHUD()
+        {
+            int aux = (int)((duracion / duracionMax) * 66);
+            gameModel.vidaUtilVela.instanciarVelas(aux);
+        }
         public void DesecharVela(Personaje personaje)
         {
             personaje.objetosInteractuables.Remove(this);

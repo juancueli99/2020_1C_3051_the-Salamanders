@@ -13,6 +13,7 @@ namespace TGC.Group.Model
 
     {
         TgcMesh mesh1;
+        private GameModel gameModel;
         TgcMesh mesh2;
         //12000 = 120 segundos
         public float duracionMax = 12000;
@@ -20,10 +21,11 @@ namespace TGC.Group.Model
         public bool estaEncendida = false;
 
 
-        public Linterna(TgcMesh nuevoMesh, TgcMesh nuevoMesh2)
+        public Linterna(TgcMesh nuevoMesh, TgcMesh nuevoMesh2, GameModel gameModel)
         {
             this.mesh2 = nuevoMesh2;
             this.mesh1 = nuevoMesh;
+            this.gameModel = gameModel;
         }
         public TGCVector3 getPosition()
         {
@@ -52,18 +54,15 @@ namespace TGC.Group.Model
 
         public void Usar(Personaje personaje)
         {
-            if (this.estaEncendida)
+            if (personaje.tieneLuz)
             {
                 this.ApagarLinterna(personaje);
+                personaje.tieneLuz = false;
             }
             else
             {
-                if (personaje.tieneLuz)
-                {
-                    personaje.UsarItemEnMano();
-                }
-
                 this.EncenderLinterna();
+                personaje.tieneLuz = true;
             }
         }
 
@@ -91,6 +90,7 @@ namespace TGC.Group.Model
         public void Recargar()
         {
             this.duracion = duracionMax;
+            this.ActualizarHUD();
         }
 
         public void DisminuirDuracion()
@@ -98,7 +98,14 @@ namespace TGC.Group.Model
             if (this.estaEncendida)
             {
                 this.duracion -= 1;
+                this.ActualizarHUD();
             }
+        }
+
+        public void ActualizarHUD()
+        {
+            int aux = (int)((duracion / duracionMax) * 75);
+            gameModel.vidaUtilLinterna.instanciarLinternas(aux);
         }
 
         public float getDuracion()
