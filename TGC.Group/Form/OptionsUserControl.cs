@@ -228,6 +228,8 @@ namespace TGC.Group.Form
         private void controlsButton_Click(object sender, EventArgs e)
         {
             //Aca va el UserControl de los controles
+            controlsUserControl1.BringToFront();
+            controlsUserControl1.Show();
         }
     }
 }

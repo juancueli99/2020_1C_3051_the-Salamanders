@@ -63,6 +63,16 @@ namespace TGC.Group.Properties {
         /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap ControlsMenu {
+            get {
+                object obj = ResourceManager.GetObject("ControlsMenu", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Earphones_Info {
             get {
                 object obj = ResourceManager.GetObject("Earphones Info", resourceCulture);
