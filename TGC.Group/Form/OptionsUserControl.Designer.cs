@@ -242,7 +242,7 @@
             this.alienButton.Location = new System.Drawing.Point(234, 643);
             this.alienButton.Margin = new System.Windows.Forms.Padding(0);
             this.alienButton.Name = "alienButton";
-            this.alienButton.Size = new System.Drawing.Size(83, 31);
+            this.alienButton.Size = new System.Drawing.Size(110, 31);
             this.alienButton.TabIndex = 56;
             this.alienButton.Text = " > ALIEN";
             this.alienButton.TextAlign = System.Drawing.ContentAlignment.TopLeft;
@@ -260,9 +260,9 @@
             this.ghostButton.Location = new System.Drawing.Point(234, 576);
             this.ghostButton.Margin = new System.Windows.Forms.Padding(0);
             this.ghostButton.Name = "ghostButton";
-            this.ghostButton.Size = new System.Drawing.Size(83, 31);
+            this.ghostButton.Size = new System.Drawing.Size(110, 31);
             this.ghostButton.TabIndex = 55;
-            this.ghostButton.Text = " > GHOST";
+            this.ghostButton.Text = " > CLOWN";
             this.ghostButton.TextAlign = System.Drawing.ContentAlignment.TopLeft;
             this.ghostButton.UseVisualStyleBackColor = false;
             this.ghostButton.Click += new System.EventHandler(this.ghostButton_Click);
@@ -302,9 +302,9 @@
             this.demonButton.Location = new System.Drawing.Point(234, 609);
             this.demonButton.Margin = new System.Windows.Forms.Padding(0);
             this.demonButton.Name = "demonButton";
-            this.demonButton.Size = new System.Drawing.Size(83, 31);
+            this.demonButton.Size = new System.Drawing.Size(110, 31);
             this.demonButton.TabIndex = 52;
-            this.demonButton.Text = " > DEMON";
+            this.demonButton.Text = " > SECTARIAN";
             this.demonButton.TextAlign = System.Drawing.ContentAlignment.TopLeft;
             this.demonButton.UseVisualStyleBackColor = false;
             this.demonButton.Click += new System.EventHandler(this.demonButton_Click);
