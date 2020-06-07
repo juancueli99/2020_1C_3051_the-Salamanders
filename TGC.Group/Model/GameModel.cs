@@ -46,7 +46,7 @@ namespace TGC.Group.Model
         }
         public Escenario escenario = new Escenario();
         public Personaje personaje;
-        public Monster monster = new Monster();
+        public Monster monster;
         public Sprite menu = new Sprite();
 
         public HUD nota = new HUD();
@@ -94,7 +94,7 @@ namespace TGC.Group.Model
         public bool estoyJugando = false;
         public Sonido musicaMenu ;
         public Sonido sonidoBarra;
-        public Sonido musicaFondoOutdoor = new Sonido("nocturno, continuo.wav",-4250, true);
+        public Sonido musicaFondoOutdoor;
 
 
         public static monstruos monstruoActual= monstruos.SECTARIAN;
@@ -109,7 +109,8 @@ namespace TGC.Group.Model
 
             
             musicaMenu = new Sonido("SonidoPruebaTGC(Mono).wav", true);
-            
+            musicaFondoOutdoor = new Sonido("nocturno, continuo.wav", -4250, true);
+
             personaje = new Personaje();
             menu.instanciarMenu();
             nota.instanciarNotas(0);
@@ -122,6 +123,7 @@ namespace TGC.Group.Model
             InstanciasSonidosInDoorRandoms();
 
             escenario.InstanciarEstructuras();
+            monster = new Monster();
             monster.InstanciarMonster(monstruoActual);
             CrearObjetosEnEscenario();
             iluminables.Add(monster.ghost);
@@ -229,6 +231,8 @@ namespace TGC.Group.Model
                 if (estoyJugando) 
                 {
                     sonidoBarra = new Sonido("AllAroundYou.wav", false);
+                    var sonidoStart = new Sonido("auto, abrir puerta.wav", -4000, false);
+                    sonidoStart.escucharSonidoActual(false);
 
                 }
             }
@@ -316,10 +320,10 @@ namespace TGC.Group.Model
         private void reproducirRandomDeLista(List<Sonido> listaSonidos)
         {
             var ran = new Random();
-            if (ran.Next() % 100 == 7)
+            if (ran.Next() % 10000 == 7)
             {
                 int indice = ran.Next() % (sonidosRandoms.Count());
-                listaSonidos[indice-1].escucharSonidoActual(false);
+                listaSonidos[Math.Max(indice-1,0)].escucharSonidoActual(false);
             }
         }
 

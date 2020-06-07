@@ -93,8 +93,8 @@ namespace TGC.Group.Model
         private static List<Sonido> configurarSonidoSectario()
         {
             var lista = new List<Sonido>();
-            lista.Add(new Sonido("ramita, partir.wav",false));
-            lista.Add(new Sonido("risa infantil.wav", false));
+            lista.Add(new Sonido("ramita, partir.wav",-3000,false));
+            lista.Add(new Sonido("risa infantil.wav",-3000 ,false));
             return lista;
         }
 

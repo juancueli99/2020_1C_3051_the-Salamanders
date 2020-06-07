@@ -19,6 +19,7 @@ namespace TGC.Group.Model
         public float duracionMax = 12000;
         public float duracion = 12000;
         public bool estaEncendida = false;
+        Sonido sonidoInterruptor;
 
 
         public Linterna(TgcMesh nuevoMesh, TgcMesh nuevoMesh2, GameModel gameModel)
@@ -26,6 +27,7 @@ namespace TGC.Group.Model
             this.mesh2 = nuevoMesh2;
             this.mesh1 = nuevoMesh;
             this.gameModel = gameModel;
+            sonidoInterruptor = new Sonido("Click2-Sebastian-759472264.wav", -3000,false);
         }
         public TGCVector3 getPosition()
         {
@@ -64,6 +66,7 @@ namespace TGC.Group.Model
                 this.EncenderLinterna();
                 personaje.tieneLuz = true;
             }
+            this.sonidoInterruptor.escucharSonidoActual(false);
         }
 
         public void Equipar(Personaje personaje)

@@ -19,7 +19,7 @@ namespace TGC.Group.Model
     {
         public TgcMesh ghost;
         String MediaDir = "..\\..\\..\\Media\\";
-        List<Sonido> SonidosRandoms;
+        List<Sonido> SonidosRandoms= new List<Sonido>();
         TGCVector3 lookAt = new TGCVector3();
         private float velocidad=2;
         Sonido sonidoAtrapa3;//instanciar antes de atrapar o en el init pero alguien tiene que subir la musica que falta
@@ -28,7 +28,7 @@ namespace TGC.Group.Model
         {
             ghost = ConfiguradorMonstruo.ConfigurarMonstruo(tipo);
             SonidosRandoms = ConfiguradorMonstruo.ConfigurarSonidosRandoms();
-            Sonido sonidoAtrapa3=ConfiguradorMonstruo.ObtenerSonidoDeGameOver();
+            sonidoAtrapa3=ConfiguradorMonstruo.ObtenerSonidoDeGameOver();
             this.lookAt = new TGCVector3(ghost.Position);
         }
 
@@ -141,6 +141,8 @@ namespace TGC.Group.Model
         {
             //Solo nos interesa el primer modelo de esta escena (tiene solo uno)
             ghost = ConfiguradorMonstruo.ConfigurarMonstruo(tipo);
+            SonidosRandoms = ConfiguradorMonstruo.ConfigurarSonidosRandoms();
+            sonidoAtrapa3 = ConfiguradorMonstruo.ObtenerSonidoDeGameOver();
             ghost.Position = new TGCVector3(posicionDeAlejamiento);
             ghost.Transform = TGCMatrix.Translation(posicionDeAlejamiento.X, posicionDeAlejamiento.Y- 100, posicionDeAlejamiento.Z);
             this.lookAt= new TGCVector3(ghost.Rotation);
@@ -168,7 +170,7 @@ namespace TGC.Group.Model
             var ran = new Random();
             
                 int indice = ran.Next() % (this.SonidosRandoms.Count());
-            SonidosRandoms[indice - 1].escucharSonidoActual(false);
+            SonidosRandoms[Math.Max(indice - 1,0)].escucharSonidoActual(false);
             
         }
         public void ReproducirSonidoGameOver() {

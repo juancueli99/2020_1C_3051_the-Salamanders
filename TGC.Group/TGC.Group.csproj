@@ -597,6 +597,7 @@
     <Content Include="Media\Sky.jpg" />
     <Content Include="Media\SkyBoxPiolasa.jpg" />
     <Content Include="Media\Sonidos\AllAroundYou.wav" />
+    <Content Include="Media\Sonidos\auto, abrir puerta.wav" />
     <Content Include="Media\Sonidos\búho, grito.wav" />
     <Content Include="Media\Sonidos\cadena arrastrada.wav" />
     <Content Include="Media\Sonidos\cadena, agitar.wav" />
