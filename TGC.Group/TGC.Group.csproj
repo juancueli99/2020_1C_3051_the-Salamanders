@@ -81,6 +81,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\..\..\Windows\Microsoft.NET\DirectX for Managed Code\1.0.2902.0\Microsoft.DirectX.DirectInput.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.DirectX.DirectSound, Version=1.0.2902.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" />
     <Reference Include="Microsoft.VisualC" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -128,6 +129,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Game.settings</DependentUpon>
     </Compile>
+    <Compile Include="Model\Sonido.cs" />
     <Compile Include="Model\ConfiguradorMonstruo.cs" />
     <Compile Include="Model\CustomBitmap.cs" />
     <Compile Include="Model\CustomSprite.cs" />
@@ -594,6 +596,7 @@
     <Content Include="Media\Sky 4.png" />
     <Content Include="Media\Sky.jpg" />
     <Content Include="Media\SkyBoxPiolasa.jpg" />
+    <Content Include="Media\SonidoPruebaTGC%28Mono%29.wav" />
     <Content Include="Media\START_GAME.png" />
     <Content Include="Media\Velita.png" />
     <Content Include="Media\vidaUtilLinterna\vidaUtilLinterna0.png" />
