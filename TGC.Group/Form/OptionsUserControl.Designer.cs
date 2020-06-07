@@ -50,6 +50,7 @@
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.controlsButton = new System.Windows.Forms.Button();
             this.Pipe57 = new System.Windows.Forms.Label();
+            this.controlsUserControl1 = new TGC.Group.Form.ControlsUserControl();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -363,6 +364,13 @@
             this.Pipe57.Text = "|";
             this.Pipe57.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
+            // controlsUserControl1
+            // 
+            this.controlsUserControl1.Location = new System.Drawing.Point(0, 0);
+            this.controlsUserControl1.Name = "controlsUserControl1";
+            this.controlsUserControl1.Size = new System.Drawing.Size(1370, 705);
+            this.controlsUserControl1.TabIndex = 60;
+            // 
             // OptionsUserControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -388,6 +396,7 @@
             this.Controls.Add(this.Pipe7);
             this.Controls.Add(this.demonButton);
             this.Controls.Add(this.Pipe8);
+            this.Controls.Add(this.controlsUserControl1);
             this.Name = "OptionsUserControl";
             this.Size = new System.Drawing.Size(1370, 705);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
@@ -418,5 +427,6 @@
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Button controlsButton;
         private System.Windows.Forms.Label Pipe57;
+        private ControlsUserControl controlsUserControl1;
     }
 }

@@ -742,6 +742,7 @@
     <Content Include="Media\vidaUtilVela\vidaUtilVela7.png" />
     <Content Include="Media\vidaUtilVela\vidaUtilVela8.png" />
     <Content Include="Media\vidaUtilVela\vidaUtilVela9.png" />
+    <None Include="Resources\ControlsMenu.jpg" />
     <Content Include="Shaders\IndicadorEscondite.fx" />
     <Content Include="Shaders\LinternaShader.fx" />
     <Content Include="Shaders\VelaShader.fx" />
