@@ -9,7 +9,7 @@ using TGC.Core.Direct3D;
 
 namespace TGC.Group.Model
 {
-    class Sonido
+    public class Sonido
     {
         TgcStaticSound player = new TgcStaticSound();
         String MediaDir = "..\\..\\..\\Media\\";
@@ -18,7 +18,7 @@ namespace TGC.Group.Model
         public Sonido(String archivo, bool loop) {
 
             ReproduccionActual = archivo;
-            var device= DirectSound.DsDevice;
+            var device= GameModel.deviceMusica;
             player.loadSound(MediaDir + archivo,device);
             player.play(loop);
             

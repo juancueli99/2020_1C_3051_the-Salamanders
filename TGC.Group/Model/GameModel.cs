@@ -90,13 +90,19 @@ namespace TGC.Group.Model
         /// </summary>
 
         public bool estoyJugando = false;
+        public Sonido musicaMenu ;
 
         public static monstruos monstruoActual= monstruos.SECTARIAN;
+        public static Microsoft.DirectX.DirectSound.Device deviceMusica;
+
         public override void Init()
         {
 
             var d3dDevice = D3DDevice.Instance.Device;
+            deviceMusica = DirectSound.DsDevice;
             this.FixedTickEnable = false;
+
+            musicaMenu = new Sonido("SonidoPruebaTGC(Mono).wav", true);
 
             menu.instanciarMenu();
             nota.instanciarNotas(0);
