@@ -52,6 +52,42 @@ namespace TGC.Group.Model
             return new List<Sonido>();
         }
 
+        internal static Sonido ObtenerSonidoDeGameOver()
+        {
+            switch (GameModel.monstruoActual)
+            {
+                case monstruos.GHOST:
+                    return configurarSonidoFantasmaGameOver();
+
+                case monstruos.CLOWN:
+                    return configurarSonidoPayasoGameOver();
+
+                case monstruos.SECTARIAN:
+                    return configurarSonidoSectarioGameOver();
+
+                case monstruos.ALIEN:
+                    return configurarSonidoAlienGameOver();
+
+            }
+            return null;
+
+        }
+
+        private static Sonido configurarSonidoSectarioGameOver()
+        {
+            return new Sonido("", -2000, false);
+        }
+
+        private static Sonido configurarSonidoAlienGameOver()
+        {
+            return new Sonido("", -2000, false);
+        }
+
+        private static Sonido configurarSonidoFantasmaGameOver()
+        {
+            return new Sonido("",-2000,false);
+        }
+
         private static List<Sonido> configurarSonidoAlien()
         {
             var lista= new List<Sonido>();

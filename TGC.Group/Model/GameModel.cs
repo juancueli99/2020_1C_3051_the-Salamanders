@@ -94,7 +94,7 @@ namespace TGC.Group.Model
         public bool estoyJugando = false;
         public Sonido musicaMenu ;
         public Sonido sonidoBarra;
-        public Sonido musicaFondoOutdoor = new Sonido("nocturno, continuo.wav",-4000, true);
+        public Sonido musicaFondoOutdoor = new Sonido("nocturno, continuo.wav",-4250, true);
 
 
         public static monstruos monstruoActual= monstruos.SECTARIAN;
@@ -488,6 +488,7 @@ namespace TGC.Group.Model
         {
             if (!personaje.tieneLuz && !personaje.estoyEscondido && personaje.tiempoSinLuz > GameModel.TiempoSinAdvertencia)
             {
+                
 
                 Monster unBicho;
                 if (personaje.tiempoSinLuz == GameModel.TiempoDeAdvertencia)
@@ -513,7 +514,7 @@ namespace TGC.Group.Model
                     //monster.DisposeMonster();
                     monster = unBicho;
                     iluminables.Add(unBicho.ghost);
-                    //Agregar un sonido
+                    monster.reproducirSonidoRandom();
 
                 }
                 if (personaje.tiempoSinLuz == GameModel.TiempoDeGameOver)
@@ -534,7 +535,7 @@ namespace TGC.Group.Model
 
                     var newTarget = new TGCVector3(nuevaPosicion.X, nuevaPosicion.Y + 350, nuevaPosicion.Z);
                     personaje.SetCamera(personaje.eye, newTarget);
-
+                    monster.ReproducirSonidoGameOver();
                     personaje.GameOver(this); 
                 }
             }

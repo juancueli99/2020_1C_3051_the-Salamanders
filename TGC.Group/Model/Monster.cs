@@ -28,6 +28,7 @@ namespace TGC.Group.Model
         {
             ghost = ConfiguradorMonstruo.ConfigurarMonstruo(tipo);
             SonidosRandoms = ConfiguradorMonstruo.ConfigurarSonidosRandoms();
+            Sonido sonidoAtrapa3=ConfiguradorMonstruo.ObtenerSonidoDeGameOver();
             this.lookAt = new TGCVector3(ghost.Position);
         }
 
@@ -160,6 +161,19 @@ namespace TGC.Group.Model
         {
            // var vectorRotacion = new TGCVector3(personaje.Position.X * elapsedTime,ghost.Position.Y, personaje.Position.Z * elapsedTime);
             this.RotarMesh(personaje);
+        }
+
+        internal void reproducirSonidoRandom()
+        {
+            var ran = new Random();
+            
+                int indice = ran.Next() % (this.SonidosRandoms.Count());
+            SonidosRandoms[indice - 1].escucharSonidoActual(false);
+            
+        }
+        public void ReproducirSonidoGameOver() {
+            this.sonidoAtrapa3.escucharSonidoActual(false);
+        
         }
     }
 }
