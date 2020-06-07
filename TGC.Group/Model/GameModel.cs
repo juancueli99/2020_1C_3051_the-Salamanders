@@ -91,6 +91,7 @@ namespace TGC.Group.Model
 
         public bool estoyJugando = false;
         public Sonido musicaMenu ;
+        public Sonido sonidoBarra;
 
         public static monstruos monstruoActual= monstruos.SECTARIAN;
         public static Microsoft.DirectX.DirectSound.Device deviceMusica;
@@ -104,6 +105,7 @@ namespace TGC.Group.Model
 
             
             musicaMenu = new Sonido("SonidoPruebaTGC(Mono).wav", true);
+            
             personaje = new Personaje();
             menu.instanciarMenu();
             nota.instanciarNotas(0);
@@ -190,6 +192,10 @@ namespace TGC.Group.Model
             if (!estoyJugando)
             {
                 estoyJugando = Input.keyDown(Key.Space);
+                if (estoyJugando) 
+                {
+                    sonidoBarra = new Sonido("AllAroundYou.wav", false);
+                }
             }
             else
             {

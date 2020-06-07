@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using TGC.Core.Mathematica;
 using TGC.Core.SceneLoader;
 
@@ -28,6 +29,62 @@ namespace TGC.Group.Model
             ghost.Transform = TGCMatrix.Translation(0, -350, 0);
 
             return ghost;
+        }
+
+        internal static List<Sonido> ConfigurarSonidosRandoms()
+        {
+            
+            switch (GameModel.monstruoActual)
+            {
+                case monstruos.GHOST:
+                    return configurarSonidosFantasma();
+
+                case monstruos.CLOWN:
+                    return configurarSonidoPayaso();
+
+                case monstruos.SECTARIAN:
+                    return configurarSonidoSectario();
+                 
+                case monstruos.ALIEN:
+                    return configurarSonidoAlien();
+                 
+            }
+            return new List<Sonido>();
+        }
+
+        private static List<Sonido> configurarSonidoAlien()
+        {
+            var lista= new List<Sonido>();
+
+            lista.Add(new Sonido("lobo mutante.wav", false));
+            return lista;
+        }
+
+        private static List<Sonido> configurarSonidoSectario()
+        {
+            var lista = new List<Sonido>();
+            lista.Add(new Sonido("ramita, partir.wav",false));
+            lista.Add(new Sonido("risa infantil.wav", false));
+            return lista;
+        }
+
+        private static List<Sonido> configurarSonidoPayaso()
+        {
+
+            var lista = new List<Sonido>();
+            lista.Add(new Sonido("risa infantil.wav", false));
+            return lista;
+        }
+
+        private static List<Sonido> configurarSonidosFantasma()
+        {
+            var lista = new List<Sonido>();
+            lista.Add(new Sonido("risa infantil.wav", false)); 
+            lista.Add(new Sonido("gemido fantasmal.wav", false));
+            lista.Add(new Sonido("cadena agitar.wav", false));
+            lista.Add(new Sonido("cadena arrastrada.wav", false));
+            lista.Add(new Sonido("monstruo ventoso.wav", false));
+            return lista;
         }
 
         public static TgcMesh configurarPayaso()
@@ -83,6 +140,7 @@ namespace TGC.Group.Model
             TgcMesh monster=null;
             var ran = new Random();
             if (ran.Next() % 1000 == 57) {
+                GameModel.monstruoActual = monstruos.GHOST;
                 return configurarFantasma();
             }
 

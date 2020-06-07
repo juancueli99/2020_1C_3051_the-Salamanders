@@ -596,6 +596,10 @@
     <Content Include="Media\Sky 4.png" />
     <Content Include="Media\Sky.jpg" />
     <Content Include="Media\SkyBoxPiolasa.jpg" />
+    <Content Include="Media\Sonidos\AllAroundYou.wav" />
+    <Content Include="Media\Sonidos\cadena arrastrada.wav" />
+    <Content Include="Media\Sonidos\cadena, agitar.wav" />
+    <Content Include="Media\Sonidos\gemido fantasmal.wav" />
     <Content Include="Media\Sonidos\golpe metálico.wav" />
     <Content Include="Media\Sonidos\gong reloj.wav" />
     <Content Include="Media\Sonidos\lobo mutante.wav" />

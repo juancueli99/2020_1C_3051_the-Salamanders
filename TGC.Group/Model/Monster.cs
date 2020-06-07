@@ -19,13 +19,15 @@ namespace TGC.Group.Model
     {
         public TgcMesh ghost;
         String MediaDir = "..\\..\\..\\Media\\";
+        List<Sonido> SonidosRandoms;
         TGCVector3 lookAt = new TGCVector3();
         private float velocidad=2;
+        Sonido sonidoAtrapa3;//instanciar antes de atrapar o en el init pero alguien tiene que subir la musica que falta
 
         public void InstanciarMonster(monstruos tipo)
         {
             ghost = ConfiguradorMonstruo.ConfigurarMonstruo(tipo);
-
+            SonidosRandoms = ConfiguradorMonstruo.ConfigurarSonidosRandoms();
             this.lookAt = new TGCVector3(ghost.Position);
         }
 
