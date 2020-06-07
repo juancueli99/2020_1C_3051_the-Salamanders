@@ -48,8 +48,12 @@ namespace TGC.Group.Model
         public Personaje personaje = new Personaje();
         public Monster monster = new Monster();
         public Sprite menu = new Sprite();
+
         public HUD nota = new HUD();
         public HUD vidaUtilVela = new HUD();
+        public HUD velita = new HUD();
+        public HUD vidaUtilLinterna = new HUD();
+        public HUD linternita = new HUD();
 
         public static bool estoyCorriendo = false;
 
@@ -97,6 +101,9 @@ namespace TGC.Group.Model
             menu.instanciarMenu();
             nota.instanciarNotas(0);
             vidaUtilVela.instanciarVelas(0);
+            velita.instanciarVelita();
+            vidaUtilLinterna.instanciarLinternas(0);
+            linternita.instanciarLinternita();
 
             escenario.InstanciarEstructuras();
             monster.InstanciarMonster(monstruoActual);
@@ -106,7 +113,7 @@ namespace TGC.Group.Model
 
             TgcMesh mesh1 = escenario.tgcScene.Meshes.Find(mesh => mesh.Name.Equals("linterna_1"));
             TgcMesh mesh2 = escenario.tgcScene.Meshes.Find(mesh => mesh.Name.Equals("linterna_2"));
-            var linterna = new Linterna(mesh1,mesh2);
+            var linterna = new Linterna(mesh1,mesh2,this);
             objetosInteractuables.Add(linterna);
             Camera = personaje;
             //Frustum.FarPlane;
@@ -203,10 +210,10 @@ namespace TGC.Group.Model
 
                 RealizarAccionesDeInventario();
 
-                if (Input.keyDown(Key.H))
+                /*if (Input.keyDown(Key.H))
                 {
                     personaje.tieneLuz = !personaje.tieneLuz;
-                }
+                }*/
 
                 if (personaje.chocandoConEscalera && Input.keyDown(Key.Space))
                 {
@@ -241,7 +248,7 @@ namespace TGC.Group.Model
                 
             }
 
-            if (personaje.TieneItemEnMano())
+            if (personaje.TieneItemEnMano() && personaje.tieneLuz)
             {
                 personaje.getItemEnMano().DisminuirDuracion();
 
@@ -256,12 +263,25 @@ namespace TGC.Group.Model
 
         private void RealizarAccionesDeInventario()
         {
+            if (Input.keyDown(Key.H))
+            {
+                personaje.getItemEnMano().Usar(personaje);
+                var linterna = personaje.objetosInteractuables.Find(item=>item is Linterna);
+                if(linterna != null)
+                    personaje.setItemEnMano((IEquipable)linterna);
+            }
+
             if (Input.keyDown(Key.F))
             {
                 //Prende/apaga la luz de la linterna
-                if (personaje.getItemEnMano() is Linterna)
+                if (personaje.getItemEnMano() is Linterna || personaje.getItemEnMano() is Vela)
                 {
                     personaje.getItemEnMano().Usar(personaje);
+                    //personaje.tieneLuz = true;
+                }
+                else
+                {
+                    //personaje.tieneLuz = false;
                 }
             }
 
@@ -273,12 +293,13 @@ namespace TGC.Group.Model
                 if (pila != null)
                     pila.Usar(personaje);
             }
-
+            
             if (Input.keyDown(Key.Q))
             {
                 //Cambiar entre vela y linterna (si hubiere)
                 if ((personaje.getItemEnMano() is Linterna || personaje.getItemEnMano() is ItemVacioDefault) && personaje.objetosInteractuables.Any(objeto => objeto is Vela))
                 {
+                    personaje.getItemEnMano().Usar(personaje);
                     var vela = (Vela)personaje.objetosInteractuables.Find(objeto => objeto is Vela);
                     personaje.setItemEnMano(vela);
                 }
@@ -286,6 +307,7 @@ namespace TGC.Group.Model
                 {
                     if ((personaje.getItemEnMano() is Vela || personaje.getItemEnMano() is ItemVacioDefault) && personaje.objetosInteractuables.Any(objeto => objeto is Linterna))
                     {
+                        personaje.getItemEnMano().Usar(personaje);
                         var linterna = (Linterna)personaje.objetosInteractuables.Find(objeto => objeto is Linterna);
                         personaje.setItemEnMano(linterna);
                     }
@@ -553,6 +575,9 @@ namespace TGC.Group.Model
 
                 nota.renderSprite();
                 vidaUtilVela.renderSprite();
+                velita.renderSprite();
+                vidaUtilLinterna.renderSprite();
+                linternita.renderSprite();
             }
 
             //Frustum Culling -> OPCION 2
@@ -591,6 +616,9 @@ namespace TGC.Group.Model
             menu.disposeSprite();
             nota.disposeSprite();
             vidaUtilVela.disposeSprite();
+            velita.disposeSprite();
+            vidaUtilLinterna.disposeSprite();
+            linternita.disposeSprite();
 
             paredInvisible.DisposePared();
         }
