@@ -26,7 +26,7 @@ namespace TGC.Group.Model
             sprite = new CustomSprite();
 
 
-            sprite.Bitmap = new CustomBitmap(MediaDir + "Earphones Info.jpg", D3DDevice.Instance.Device);
+            sprite.Bitmap = new CustomBitmap(MediaDir + "pressSpacebarToContinue.jpg", D3DDevice.Instance.Device);
 
             var textureSize = sprite.Bitmap.Size;
             sprite.Position = new TGCVector2(FastMath.Max(D3DDevice.Instance.Width / 2 - textureSize.Width / 2, 0), FastMath.Max(D3DDevice.Instance.Height / 2 - textureSize.Height / 2, 0));

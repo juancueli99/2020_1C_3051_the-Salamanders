@@ -48,6 +48,8 @@
             this.demonButton = new System.Windows.Forms.Button();
             this.Pipe8 = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.controlsButton = new System.Windows.Forms.Button();
+            this.Pipe57 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -59,7 +61,7 @@
             this.returnButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.returnButton.Font = new System.Drawing.Font("Bahnschrift Condensed", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.returnButton.ForeColor = System.Drawing.Color.White;
-            this.returnButton.Location = new System.Drawing.Point(33, 609);
+            this.returnButton.Location = new System.Drawing.Point(33, 643);
             this.returnButton.Margin = new System.Windows.Forms.Padding(0);
             this.returnButton.Name = "returnButton";
             this.returnButton.Size = new System.Drawing.Size(135, 31);
@@ -77,7 +79,7 @@
             this.setDifficultyButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.setDifficultyButton.Font = new System.Drawing.Font("Bahnschrift Condensed", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.setDifficultyButton.ForeColor = System.Drawing.Color.White;
-            this.setDifficultyButton.Location = new System.Drawing.Point(33, 542);
+            this.setDifficultyButton.Location = new System.Drawing.Point(33, 543);
             this.setDifficultyButton.Margin = new System.Windows.Forms.Padding(0);
             this.setDifficultyButton.Name = "setDifficultyButton";
             this.setDifficultyButton.Size = new System.Drawing.Size(183, 31);
@@ -92,7 +94,7 @@
             this.Pipe3.AutoSize = true;
             this.Pipe3.Font = new System.Drawing.Font("Bahnschrift Condensed", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Pipe3.ForeColor = System.Drawing.Color.Maroon;
-            this.Pipe3.Location = new System.Drawing.Point(16, 606);
+            this.Pipe3.Location = new System.Drawing.Point(16, 640);
             this.Pipe3.Name = "Pipe3";
             this.Pipe3.Size = new System.Drawing.Size(21, 35);
             this.Pipe3.TabIndex = 35;
@@ -104,7 +106,7 @@
             this.Pipe1.AutoSize = true;
             this.Pipe1.Font = new System.Drawing.Font("Bahnschrift Condensed", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Pipe1.ForeColor = System.Drawing.Color.Maroon;
-            this.Pipe1.Location = new System.Drawing.Point(16, 538);
+            this.Pipe1.Location = new System.Drawing.Point(16, 539);
             this.Pipe1.Name = "Pipe1";
             this.Pipe1.Size = new System.Drawing.Size(21, 35);
             this.Pipe1.TabIndex = 34;
@@ -119,7 +121,7 @@
             this.monstersAvailableButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.monstersAvailableButton.Font = new System.Drawing.Font("Bahnschrift Condensed", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.monstersAvailableButton.ForeColor = System.Drawing.Color.White;
-            this.monstersAvailableButton.Location = new System.Drawing.Point(33, 575);
+            this.monstersAvailableButton.Location = new System.Drawing.Point(33, 576);
             this.monstersAvailableButton.Margin = new System.Windows.Forms.Padding(0);
             this.monstersAvailableButton.Name = "monstersAvailableButton";
             this.monstersAvailableButton.Size = new System.Drawing.Size(183, 31);
@@ -134,7 +136,7 @@
             this.Pipe2.AutoSize = true;
             this.Pipe2.Font = new System.Drawing.Font("Bahnschrift Condensed", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Pipe2.ForeColor = System.Drawing.Color.Maroon;
-            this.Pipe2.Location = new System.Drawing.Point(16, 573);
+            this.Pipe2.Location = new System.Drawing.Point(16, 574);
             this.Pipe2.Name = "Pipe2";
             this.Pipe2.Size = new System.Drawing.Size(21, 35);
             this.Pipe2.TabIndex = 32;
@@ -331,10 +333,42 @@
             this.pictureBox1.TabIndex = 57;
             this.pictureBox1.TabStop = false;
             // 
+            // controlsButton
+            // 
+            this.controlsButton.BackColor = System.Drawing.Color.Transparent;
+            this.controlsButton.FlatAppearance.BorderSize = 0;
+            this.controlsButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Maroon;
+            this.controlsButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.controlsButton.Font = new System.Drawing.Font("Bahnschrift Condensed", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.controlsButton.ForeColor = System.Drawing.Color.White;
+            this.controlsButton.Location = new System.Drawing.Point(33, 610);
+            this.controlsButton.Margin = new System.Windows.Forms.Padding(0);
+            this.controlsButton.Name = "controlsButton";
+            this.controlsButton.Size = new System.Drawing.Size(183, 31);
+            this.controlsButton.TabIndex = 59;
+            this.controlsButton.Text = " > CONTROLS";
+            this.controlsButton.TextAlign = System.Drawing.ContentAlignment.TopLeft;
+            this.controlsButton.UseVisualStyleBackColor = false;
+            this.controlsButton.Click += new System.EventHandler(this.controlsButton_Click);
+            // 
+            // Pipe57
+            // 
+            this.Pipe57.AutoSize = true;
+            this.Pipe57.Font = new System.Drawing.Font("Bahnschrift Condensed", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Pipe57.ForeColor = System.Drawing.Color.Maroon;
+            this.Pipe57.Location = new System.Drawing.Point(16, 608);
+            this.Pipe57.Name = "Pipe57";
+            this.Pipe57.Size = new System.Drawing.Size(21, 35);
+            this.Pipe57.TabIndex = 58;
+            this.Pipe57.Text = "|";
+            this.Pipe57.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
             // OptionsUserControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.controlsButton);
+            this.Controls.Add(this.Pipe57);
             this.Controls.Add(this.returnButton);
             this.Controls.Add(this.setDifficultyButton);
             this.Controls.Add(this.Pipe3);
@@ -382,5 +416,7 @@
         private System.Windows.Forms.Button demonButton;
         private System.Windows.Forms.Label Pipe8;
         private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.Button controlsButton;
+        private System.Windows.Forms.Label Pipe57;
     }
 }

@@ -93,6 +93,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Form\ControlsUserControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Form\ControlsUserControl.Designer.cs">
+      <DependentUpon>ControlsUserControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Form\CreditsUserControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -147,6 +153,9 @@
     <Compile Include="Model\Vela.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Form\ControlsUserControl.resx">
+      <DependentUpon>ControlsUserControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Form\CreditsUserControl.resx">
       <DependentUpon>CreditsUserControl.cs</DependentUpon>
     </EmbeddedResource>
@@ -225,6 +234,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Media\cajaMadera4.jpg" />
+    <Content Include="Media\ControlsMenu.jpg" />
     <Content Include="Media\Credits.jpg" />
     <Content Include="Media\Earphones Info.jpg" />
     <Content Include="Media\Heighmaps\alfajorGrandote.jpg" />
@@ -576,6 +586,7 @@
     <Content Include="Media\NuestrosModelos\Textures\_Black_1.jpg" />
     <Content Include="Media\NuestrosModelos\Textures\_Blue_.jpg" />
     <Content Include="Media\Options.jpg" />
+    <Content Include="Media\pressSpacebarToContinue.jpg" />
     <Content Include="Media\Real Into the Mist.jpg" />
     <Content Include="Media\Sky 1.png" />
     <Content Include="Media\Sky 2.png" />

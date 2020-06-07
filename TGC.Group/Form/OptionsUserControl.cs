@@ -30,7 +30,13 @@ namespace TGC.Group.Form
             Pipe3.Parent = pictureBox1;
             Pipe3.BackColor = Color.Transparent;
 
+            Pipe57.Parent = pictureBox1;
+            Pipe57.BackColor = Color.Transparent;
+
             //Buttons
+
+            controlsButton.Parent = pictureBox1;
+            controlsButton.BackColor = Color.Transparent;
 
             setDifficultyButton.Parent = pictureBox1;
             setDifficultyButton.BackColor = Color.Transparent;
@@ -217,6 +223,11 @@ namespace TGC.Group.Form
             demonButton.Hide();
             alienButton.Hide();
             monstersAvailableButton.BackColor = Color.Transparent;
+        }
+
+        private void controlsButton_Click(object sender, EventArgs e)
+        {
+            //Aca va el UserControl de los controles
         }
     }
 }
