@@ -9,7 +9,6 @@ namespace TGC.Group.Model
         public enum monstruos
         {
             GHOST,
-            CLOWN,
             SECTARIAN,
             ALIEN
         }

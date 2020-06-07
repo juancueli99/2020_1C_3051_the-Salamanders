@@ -39,9 +39,6 @@ namespace TGC.Group.Model
                 case monstruos.GHOST:
                     return configurarSonidosFantasma();
 
-                case monstruos.CLOWN:
-                    return configurarSonidoPayaso();
-
                 case monstruos.SECTARIAN:
                     return configurarSonidoSectario();
                  
@@ -59,9 +56,6 @@ namespace TGC.Group.Model
                 case monstruos.GHOST:
                     return configurarSonidoFantasmaGameOver();
 
-                case monstruos.CLOWN:
-                    return configurarSonidoPayasoGameOver();
-
                 case monstruos.SECTARIAN:
                     return configurarSonidoSectarioGameOver();
 
@@ -75,17 +69,17 @@ namespace TGC.Group.Model
 
         private static Sonido configurarSonidoSectarioGameOver()
         {
-            return new Sonido("", -2000, false);
+            return new Sonido("Laughter-Mike_Koenig-360558723.wav", -2000, false);
         }
 
         private static Sonido configurarSonidoAlienGameOver()
         {
-            return new Sonido("", -2000, false);
+            return new Sonido("Eating-SoundBible.com-1470347575.wav", -2000, false);
         }
 
         private static Sonido configurarSonidoFantasmaGameOver()
         {
-            return new Sonido("",-2000,false);
+            return new Sonido("Demon_Your_Soul_is_mine-BlueMann-1903732045.wav", -2000,false);
         }
 
         private static List<Sonido> configurarSonidoAlien()
@@ -104,14 +98,7 @@ namespace TGC.Group.Model
             return lista;
         }
 
-        private static List<Sonido> configurarSonidoPayaso()
-        {
-
-            var lista = new List<Sonido>();
-            lista.Add(new Sonido("risa infantil.wav", false));
-            return lista;
-        }
-
+       
         private static List<Sonido> configurarSonidosFantasma()
         {
             var lista = new List<Sonido>();
@@ -123,21 +110,6 @@ namespace TGC.Group.Model
             return lista;
         }
 
-        public static TgcMesh configurarPayaso()
-        {
-            TgcMesh payaso;
-
-            var loader = new TgcSceneLoader();
-            var scene2 = loader.loadSceneFromFile(MediaDir + "Modelame\\Clown-TgcScene.xml");
-
-            payaso = scene2.Meshes[0];
-
-            payaso.Position = new TGCVector3(200, -300, 100);
-
-            payaso.Transform = TGCMatrix.Translation(0, -300, 0) * TGCMatrix.Scaling(5, 5, 5);
-
-            return payaso;
-        }
 
         public static TgcMesh configurarSectario()
         {
@@ -174,20 +146,11 @@ namespace TGC.Group.Model
         public static TgcMesh ConfigurarMonstruo(monstruos monstruo)
         {
             TgcMesh monster=null;
-            var ran = new Random();
-            if (ran.Next() % 1000 == 57) {
-                GameModel.monstruoActual = monstruos.GHOST;
-                return configurarFantasma();
-            }
 
             switch (monstruo)
             {
                 case monstruos.GHOST:
                     monster = configurarFantasma();
-                    break;
-
-                case monstruos.CLOWN:
-                    monster = configurarPayaso();
                     break;
 
                 case monstruos.SECTARIAN:

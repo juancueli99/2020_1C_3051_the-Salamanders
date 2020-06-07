@@ -194,7 +194,7 @@ namespace TGC.Group.Form
         private void ghostButton_Click(object sender, EventArgs e)
         {
             //Guardar la opcion elegida
-            GameModel.monstruoActual = monstruos.CLOWN;//hay que cambiarle el nombre de ghost a Clown
+            GameModel.monstruoActual = monstruos.GHOST;//hay que cambiarle el nombre de ghost a Clown
             this.hideMonstersButtons();
             
         }
