@@ -65,7 +65,8 @@ namespace TGC.Group.Model
         public List<IInteractuable> objetosInteractuables = new List<IInteractuable>();
         public List<TgcMesh> iluminables= new List<TgcMesh>();
         public List<Sonido> sonidosRandoms = new List<Sonido>();
-
+        public List<Sonido> sonidosOutDoorRandom = new List<Sonido>();
+        public List<Sonido> sonidosInDoorRandom = new List<Sonido>();
         //Caja que se muestra en el ejemplo.
         private TGCBox Box { get; set; }
 
@@ -116,6 +117,8 @@ namespace TGC.Group.Model
             vidaUtilLinterna.instanciarLinternas(0);
             linternita.instanciarLinternita();
             InstanciarSonidosRandoms();
+            InstanciarSondosOutDoorRandoms();
+            InstanciasSonidosInDoorRandoms();
 
             escenario.InstanciarEstructuras();
             monster.InstanciarMonster(monstruoActual);
@@ -138,10 +141,32 @@ namespace TGC.Group.Model
 
         }
 
+        private void InstanciasSonidosInDoorRandoms()
+        {
+            sonidosInDoorRandom.Add(new Sonido("caja fuerte, golpe en.wav", -3500, false));
+            sonidosInDoorRandom.Add(new Sonido("golpe metálico.wav", -3500, false));
+        }
+
+        private void InstanciarSondosOutDoorRandoms()
+        {
+            sonidosOutDoorRandom.Add(new Sonido("ráfaga ventosa.wav", -3500, false));
+            sonidosOutDoorRandom.Add(new Sonido("viento en arbustos.wav", -3500, false));
+            sonidosOutDoorRandom.Add(new Sonido("viento, golpe de.wav", -3500, false));
+            sonidosOutDoorRandom.Add(new Sonido("viento, ráfaga larga.wav", -3500, false));
+            sonidosOutDoorRandom.Add(new Sonido("árbol, caída de.wav", -3500, false));
+            sonidosOutDoorRandom.Add(new Sonido("búho, grito.wav", -3500, false));
+            sonidosOutDoorRandom.Add(new Sonido("cascabel.wav", -4250, false));
+
+        }
+
         private void InstanciarSonidosRandoms()
         {
-            sonidosRandoms.Add(new Sonido("",false));
+            sonidosRandoms.Add(new Sonido("campanadas horas.wav",-3500, false));
+            sonidosRandoms.Add(new Sonido("gong reloj.wav", -3500,false));
+            sonidosRandoms.Add(new Sonido("campanada reloj, (1).wav",-3500, false));
         }
+
+
 
         private void CrearObjetosEnEscenario()
         {
@@ -230,6 +255,7 @@ namespace TGC.Group.Model
                     InteraccionPersonajeYMesh();
 
                 }
+                ReproducirSonidoRandomEscenario();
 
                 RealizarAccionesDeInventario();
 
@@ -243,15 +269,56 @@ namespace TGC.Group.Model
                     personaje.MoverPersonaje(' ', ElapsedTime, Input, this);//lo dejo asi porque no se que hace esto
                     // #TinchoHaceteCargo
                 }
+                personaje.updateCamera(ElapsedTime, Input);
+
+                personaje.aumentarTiempoSinLuz();
+
+                AccionesPersonajeMonstruo();
+
+                personaje.YouWin();
             }
-            personaje.updateCamera(ElapsedTime, Input);
+            
 
-            personaje.aumentarTiempoSinLuz();
+        }
 
-            AccionesPersonajeMonstruo();
+        private void ReproducirSonidoRandomEscenario()
+        {
+            if (personaje.estoyAdentro)
+            {
 
-            personaje.YouWin();
+                reproducirSonidoRandomIndoor();
+            }
+            else 
+            {
+                reproducirSonidoRandomOutdoor();
+            }
 
+            reproducirSonidoRandomAmbiental();
+        }
+
+        private void reproducirSonidoRandomIndoor()
+        {
+            reproducirRandomDeLista(sonidosInDoorRandom);
+        }
+
+        private void reproducirSonidoRandomOutdoor()
+        {
+            reproducirRandomDeLista(sonidosOutDoorRandom);
+        }
+
+        private void reproducirSonidoRandomAmbiental()
+        {
+            reproducirRandomDeLista(sonidosRandoms);
+        }
+
+        private void reproducirRandomDeLista(List<Sonido> listaSonidos)
+        {
+            var ran = new Random();
+            if (ran.Next() % 10 == 7)
+            {
+                int indice = ran.Next() % (sonidosRandoms.Count());
+                listaSonidos[indice].escucharSonidoActual(false);
+            }
         }
 
         private void AccionesPersonajeMonstruo()

@@ -597,8 +597,14 @@
     <Content Include="Media\Sky.jpg" />
     <Content Include="Media\SkyBoxPiolasa.jpg" />
     <Content Include="Media\Sonidos\AllAroundYou.wav" />
+    <Content Include="Media\Sonidos\búho, grito.wav" />
     <Content Include="Media\Sonidos\cadena arrastrada.wav" />
     <Content Include="Media\Sonidos\cadena, agitar.wav" />
+    <Content Include="Media\Sonidos\caja fuerte, golpe en.wav" />
+    <Content Include="Media\Sonidos\campanada reloj, %281%29.wav" />
+    <Content Include="Media\Sonidos\campanadas horas.wav" />
+    <Content Include="Media\Sonidos\canto de grillo.wav" />
+    <Content Include="Media\Sonidos\cascabel.wav" />
     <Content Include="Media\Sonidos\Demon_Girls_Mockingbir-Hello-1365708396.wav" />
     <Content Include="Media\Sonidos\Demon_Your_Soul_is_mine-BlueMann-1903732045.wav" />
     <Content Include="Media\Sonidos\Eating-SoundBible.com-1470347575.wav" />
@@ -634,6 +640,7 @@
     <Content Include="Media\Sonidos\viento en arbustos.wav" />
     <Content Include="Media\Sonidos\viento, golpe de.wav" />
     <Content Include="Media\Sonidos\viento, ráfaga larga.wav" />
+    <Content Include="Media\Sonidos\árbol, caída de.wav" />
     <Content Include="Media\START_GAME.png" />
     <Content Include="Media\Velita.png" />
     <Content Include="Media\vidaUtilLinterna\vidaUtilLinterna0.png" />
