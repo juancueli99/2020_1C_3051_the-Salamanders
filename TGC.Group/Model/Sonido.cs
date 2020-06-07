@@ -6,22 +6,33 @@ using System.Threading.Tasks;
 using TGC.Core.Direct3D;
 using TGC.Core.Sound;
 using TGC.Core.Direct3D;
+using Microsoft.DirectX.DirectSound;
+using Microsoft.DirectX.Direct3D;
 
 namespace TGC.Group.Model
 {
     public class Sonido
     {
         TgcStaticSound player = new TgcStaticSound();
-        String MediaDir = "..\\..\\..\\Media\\";
+        String media = "..\\..\\..\\Media\\Sonidos\\";
         String ReproduccionActual;
         private static TgcDirectSound DirectSound = new TgcDirectSound();
         public Sonido(String archivo, bool loop) {
 
             ReproduccionActual = archivo;
             var device= GameModel.deviceMusica;
-            player.loadSound(MediaDir + archivo,device);
+            player.loadSound(this.media + archivo,device);
             player.play(loop);
             
+        }
+        public Sonido(String archivo,int volumen, bool loop)
+        {// esto no esta andando cunado metes el volumen en el loadSound
+            ReproduccionActual = archivo;
+            
+            var device = GameModel.deviceMusica;            
+            player.loadSound(this.media + archivo, volumen, device);
+
+
         }
         public void DetenerSonido() {
             player.stop();
@@ -34,15 +45,17 @@ namespace TGC.Group.Model
         
         }
 
-        private void escucharSonidoActual(bool loop)
+        public void escucharSonidoActual(bool loop)
         {
             player.play(loop);
         }
 
-        private void CargarSonido(string archivo)
+        public void CargarSonido(string archivo)
         {
-            var device = DirectSound.DsDevice;
-            player.loadSound(MediaDir + archivo, device);
+            ReproduccionActual = archivo;
+            var device = GameModel.deviceMusica;
+            player.loadSound(media + archivo, device);
         }
+
     }
 }

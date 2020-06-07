@@ -39,10 +39,12 @@ namespace TGC.Group.Model
             if (personaje.estoyAdentro)
             {
                 personaje.TeletrasportarmeA(posicionSalida);
+                personaje.setearSonidosOutdoor();
             }
             else
             {
                 personaje.TeletrasportarmeA(posicionEntrada);
+                personaje.setearSonidosIndoor();
             }
 
             personaje.estoyAdentro = !personaje.estoyAdentro;

@@ -45,7 +45,7 @@ namespace TGC.Group.Model
             Description = Game.Default.Description;
         }
         public Escenario escenario = new Escenario();
-        public Personaje personaje = new Personaje();
+        public Personaje personaje;
         public Monster monster = new Monster();
         public Sprite menu = new Sprite();
 
@@ -102,8 +102,9 @@ namespace TGC.Group.Model
             deviceMusica = DirectSound.DsDevice;
             this.FixedTickEnable = false;
 
+            
             musicaMenu = new Sonido("SonidoPruebaTGC(Mono).wav", true);
-
+            personaje = new Personaje();
             menu.instanciarMenu();
             nota.instanciarNotas(0);
             vidaUtilVela.instanciarVelas(0);
@@ -192,6 +193,7 @@ namespace TGC.Group.Model
             }
             else
             {
+                this.musicaMenu.DetenerSonido();
                 UpdateGame();
             }
 

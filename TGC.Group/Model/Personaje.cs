@@ -33,9 +33,25 @@ namespace TGC.Group.Model
         public IEquipable itemEnMano;
         public bool chocandoConEscalera = false;
 
+        internal void setearSonidosOutdoor()
+        {
+            sonidoActualIzq = this.CaminataOutdoorIzq;
+            sonidoActualDer =this.CaminataOutdoorDer;
+        }
+
+
+        bool suenoDerecha=false;
+
+
         public IEquipable getItemEnMano()
         {
             return itemEnMano;
+        }
+
+        internal void setearSonidosIndoor()
+        {
+           sonidoActualDer = this.CaminataIndoorDer;
+            sonidoActualIzq = this.CaminataIndoorIzq;
         }
 
         public void setItemEnMano(IEquipable nuevoItemEnMano)
@@ -211,6 +227,15 @@ namespace TGC.Group.Model
         public float anguloAbsolutoEnY;
         public float anguloAbsolutoEnX;
 
+        Sonido CaminataIndoorIzq;
+        Sonido CaminataOutdoorIzq;
+        Sonido CaminataIndoorDer;
+        Sonido CaminataOutdoorDer;
+
+        private bool sonidoDescanso=false;
+        private Sonido sonidoActualDer;
+        private Sonido sonidoActualIzq;
+
         public Personaje()
         {
             estoyAdentro = false;
@@ -285,6 +310,16 @@ namespace TGC.Group.Model
             Enable = true;
 
             setCamera(eye, target);
+
+            //SONIDO
+
+            this.CaminataOutdoorIzq = new Sonido("pisada hierba izda.wav",-4200,false);
+            this.CaminataIndoorIzq = new Sonido("pisada azulejo izda.wav",-4200,false);
+            this.CaminataOutdoorDer = new Sonido("pisada hierba dcha.wav", -4200, false);
+            this.CaminataIndoorDer = new Sonido("pisada azulejo dcha.wav", -4200, false);
+            sonidoActualDer = CaminataOutdoorDer;
+            sonidoActualIzq = CaminataOutdoorIzq;
+
         }
 
 
@@ -642,6 +677,8 @@ namespace TGC.Group.Model
                     meshPersonaje.Position = lastPos;
                 }
 
+                reproducirCaminata();
+                
                 transformarMesh(); // Hace el mesh transform
 
                 this.Position = meshPersonaje.Position;
@@ -658,6 +695,34 @@ namespace TGC.Group.Model
             //camaraInterna.Target = this.Position;
 
             this.SetCamera(eye, target);
+
+        }
+
+        private void reproducirCaminata()
+        {
+            if (!sonidoDescanso)
+            {
+                if (this.suenoDerecha)
+                {
+                    sonidoActualDer.escucharSonidoActual(false);
+                    this.suenoDerecha = false;
+                    sonidoDescanso = true;
+                }
+                else
+                {
+
+                    sonidoActualIzq.escucharSonidoActual(false);
+                    this.suenoDerecha = true;
+                    sonidoDescanso = true;
+
+
+                }
+            }
+            else 
+            {
+                sonidoDescanso = false;
+            }
+            
 
         }
 
@@ -791,6 +856,7 @@ namespace TGC.Group.Model
             //Por ahora lo dejamos asi hasta que tengamos una interfaz grafica
             
             modelo.estoyJugando = false;
+            modelo.musicaMenu.escucharSonidoActual(true);
             //tendria que mandarme de vuelta al menu
         }
         public void YouWin()
@@ -799,6 +865,7 @@ namespace TGC.Group.Model
             {
                 //Por ahora lo dejamos asi hasta que tengamos una interfaz grafica
                 Console.WriteLine("Ganaste!!");
+
             }
         }
 
