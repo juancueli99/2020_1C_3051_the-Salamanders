@@ -49,6 +49,7 @@ namespace TGC.Group.Form
         private void startGameButton_Click(object sender, EventArgs e)
         {
             //GameModel.estoyCorriendo = true;
+            GameModel.estoyEnElMenu = false;
             this.Hide();
             //GameForm gameForm = new GameForm();
             //gameForm.ShowDialog();

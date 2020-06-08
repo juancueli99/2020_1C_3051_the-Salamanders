@@ -55,6 +55,8 @@ namespace TGC.Group.Model
         public HUD vidaUtilLinterna = new HUD();
         public HUD linternita = new HUD();
 
+        public static bool estoyEnElMenu = true;
+
         public static bool estoyCorriendo = false;
 
         //PARED INVISIBLE
@@ -227,7 +229,7 @@ namespace TGC.Group.Model
 
             if (!estoyJugando)
             {
-                estoyJugando = Input.keyDown(Key.Space);
+                estoyJugando = Input.keyDown(Key.Space) && !estoyEnElMenu;
                 if (estoyJugando) 
                 {
                     sonidoBarra = new Sonido("AllAroundYou.wav", false);
