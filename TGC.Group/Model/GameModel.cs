@@ -342,7 +342,8 @@ namespace TGC.Group.Model
                 else 
                 {
                     monster.MirarA(personaje, ElapsedTime);
-                    monster.avanzarHaciaPersonaje(ElapsedTime,personaje);
+                    //monster.avanzarHaciaPersonaje(ElapsedTime,personaje); falta la animacion del monster para este metodo
+                    //monster.ejecutarAnimacion(TipoAnimacion.Perseguir); //esto no existe jejex
                 }
                 
             }
