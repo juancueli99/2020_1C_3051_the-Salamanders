@@ -78,7 +78,7 @@ namespace TGC.Group.Model
         //Boleano para ver si dibujamos el boundingbox
         private bool BoundingBox { get; set; }
         public FrustumResult INTERSECT { get; private set; }
-        public static float TiempoDeGameOver = 5000;
+        public static float TiempoDeGameOver = 30000;
         public static float TiempoDeAdvertencia = 4000;
         public static float TiempoSinAdvertencia = 3500;
 
@@ -340,6 +340,7 @@ namespace TGC.Group.Model
                 else 
                 {
                     monster.MirarA(personaje, ElapsedTime);
+                    monster.avanzarHaciaPersonaje(ElapsedTime,personaje);
                 }
                 
             }
@@ -519,8 +520,12 @@ namespace TGC.Group.Model
                     monster = unBicho;
                     iluminables.Add(unBicho.ghost);
                     monster.reproducirSonidoRandom();
+                                   
 
                 }
+
+                
+
                 if (personaje.tiempoSinLuz == GameModel.TiempoDeGameOver)
                 {
                     monster.DisposeMonster();
@@ -531,7 +536,7 @@ namespace TGC.Group.Model
                     var posicion = personaje.puntoDemira(personaje.anguloAbsolutoEnY + anguloDeRotacion, personaje.anguloAbsolutoEnX);
                     var nuevaPosicion = new TGCVector3(posicion.X + 300, -350, posicion.Z + 300);
 
-                    unBicho.InstanciarMonster(personaje, nuevaPosicion,monstruoActual);
+                    unBicho.InstanciarMonster(personaje, nuevaPosicion, monstruoActual);
                     monster = unBicho;
                     iluminables.Add(unBicho.ghost);
 
@@ -540,8 +545,9 @@ namespace TGC.Group.Model
                     var newTarget = new TGCVector3(nuevaPosicion.X, nuevaPosicion.Y + 350, nuevaPosicion.Z);
                     personaje.SetCamera(personaje.eye, newTarget);
                     monster.ReproducirSonidoGameOver();
-                    personaje.GameOver(this); 
-                }
+                    personaje.GameOver(this);
+                }     
+                
             }
         }
 
