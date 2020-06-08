@@ -265,7 +265,7 @@
             this.ghostButton.Name = "ghostButton";
             this.ghostButton.Size = new System.Drawing.Size(110, 31);
             this.ghostButton.TabIndex = 55;
-            this.ghostButton.Text = " > CLOWN";
+            this.ghostButton.Text = " > GHOST";
             this.ghostButton.TextAlign = System.Drawing.ContentAlignment.TopLeft;
             this.ghostButton.UseVisualStyleBackColor = false;
             this.ghostButton.Click += new System.EventHandler(this.ghostButton_Click);
