@@ -23,6 +23,8 @@ namespace TGC.Group.Model
         TGCVector3 lookAt = new TGCVector3();
         private float velocidad=2;
         Sonido sonidoAtrapa3;//instanciar antes de atrapar o en el init pero alguien tiene que subir la musica que falta
+        float RotacionY;
+        float VelocidadMonster;
 
         public void InstanciarMonster(monstruos tipo)
         {
@@ -30,6 +32,7 @@ namespace TGC.Group.Model
             SonidosRandoms = ConfiguradorMonstruo.ConfigurarSonidosRandoms();
             sonidoAtrapa3=ConfiguradorMonstruo.ObtenerSonidoDeGameOver();
             this.lookAt = new TGCVector3(ghost.Position);
+            VelocidadMonster = 500f;
         }
 
         public void RenderMonster()
@@ -152,7 +155,7 @@ namespace TGC.Group.Model
 
         internal void HuirDe(Personaje personaje, float elapsedTime)
         {
-            var posicionDeBorrado = new TGCVector3(ghost.Position.X+2000, ghost.Position.Y, ghost.Position.Z - 15000);
+            var posicionDeBorrado = new TGCVector3(ghost.Position.X+2000, ghost.Position.Y, ghost.Position.Z - 5000);
             ghost.Move(posicionDeBorrado);
             ghost.updateBoundingBox();
             ghost.UpdateMeshTransform();
@@ -175,7 +178,85 @@ namespace TGC.Group.Model
         }
         public void ReproducirSonidoGameOver() {
             this.sonidoAtrapa3.escucharSonidoActual(false);
+        }
+
+        public float obtenerAnguloDeRotacion(Personaje personaje)
+        {
+
+            float diferenciaEnX = personaje.getPosition().X - ghost.Position.X;
+            float diferenciaEnZ = personaje.getPosition().Z - ghost.Position.Z;
+
+            float anguloRotacion = (float)Math.Atan(diferenciaEnX / diferenciaEnZ);
+
+            if (diferenciaEnX < 0 && diferenciaEnZ < 0)
+            {
+                //3er Cuadrante
+                anguloRotacion = (float)Math.PI + anguloRotacion;
+            }
+            else
+            {
+                if (diferenciaEnX < 0 && diferenciaEnZ > 0)
+                {
+                    //2do Cuadrante
+                    anguloRotacion = 2 * (float)Math.PI + anguloRotacion;
+                }
+                else
+                {
+                    if (diferenciaEnX > 0 && diferenciaEnZ < 0)
+                    {
+                        //4to Cuadrante
+                        anguloRotacion = (float)Math.PI + anguloRotacion;
+                    }
+                }
+            }
+
+            return anguloRotacion;
+        }
+
+        public void avanzarHaciaPersonaje(float ElapsedTime, Personaje personaje)
+        {
+
+
+
+            if (distanciaEntreMonstruoY(personaje.getPosition()) < 10000)
+            { 
+            
+                VelocidadMonster = 500f;
+                var movimientoReal = VelocidadMonster * ElapsedTime;
+                RotacionY = obtenerAnguloDeRotacion(personaje);
+
+                 float z = (float)Math.Cos(RotacionY) * movimientoReal;
+                float x = (float)Math.Sin(RotacionY) * movimientoReal;
+
+                ghost.Position += new TGCVector3(x, 0, z);
+                transformarAlMesh();
+            
+            
+            }
+
+        }
+
+        float distanciaEntreMonstruoY(TGCVector3 punto) {
+
+            TGCVector3 Distancia = ghost.Position - punto;
+
+
+            return (float)Math.Sqrt(Math.Pow(Distancia.X, 2) + Math.Pow(Distancia.Z, 2));           
         
         }
+
+        void transformarAlMesh() {
+
+            ghost.Transform = TGCMatrix.Scaling(ghost.Scale) *
+                TGCMatrix.RotationYawPitchRoll(RotacionY, ghost.Rotation.X, ghost.Rotation.Z)
+                * TGCMatrix.Translation(ghost.Position);
+        }
+
+
     }
+
+
+
+
+    
 }
