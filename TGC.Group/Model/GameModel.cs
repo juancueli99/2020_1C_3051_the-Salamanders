@@ -111,7 +111,7 @@ namespace TGC.Group.Model
 
             
             musicaMenu = new Sonido("SonidoPruebaTGC(Mono).wav", true);
-            musicaFondoOutdoor = new Sonido("nocturno, continuo.wav", -4250, true);
+            musicaFondoOutdoor = new Sonido("nocturno, continuo.wav", -3000, true);
 
             personaje = new Personaje();
             menu.instanciarMenu();
@@ -170,8 +170,6 @@ namespace TGC.Group.Model
             sonidosRandoms.Add(new Sonido("gong reloj.wav", -3500,false));
             sonidosRandoms.Add(new Sonido("campanada reloj, (1).wav",-3500, false));
         }
-
-
 
         private void CrearObjetosEnEscenario()
         {

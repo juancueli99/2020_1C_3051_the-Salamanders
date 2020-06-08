@@ -11,9 +11,11 @@ namespace TGC.Group.Model
     class Pila : IInteractuable
     {
         private TgcMesh mesh;
+        Sonido sonidoInterruptor;
         public Pila(TgcMesh meshAsociado)
         {
             this.mesh = meshAsociado;
+            sonidoInterruptor = new Sonido("Stapler-SoundBible.com-374581609.wav", -3000, false);
         }
 
         public TGCVector3 getPosition()
@@ -36,6 +38,7 @@ namespace TGC.Group.Model
 
                 personaje.objetosInteractuables.Remove(this);
             }
+            this.sonidoInterruptor.escucharSonidoActual(false);
 
         }
         private void eliminarMesh()

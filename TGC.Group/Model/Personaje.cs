@@ -313,10 +313,10 @@ namespace TGC.Group.Model
 
             //SONIDO
 
-            this.CaminataOutdoorIzq = new Sonido("pisada hierba izda.wav",-4200,false);
-            this.CaminataIndoorIzq = new Sonido("pisada azulejo izda.wav",-4200,false);
-            this.CaminataOutdoorDer = new Sonido("pisada hierba dcha.wav", -4200, false);
-            this.CaminataIndoorDer = new Sonido("pisada azulejo dcha.wav", -4200, false);
+            this.CaminataOutdoorIzq = new Sonido("pisada hierba izda.wav",-5000,false);
+            this.CaminataIndoorIzq = new Sonido("pisada azulejo izda.wav",-5000,false);
+            this.CaminataOutdoorDer = new Sonido("pisada hierba dcha.wav", -5000, false);
+            this.CaminataIndoorDer = new Sonido("pisada azulejo dcha.wav", -5000, false);
             sonidoActualDer = CaminataOutdoorDer;
             sonidoActualIzq = CaminataOutdoorIzq;
 
