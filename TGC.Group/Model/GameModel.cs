@@ -85,7 +85,7 @@ namespace TGC.Group.Model
         public static float TiempoDeGameOver = 30000;
         public static float TiempoDeAdvertencia = 4000;
         public static float TiempoSinAdvertencia = 3500;
-
+        public static GameModel instancia;
         public static int notasParaGanar = 4;
 
         /// <summary>
@@ -111,7 +111,7 @@ namespace TGC.Group.Model
             deviceMusica = DirectSound.DsDevice;
             this.FixedTickEnable = false;
 
-            
+            GameModel.instancia = this;
             musicaMenu = new Sonido("SonidoPruebaTGC(Mono).wav", true);
             musicaFondoOutdoor = new Sonido("nocturno, continuo.wav", -3000, true);
 
@@ -218,6 +218,10 @@ namespace TGC.Group.Model
                 var escalera = (Escalera)interactuable;
                 paredInvisible.InstanciarPared(escalera);
             }
+            if (mesh.Name.Equals("maleta")) {
+                interactuable = new Maleta(mesh);
+                objetosInteractuables.Add(interactuable);
+            }
         }
 
 
@@ -282,8 +286,6 @@ namespace TGC.Group.Model
                 personaje.aumentarTiempoSinLuz();
 
                 AccionesPersonajeMonstruo();
-
-                personaje.YouWin(this);
             }
             
 

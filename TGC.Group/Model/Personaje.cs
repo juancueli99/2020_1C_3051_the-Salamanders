@@ -862,15 +862,14 @@ namespace TGC.Group.Model
             
             //tendria que mandarme de vuelta al menu
         }
-        public void YouWin(GameModel modelo)
+        public void YouWin()
         {
-            if (this.notasRequeridas == 9 && this.getPosition() == posicionInicial)
+            if (this.notasRequeridas == 9)
             {
                 //Por ahora lo dejamos asi hasta que tengamos una interfaz grafica
                 LockMouse = false;
-                Console.WriteLine("Ganaste!!");
-                modelo.estoyJugando = false;
-                modelo.musicaMenu.escucharSonidoActual(true);
+                GameModel.instancia.estoyJugando = false;
+                GameModel.instancia.musicaMenu.escucharSonidoActual(true);
                 YouSurvivedUserControl.instancia.Show();
             }
         }
