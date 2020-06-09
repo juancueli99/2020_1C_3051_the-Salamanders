@@ -55,8 +55,10 @@ namespace TGC.Group.Model
         public HUD vidaUtilLinterna = new HUD();
         public HUD linternita = new HUD();
 
-        public static bool estoyEnElMenu = true;
+        public double tiempoDeRotacion = 0;
 
+        public static bool estoyEnElMenu = true;
+        public static bool perdi = false;
         public static bool estoyCorriendo = false;
 
         //PARED INVISIBLE
@@ -253,7 +255,8 @@ namespace TGC.Group.Model
 
             if (personaje.LockMouse)
             {
-                UpdateAccionesDeMovimientoYCamara();
+                if(!perdi)
+                    UpdateAccionesDeMovimientoYCamara();
 
                 if (Input.keyDown(Key.E))
                 {
@@ -280,7 +283,7 @@ namespace TGC.Group.Model
 
                 AccionesPersonajeMonstruo();
 
-                personaje.YouWin();
+                personaje.YouWin(this);
             }
             
 
@@ -524,11 +527,12 @@ namespace TGC.Group.Model
                                    
 
                 }
-
                 
-
                 if (personaje.tiempoSinLuz == GameModel.TiempoDeGameOver)
                 {
+                    perdi = true;
+                    tiempoDeRotacion = 0;
+
                     monster.DisposeMonster();
                     //El monster aparece detrás del personaje
                     unBicho = new Monster();
@@ -546,11 +550,18 @@ namespace TGC.Group.Model
                     var newTarget = new TGCVector3(nuevaPosicion.X, nuevaPosicion.Y + 350, nuevaPosicion.Z);
                     personaje.SetCamera(personaje.eye, newTarget);
                     monster.ReproducirSonidoGameOver();
+                    //personaje.GameOver(this);
+                }
+
+                if (tiempoDeRotacion>6 && personaje.tiempoSinLuz > GameModel.TiempoDeGameOver)
+                {
                     personaje.GameOver(this);
-                }     
-                
+                }
+
+                tiempoDeRotacion += ElapsedTime;
             }
         }
+
 
         private double DistanciaA(IInteractuable mesh)
         {
