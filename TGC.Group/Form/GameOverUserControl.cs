@@ -12,6 +12,7 @@ namespace TGC.Group.Form
 {
     public partial class GameOverUserControl : UserControl
     {
+        public static GameOverUserControl instancia = null;
         public GameOverUserControl()
         {
             InitializeComponent();
@@ -21,6 +22,7 @@ namespace TGC.Group.Form
 
             returnButton.Parent = pictureBox1;
             returnButton.BackColor = Color.Transparent;
+            GameOverUserControl.instancia = this;
         }
 
         private void returnButton_Click(object sender, EventArgs e)

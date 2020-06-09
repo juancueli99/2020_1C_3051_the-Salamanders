@@ -280,7 +280,7 @@ namespace TGC.Group.Model
 
                 AccionesPersonajeMonstruo();
 
-                personaje.YouWin();
+                personaje.YouWin(this);
             }
             
 

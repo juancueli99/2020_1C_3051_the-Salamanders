@@ -40,6 +40,8 @@
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.creditsUserControl1 = new TGC.Group.Form.CreditsUserControl();
             this.optionsUserControl1 = new TGC.Group.Form.OptionsUserControl();
+            this.gameOverUserControl1 = new TGC.Group.Form.GameOverUserControl();
+            this.youSurvivedUserControl1 = new TGC.Group.Form.YouSurvivedUserControl();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -187,6 +189,20 @@
             this.optionsUserControl1.Size = new System.Drawing.Size(1370, 705);
             this.optionsUserControl1.TabIndex = 40;
             // 
+            // gameOverUserControl1
+            // 
+            this.gameOverUserControl1.Location = new System.Drawing.Point(0, 0);
+            this.gameOverUserControl1.Name = "gameOverUserControl1";
+            this.gameOverUserControl1.Size = new System.Drawing.Size(1370, 705);
+            this.gameOverUserControl1.TabIndex = 44;
+            // 
+            // youSurvivedUserControl1
+            // 
+            this.youSurvivedUserControl1.Location = new System.Drawing.Point(0, 0);
+            this.youSurvivedUserControl1.Name = "youSurvivedUserControl1";
+            this.youSurvivedUserControl1.Size = new System.Drawing.Size(1370, 705);
+            this.youSurvivedUserControl1.TabIndex = 45;
+            // 
             // MenuUserControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -202,6 +218,8 @@
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.optionsUserControl1);
             this.Controls.Add(this.creditsUserControl1);
+            this.Controls.Add(this.gameOverUserControl1);
+            this.Controls.Add(this.youSurvivedUserControl1);
             this.Name = "MenuUserControl";
             this.Size = new System.Drawing.Size(1370, 705);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
@@ -222,5 +240,7 @@
         private OptionsUserControl optionsUserControl1;
         private CreditsUserControl creditsUserControl1;
         private System.Windows.Forms.PictureBox pictureBox1;
+        private GameOverUserControl gameOverUserControl1;
+        private YouSurvivedUserControl youSurvivedUserControl1;
     }
 }
