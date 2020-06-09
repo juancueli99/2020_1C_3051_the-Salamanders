@@ -12,7 +12,6 @@ namespace TGC.Group.Form
 {
     public partial class YouSurvivedUserControl : UserControl
     {
-        public static YouSurvivedUserControl instancia = null;
         public YouSurvivedUserControl()
         {
             InitializeComponent();
@@ -22,7 +21,6 @@ namespace TGC.Group.Form
 
             returnButton.Parent = pictureBox1;
             returnButton.BackColor = Color.Transparent;
-            YouSurvivedUserControl.instancia = this;
         }
 
         private void returnButton_Click(object sender, EventArgs e)

@@ -6,8 +6,6 @@
         /// Required designer variable.
         /// </summary>
         private System.ComponentModel.IContainer components = null;
-        private System.Windows.Forms.Panel panel3D;
-        private MenuUserControl menuUserControl1;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -70,7 +68,8 @@
 
         #endregion
 
-        
+        private System.Windows.Forms.Panel panel3D;
+        private MenuUserControl menuUserControl1;
     }
 }
 
