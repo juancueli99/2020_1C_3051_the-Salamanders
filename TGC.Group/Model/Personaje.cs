@@ -864,7 +864,7 @@ namespace TGC.Group.Model
         }
         public void YouWin()
         {
-            if (this.notasRequeridas == 9)
+            if (this.cantidadNotas == 9)
             {
                 //Por ahora lo dejamos asi hasta que tengamos una interfaz grafica
                 LockMouse = false;
