@@ -23,12 +23,15 @@ namespace TGC.Group.Form
         public GameForm()
         {
             InitializeComponent();
+
+            gameOverUserControl1.Hide();
+            youSurvivedUserControl1.Hide();
         }
 
         /// <summary>
         ///     Ejemplo del juego a correr
         /// </summary>
-        private TGCExample Modelo { get; set; }
+        public TGCExample Modelo { get; set; }
 
         /// <summary>
         ///     Obtener o parar el estado del RenderLoop.

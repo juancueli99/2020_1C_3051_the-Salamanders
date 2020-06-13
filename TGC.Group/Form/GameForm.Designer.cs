@@ -30,12 +30,16 @@
         {
             this.panel3D = new System.Windows.Forms.Panel();
             this.menuUserControl1 = new TGC.Group.Form.MenuUserControl();
+            this.gameOverUserControl1 = new TGC.Group.Form.GameOverUserControl();
+            this.youSurvivedUserControl1 = new TGC.Group.Form.YouSurvivedUserControl();
             this.panel3D.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel3D
             // 
             this.panel3D.Controls.Add(this.menuUserControl1);
+            this.panel3D.Controls.Add(this.gameOverUserControl1);
+            this.panel3D.Controls.Add(this.youSurvivedUserControl1);
             this.panel3D.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel3D.Location = new System.Drawing.Point(0, 0);
             this.panel3D.Name = "panel3D";
@@ -48,6 +52,20 @@
             this.menuUserControl1.Name = "menuUserControl1";
             this.menuUserControl1.Size = new System.Drawing.Size(1370, 705);
             this.menuUserControl1.TabIndex = 0;
+            // 
+            // gameOverUserControl1
+            // 
+            this.gameOverUserControl1.Location = new System.Drawing.Point(0, 0);
+            this.gameOverUserControl1.Name = "gameOverUserControl1";
+            this.gameOverUserControl1.Size = new System.Drawing.Size(1370, 705);
+            this.gameOverUserControl1.TabIndex = 1;
+            // 
+            // youSurvivedUserControl1
+            // 
+            this.youSurvivedUserControl1.Location = new System.Drawing.Point(0, 0);
+            this.youSurvivedUserControl1.Name = "youSurvivedUserControl1";
+            this.youSurvivedUserControl1.Size = new System.Drawing.Size(1370, 705);
+            this.youSurvivedUserControl1.TabIndex = 2;
             // 
             // GameForm
             // 
@@ -70,6 +88,8 @@
 
         private System.Windows.Forms.Panel panel3D;
         private MenuUserControl menuUserControl1;
+        private GameOverUserControl gameOverUserControl1;
+        private YouSurvivedUserControl youSurvivedUserControl1;
     }
 }
 

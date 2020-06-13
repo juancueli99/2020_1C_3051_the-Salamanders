@@ -141,6 +141,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Game.settings</DependentUpon>
     </Compile>
+    <Compile Include="Model\Maleta.cs" />
     <Compile Include="Model\Sonido.cs" />
     <Compile Include="Model\ConfiguradorMonstruo.cs" />
     <Compile Include="Model\CustomBitmap.cs" />

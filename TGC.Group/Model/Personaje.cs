@@ -19,6 +19,7 @@ using Microsoft.DirectX.Direct3D;
 using TGC.Core.Collision;
 using TGC.Core.SkeletalAnimation;
 using System.Runtime.InteropServices.WindowsRuntime;
+using TGC.Group.Form;
 
 namespace TGC.Group.Model
 {
@@ -854,18 +855,22 @@ namespace TGC.Group.Model
         public void GameOver(GameModel modelo)
         {
             //Por ahora lo dejamos asi hasta que tengamos una interfaz grafica
-            
+            LockMouse = false;
             modelo.estoyJugando = false;
             modelo.musicaMenu.escucharSonidoActual(true);
+            GameOverUserControl.instancia.Show();
+            
             //tendria que mandarme de vuelta al menu
         }
         public void YouWin()
         {
-            if (this.notasRequeridas == GameModel.notasParaGanar && this.getPosition() == posicionInicial)
+            if (this.cantidadNotas == 9)
             {
                 //Por ahora lo dejamos asi hasta que tengamos una interfaz grafica
-                Console.WriteLine("Ganaste!!");
-
+                LockMouse = false;
+                GameModel.instancia.estoyJugando = false;
+                GameModel.instancia.musicaMenu.escucharSonidoActual(true);
+                YouSurvivedUserControl.instancia.Show();
             }
         }
 
