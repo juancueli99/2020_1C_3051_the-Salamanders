@@ -103,6 +103,9 @@ namespace TGC.Group.Model
 
         public static monstruos monstruoActual= monstruos.SECTARIAN;
         public static Microsoft.DirectX.DirectSound.Device deviceMusica;
+        private TgcScreenQuad fullScreenQuad;
+        private Surface depthStencil;
+        private Texture renderTarget;
 
         public override void Init()
         {
@@ -137,6 +140,9 @@ namespace TGC.Group.Model
             TgcMesh mesh2 = escenario.tgcScene.Meshes.Find(mesh => mesh.Name.Equals("linterna_2"));
             var linterna = new Linterna(mesh1,mesh2,this);
             objetosInteractuables.Add(linterna);
+            CreateFullScreenQuad();
+            CreateRenderTarget();
+            
             Camera = personaje;
             //Frustum.FarPlane;
             //Camara.SetCamera(personaje.PosicionMesh(), new TGCVector3(0, 0, 0));
@@ -663,38 +669,11 @@ namespace TGC.Group.Model
 
             if (!estoyJugando)
             {
-                menu.renderSprite();
-                
+                menu.renderSprite();   
             }
             else
             {
-                this.updateLighting();
-                
-
-                //Pone el fondo negro en vez del azul feo ese
-                D3DDevice.Instance.Device.Clear(ClearFlags.Target | ClearFlags.ZBuffer, Color.Black, 1.0f, 0);
-
-                //Frustum Culling -> OPCION 1
-                var meshesQueChocanConFrustrum = escenario.tgcScene.Meshes.FindAll(mesh => TgcCollisionUtils.classifyFrustumAABB(this.Frustum, mesh.BoundingBox) != TgcCollisionUtils.FrustumResult.OUTSIDE);
-                meshesQueChocanConFrustrum.ForEach(mesh => mesh.Render());
-
-                if (DistanciaA2(monster.ghost) < 5000)
-                {
-                    monster.RenderMonster();
-                }
-                //Render de BoundingBox, muy útil para debug de colisiones.
-                if (BoundingBox)
-                {
-                    Box.BoundingBox.Render();
-                    tgcScene.Meshes.ForEach(mesh => mesh.BoundingBox.Render());
-                    fondo.BoundingBox.Render();
-                }
-
-                nota.renderSprite();
-                vidaUtilVela.renderSprite();
-                velita.renderSprite();
-                vidaUtilLinterna.renderSprite();
-                linternita.renderSprite();
+                GameRender();
             }
 
             //Frustum Culling -> OPCION 2
@@ -719,6 +698,80 @@ namespace TGC.Group.Model
             PostRender();
         }
 
+        private void GameRender()
+        {
+            RenderPantallaConMonsterCerca();
+            this.updateLighting();
+
+
+            //Pone el fondo negro en vez del azul feo ese
+            D3DDevice.Instance.Device.Clear(ClearFlags.Target | ClearFlags.ZBuffer, Color.Black, 1.0f, 0);
+            
+           
+            //Frustum Culling -> OPCION 1
+            var meshesQueChocanConFrustrum = escenario.tgcScene.Meshes.FindAll(mesh => TgcCollisionUtils.classifyFrustumAABB(this.Frustum, mesh.BoundingBox) != TgcCollisionUtils.FrustumResult.OUTSIDE);
+            meshesQueChocanConFrustrum.ForEach(mesh => mesh.Render());
+
+            if (DistanciaA2(monster.ghost) < 5000)
+            {
+                monster.RenderMonster();
+            }
+            //Render de BoundingBox, muy útil para debug de colisiones.
+            if (BoundingBox)
+            {
+                Box.BoundingBox.Render();
+                tgcScene.Meshes.ForEach(mesh => mesh.BoundingBox.Render());
+                fondo.BoundingBox.Render();
+            }
+
+            nota.renderSprite();
+            vidaUtilVela.renderSprite();
+            velita.renderSprite();
+            vidaUtilLinterna.renderSprite();
+            linternita.renderSprite();
+        }
+        private void CreateFullScreenQuad()
+        {
+            var d3dDevice = D3DDevice.Instance.Device;
+
+            // Creamos un FullScreen Quad
+            CustomVertex.PositionTextured[] vertices =
+            {
+                new CustomVertex.PositionTextured(-1, 1, 1, 0, 0),
+                new CustomVertex.PositionTextured(1, 1, 1, 1, 0),
+                new CustomVertex.PositionTextured(-1, -1, 1, 0, 1),
+                new CustomVertex.PositionTextured(1, -1, 1, 1, 1)
+            };
+
+            // Vertex buffer de los triangulos
+            fullScreenQuad = new TgcScreenQuad();
+            fullScreenQuad.ScreenQuadVB = new VertexBuffer(typeof(CustomVertex.PositionTextured), 4, d3dDevice, Usage.Dynamic | Usage.WriteOnly, CustomVertex.PositionTextured.Format, Pool.Default);
+            fullScreenQuad.ScreenQuadVB.SetData(vertices, 0, LockFlags.None);
+        }
+
+        private void CreateRenderTarget()
+        {
+            var d3dDevice = D3DDevice.Instance.Device;
+
+            depthStencil = d3dDevice.CreateDepthStencilSurface(d3dDevice.PresentationParameters.BackBufferWidth, d3dDevice.PresentationParameters.BackBufferHeight, DepthFormat.D24S8, MultiSampleType.None, 0, true);
+
+            renderTarget = new Texture(d3dDevice, d3dDevice.PresentationParameters.BackBufferWidth, d3dDevice.PresentationParameters.BackBufferHeight, 1, Usage.RenderTarget, Format.X8R8G8B8, Pool.Default);
+        }
+
+        private void RenderPantallaConMonsterCerca()
+        {
+            
+            //esta condicion es para que pueda ver al monster cuando me atrapa y tambien para que se aplique cuando aparece antes
+            if (/*TiempoDeAdvertencia > personaje.tiempoSinLuz && TiempoDeGameOver > personaje.tiempoSinLuz*/ true)
+            {
+                var effect = TGCShaders.Instance.LoadEffect(ShadersDir + "PostProcesado.fx");
+                var device = D3DDevice.Instance.Device;
+                effect.Technique = "PostProcess";
+                effect.SetValue("renderTarget", renderTarget);
+                fullScreenQuad.render(effect);
+            }
+        }
+
         /// <summary>
         ///     Se llama cuando termina la ejecución del ejemplo.
         ///     Hacer Dispose() de todos los objetos creados.
@@ -728,16 +781,16 @@ namespace TGC.Group.Model
         {
             escenario.DisposeEscenario();
             //personaje.DisposePersonaje();
-            monster.DisposeMonster();
-            
+            monster.DisposeMonster();     
             menu.disposeSprite();
             nota.disposeSprite();
             vidaUtilVela.disposeSprite();
             velita.disposeSprite();
             vidaUtilLinterna.disposeSprite();
             linternita.disposeSprite();
-
             paredInvisible.DisposePared();
+            fullScreenQuad.dispose();
+            this.depthStencil.Dispose();
         }
 
     }

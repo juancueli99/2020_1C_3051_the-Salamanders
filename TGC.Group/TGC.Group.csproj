@@ -829,6 +829,7 @@
     <Content Include="Media\YouSurvivedSprite2.jpg" />
     <Content Include="Shaders\IndicadorEscondite.fx" />
     <Content Include="Shaders\LinternaShader.fx" />
+    <Content Include="Shaders\PostProcesado.fx" />
     <Content Include="Shaders\VelaShader.fx" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
