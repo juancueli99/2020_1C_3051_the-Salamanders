@@ -140,10 +140,11 @@ namespace TGC.Group.Model
             TgcMesh mesh2 = escenario.tgcScene.Meshes.Find(mesh => mesh.Name.Equals("linterna_2"));
             var linterna = new Linterna(mesh1,mesh2,this);
             objetosInteractuables.Add(linterna);
+           
+            Camera = personaje;
+
             CreateFullScreenQuad();
             CreateRenderTarget();
-            
-            Camera = personaje;
             //Frustum.FarPlane;
             //Camara.SetCamera(personaje.PosicionMesh(), new TGCVector3(0, 0, 0));
 
@@ -603,11 +604,14 @@ namespace TGC.Group.Model
                 currentShader = TGCShaders.Instance.TgcMeshPointLightShader;
             }
 
+            //currentShader = TGCShaders.Instance.LoadEffect(ShadersDir + "PostProcesado.fx");
+
             //Aplicar a cada mesh el shader actual
             foreach (TgcMesh mesh in iluminables)
             {
                 mesh.Effect = currentShader;
                 mesh.Technique = TGCShaders.Instance.GetTGCMeshTechnique(mesh.RenderType);
+                //mesh.Technique = "FogEffect";
 
                 // Estos son paramentros del current shader, si cambias el shader chequear los parametros o rompe
                 mesh.Effect.SetValue("materialEmissiveColor", ColorValue.FromColor(Color.Black));
@@ -700,6 +704,7 @@ namespace TGC.Group.Model
 
         private void GameRender()
         {
+            
             RenderPantallaConMonsterCerca();
             this.updateLighting();
 
@@ -759,14 +764,13 @@ namespace TGC.Group.Model
         }
 
         private void RenderPantallaConMonsterCerca()
-        {
-            
+        {   
             //esta condicion es para que pueda ver al monster cuando me atrapa y tambien para que se aplique cuando aparece antes
             if (/*TiempoDeAdvertencia > personaje.tiempoSinLuz && TiempoDeGameOver > personaje.tiempoSinLuz*/ true)
             {
                 var effect = TGCShaders.Instance.LoadEffect(ShadersDir + "PostProcesado.fx");
                 var device = D3DDevice.Instance.Device;
-                effect.Technique = "PostProcess";
+                effect.Technique = "PostProcessMonster";
                 effect.SetValue("renderTarget", renderTarget);
                 fullScreenQuad.render(effect);
             }
