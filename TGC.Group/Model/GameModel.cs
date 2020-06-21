@@ -106,6 +106,10 @@ namespace TGC.Group.Model
         private TgcScreenQuad fullScreenQuad;
         private Surface depthStencil;
         private Texture renderTarget;
+        float timer;
+        //string lala = "..\\..\\..\\shaders\\";
+        public Microsoft.DirectX.Direct3D.Effect effectPosProcesado;
+        //bool render = false;
 
         public override void Init()
         {
@@ -145,13 +149,19 @@ namespace TGC.Group.Model
 
             CreateFullScreenQuad();
             CreateRenderTarget();
-            //Frustum.FarPlane;
-            //Camara.SetCamera(personaje.PosicionMesh(), new TGCVector3(0, 0, 0));
+            
+            //ShadersDir
+            effectPosProcesado = TGCShaders.Instance.LoadEffect(ShadersDir + "PostProcesado.fx");
+            effectPosProcesado.SetValue("eyePosition", TGCVector3.TGCVector3ToFloat3Array(Camera.Position));
 
-            //personaje.LockMouse = true;
+            effectPosProcesado.SetValue("screenWidth", d3dDevice.PresentationParameters.BackBufferWidth);
+            effectPosProcesado.SetValue("screenHeight", d3dDevice.PresentationParameters.BackBufferHeight);
+            timer = 0;
+            effectPosProcesado.SetValue("timer", timer);
+            //effectPosProcesado.Technique = "PostProcess";
+            //render = true;
 
-            //Internamente el framework construye la matriz de view con estos dos vectores.
-            //Luego en nuestro juego tendremos que crear una cámara que cambie la matriz de view con variables como movimientos o animaciones de escenas
+
 
         }
 
@@ -669,16 +679,67 @@ namespace TGC.Group.Model
         public override void Render()
         {
             //Inicio el render de la escena, para ejemplos simples. Cuando tenemos postprocesado o shaders es mejor realizar las operaciones según nuestra conveniencia.
-            PreRender();
+            //PreRender();
+                        
+            var device = D3DDevice.Instance.Device;
+
+            // Capturamos las texturas de pantalla
+            Surface screenRenderTarget = device.GetRenderTarget(0);
+            Surface screenDepthSurface = device.DepthStencilSurface;
+
+            // Especificamos que vamos a dibujar en una textura
+            Surface surface = renderTarget1.GetSurfaceLevel(0);
+            device.SetRenderTarget(0, surface);
+            device.DepthStencilSurface = depthStencil;
+
+            // Captura de escena en render target
+            device.Clear(ClearFlags.Target | ClearFlags.ZBuffer, Color.CornflowerBlue, 1.0f, 0);
+            device.BeginScene();
+
+            /**Render**/
 
             if (!estoyJugando)
             {
-                menu.renderSprite();   
+                menu.renderSprite();
             }
             else
             {
                 GameRender();
             }
+
+
+
+            device.EndScene();
+            // Fin de escena
+
+
+            // Especificamos que vamos a dibujar en pantalla
+            device.SetRenderTarget(0, screenRenderTarget);
+            device.DepthStencilSurface = screenDepthSurface;
+
+            // Dibujado de textura en full screen quad
+            device.Clear(ClearFlags.Target | ClearFlags.ZBuffer, Color.CornflowerBlue, 1.0f, 0);
+            device.BeginScene();
+
+            effectPosProcesado.Technique = "PostProcessMonster";
+            device.VertexFormat = CustomVertex.PositionTextured.Format;
+            device.SetStreamSource(0, fullScreenQuad1, 0);
+            effectPosProcesado.SetValue("renderTarget", renderTarget1);
+
+            // Dibujamos el full screen quad
+            effectPosProcesado.Begin(FX.None);
+            effectPosProcesado.BeginPass(0);
+            device.DrawPrimitives(PrimitiveType.TriangleStrip, 0, 2);
+            effectPosProcesado.EndPass();
+            effectPosProcesado.End();
+
+            RenderFPS();
+            RenderAxis();
+            device.EndScene();
+
+            device.Present();
+
+            surface.Dispose();
 
             //Frustum Culling -> OPCION 2
             /*
@@ -699,13 +760,13 @@ namespace TGC.Group.Model
             //personaje.RenderPersonaje(ElapsedTime);
 
             //Finaliza el render y presenta en pantalla, al igual que el preRender se debe para casos puntuales es mejor utilizar a mano las operaciones de EndScene y PresentScene
-            PostRender();
+            //PostRender();
         }
 
         private void GameRender()
         {
             
-            RenderPantallaConMonsterCerca();
+            //RenderPantallaConMonsterCerca();
             this.updateLighting();
 
 
@@ -735,6 +796,9 @@ namespace TGC.Group.Model
             vidaUtilLinterna.renderSprite();
             linternita.renderSprite();
         }
+        
+
+        private VertexBuffer fullScreenQuad1;
         private void CreateFullScreenQuad()
         {
             var d3dDevice = D3DDevice.Instance.Device;
@@ -749,30 +813,36 @@ namespace TGC.Group.Model
             };
 
             // Vertex buffer de los triangulos
-            fullScreenQuad = new TgcScreenQuad();
-            fullScreenQuad.ScreenQuadVB = new VertexBuffer(typeof(CustomVertex.PositionTextured), 4, d3dDevice, Usage.Dynamic | Usage.WriteOnly, CustomVertex.PositionTextured.Format, Pool.Default);
-            fullScreenQuad.ScreenQuadVB.SetData(vertices, 0, LockFlags.None);
+            fullScreenQuad1 = new VertexBuffer(typeof(CustomVertex.PositionTextured), 4, d3dDevice, Usage.Dynamic | Usage.WriteOnly, CustomVertex.PositionTextured.Format, Pool.Default);
+            fullScreenQuad1.SetData(vertices, 0, LockFlags.None);
         }
 
+        private Texture renderTarget1;
         private void CreateRenderTarget()
         {
             var d3dDevice = D3DDevice.Instance.Device;
 
             depthStencil = d3dDevice.CreateDepthStencilSurface(d3dDevice.PresentationParameters.BackBufferWidth, d3dDevice.PresentationParameters.BackBufferHeight, DepthFormat.D24S8, MultiSampleType.None, 0, true);
 
-            renderTarget = new Texture(d3dDevice, d3dDevice.PresentationParameters.BackBufferWidth, d3dDevice.PresentationParameters.BackBufferHeight, 1, Usage.RenderTarget, Format.X8R8G8B8, Pool.Default);
+            renderTarget1 = new Texture(d3dDevice, d3dDevice.PresentationParameters.BackBufferWidth, d3dDevice.PresentationParameters.BackBufferHeight, 1, Usage.RenderTarget, Format.X8R8G8B8, Pool.Default);
         }
+
+        
+        
+
+
+
 
         private void RenderPantallaConMonsterCerca()
         {   
             //esta condicion es para que pueda ver al monster cuando me atrapa y tambien para que se aplique cuando aparece antes
             if (/*TiempoDeAdvertencia > personaje.tiempoSinLuz && TiempoDeGameOver > personaje.tiempoSinLuz*/ true)
             {
-                var effect = TGCShaders.Instance.LoadEffect(ShadersDir + "PostProcesado.fx");
-                var device = D3DDevice.Instance.Device;
-                effect.Technique = "PostProcessMonster";
-                effect.SetValue("renderTarget", renderTarget);
-                fullScreenQuad.render(effect);
+                //var effect = TGCShaders.Instance.LoadEffect(ShadersDir + "PostProcesado.fx");
+                //var device = D3DDevice.Instance.Device;
+                //effect.Technique = "PostProcessMonster";
+                //effect.SetValue("renderTarget", renderTarget);
+                //fullScreenQuad.render(effect);
             }
         }
 
@@ -793,7 +863,7 @@ namespace TGC.Group.Model
             vidaUtilLinterna.disposeSprite();
             linternita.disposeSprite();
             paredInvisible.DisposePared();
-            fullScreenQuad.dispose();
+            //fullScreenQuad.dispose();
             this.depthStencil.Dispose();
         }
 
