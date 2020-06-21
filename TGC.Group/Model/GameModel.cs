@@ -110,7 +110,7 @@ namespace TGC.Group.Model
         private Surface depthStencil;
         private Texture renderTarget;
 
-        float timer;
+        
         //string lala = "..\\..\\..\\shaders\\";
         public Microsoft.DirectX.Direct3D.Effect effectPosProcesado;
         //bool render = false;
@@ -132,6 +132,9 @@ namespace TGC.Group.Model
             GameModel.instancia = this;
             musicaMenu = new Sonido("SonidoPruebaTGC(Mono).wav", true);
             musicaFondoOutdoor = new Sonido("nocturno, continuo.wav", -3000, true);
+
+            CreateFullScreenQuad();
+            CreateRenderTarget();
 
             personaje = new Personaje();
             menu.instanciarMenu();
@@ -157,9 +160,6 @@ namespace TGC.Group.Model
             objetosInteractuables.Add(linterna);
            
             Camera = personaje;
-
-            CreateFullScreenQuad();
-            CreateRenderTarget();
             
             //ShadersDir
             effectPosProcesado = TGCShaders.Instance.LoadEffect(ShadersDir + "PostProcesado.fx");
@@ -172,7 +172,7 @@ namespace TGC.Group.Model
             //effectPosProcesado.Technique = "PostProcess";
             //render = true;
 
-
+            effectPosProcesado.Technique = "PostProcessMonster";
 
         }
 
@@ -223,6 +223,11 @@ namespace TGC.Group.Model
             if (mesh.Name.Equals("pilas"))
             {
                 interactuable = new Pila(mesh);
+                objetosInteractuables.Add(interactuable);
+            }
+            if (mesh.Name.Equals("NVG"))
+            {
+                interactuable = new VisionNocturna(mesh, this);
                 objetosInteractuables.Add(interactuable);
             }
             if (mesh.Name.Contains("puerta"))
@@ -764,10 +769,15 @@ namespace TGC.Group.Model
             device.DepthStencilSurface = screenDepthSurface;
 
             // Dibujado de textura en full screen quad
-            device.Clear(ClearFlags.Target | ClearFlags.ZBuffer, Color.CornflowerBlue, 1.0f, 0);
+            device.Clear(ClearFlags.Target | ClearFlags.ZBuffer, Color.Black, 1.0f, 0);
             device.BeginScene();
 
-            effectPosProcesado.Technique = "PostProcessMonster";
+            nota.renderSprite();
+            vidaUtilVela.renderSprite();
+            velita.renderSprite();
+            vidaUtilLinterna.renderSprite();
+            linternita.renderSprite();
+
             device.VertexFormat = CustomVertex.PositionTextured.Format;
             device.SetStreamSource(0, fullScreenQuad1, 0);
             effectPosProcesado.SetValue("renderTarget", renderTarget1);
@@ -836,12 +846,13 @@ namespace TGC.Group.Model
                 tgcScene.Meshes.ForEach(mesh => mesh.BoundingBox.Render());
                 fondo.BoundingBox.Render();
             }
-
+            /*
             nota.renderSprite();
             vidaUtilVela.renderSprite();
             velita.renderSprite();
             vidaUtilLinterna.renderSprite();
             linternita.renderSprite();
+            */
         }
         
 
