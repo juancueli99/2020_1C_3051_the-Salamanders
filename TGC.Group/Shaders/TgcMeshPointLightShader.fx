@@ -274,13 +274,9 @@ float4 ps_DiffuseMap(PS_DIFFUSE_MAP input) : COLOR0
 	/* Color final: modular (Emissive + Ambient + Diffuse) por el color de la textura, y luego sumar Specular.
 	   El color Alpha sale del diffuse material */
 	
-
 	float4 finalColor = float4(saturate(materialEmissiveColor + ambientLight + diffuseLight) * texelColor + specularLight, materialDiffuseColor.a);
 
-	///////////////////////////////
-	///////////////////////////////
-	
-    float startFogDistance = 1500;
+    float startFogDistance = 3000;
     float endFogDistance = 8000;
     float4 ColorFog = float4(0.5, 0.5, 0.5, 1);
     
