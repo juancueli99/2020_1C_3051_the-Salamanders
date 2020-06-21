@@ -36,9 +36,9 @@ namespace TGC.Group.Model
 
         public void Interactuar(Personaje personaje)
         {
-            if (!personaje.objetosInteractuables.Any(objeto => objeto is Linterna))
+            if (!Inventario.inventario.Any(objeto => objeto is Linterna))
             {
-                personaje.objetosInteractuables.Add(this);
+                Inventario.inventario.Add(this);
             }
             eliminarMesh();
         }
@@ -87,7 +87,7 @@ namespace TGC.Group.Model
         public void ApagarLinterna(Personaje personaje)
         {
             this.estaEncendida = false;
-            personaje.itemEnMano = (IEquipable)personaje.objetosInteractuables.Find(itemDefault => itemDefault is ItemVacioDefault);
+            //personaje.itemEnMano = (IEquipable)personaje.objetosInteractuables.Find(itemDefault => itemDefault is ItemVacioDefault);
         }
 
         public void Recargar()

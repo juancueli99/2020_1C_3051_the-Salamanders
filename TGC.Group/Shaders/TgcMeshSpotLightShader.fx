@@ -193,6 +193,7 @@ struct VS_OUTPUT_DIFFUSE_MAP
 	float3 WorldNormal : TEXCOORD2;
 	float3 LightVec	: TEXCOORD3;
 	float3 HalfAngleVec	: TEXCOORD4;
+    float4 PosView : COLOR0;
 };
 
 //Vertex Shader
@@ -222,6 +223,8 @@ VS_OUTPUT_DIFFUSE_MAP vs_DiffuseMap(VS_INPUT_DIFFUSE_MAP input)
 
 	//HalfAngleVec (H): vector de reflexion simplificado de Phong-Blinn (H = |V + L|). Usado en Specular
 	output.HalfAngleVec = viewVector + output.LightVec;
+	
+    output.PosView = mul(input.Position, matWorldView);
 
 	return output;
 }
@@ -234,6 +237,7 @@ struct PS_DIFFUSE_MAP
 	float3 WorldNormal : TEXCOORD2;
 	float3 LightVec	: TEXCOORD3;
 	float3 HalfAngleVec	: TEXCOORD4;
+    float4 PosView : COLOR0;
 };
 
 //Pixel Shader
@@ -281,7 +285,40 @@ float4 ps_DiffuseMap(PS_DIFFUSE_MAP input) : COLOR0
 	   El color Alpha sale del diffuse material */
 	float4 finalColor = float4(saturate(materialEmissiveColor + ambientLight + diffuseLight) * texelColor + specularLight, materialDiffuseColor.a);
 
-	return finalColor;
+    //return lerp(finalColor, float4(1, 0, 0, 1), 0.5);
+	
+    float startFogDistance = 3000;
+    float endFogDistance = 8000;
+    float4 ColorFog = float4(0.5, 0.5, 0.5, 1);
+    
+    float4 fvBaseColor = finalColor;
+    
+    if (fvBaseColor.a < 0.5)
+    {
+        discard;
+    }
+    // Si estoy adentro del startFogDistance muestro el color original de la textura
+    if (input.PosView.z < startFogDistance)
+        return fvBaseColor;
+    else if (input.PosView.z > endFogDistance)
+    {
+        // Si estoy fuera del endFogDistance muestro el color gris
+        fvBaseColor = ColorFog;
+        return fvBaseColor;
+    }
+    else
+    {
+		// combino fog y textura
+        float1 total = endFogDistance - startFogDistance;
+        float1 resto = input.PosView.z - startFogDistance;
+        float1 proporcion = resto / total;
+		
+        float3 retorno = lerp(fvBaseColor.xyz, ColorFog.xyz, proporcion);
+        
+        fvBaseColor = float4(retorno, 1);
+		
+        return fvBaseColor;
+    }
 }
 
 /*

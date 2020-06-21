@@ -94,13 +94,18 @@ VS_OUTPUT_DEFAULT VSDefault(VS_INPUT_DEFAULT input)
 //Pixel Shader
 float4 PSFogEffect(VS_OUTPUT_DEFAULT input) : COLOR0
 {
-    float startFogDistance = 4800;
-    float endFogDistance = 10000;
+    float startFogDistance = 3500;
+    float endFogDistance = 4000;
     float4 ColorFog = float4(0.5, 0.5, 0.5, 1);
     
     float4 fvBaseColor = tex2D(diffuseMap, input.TextureCoordinates);
     
-    /*if (input.PosView.z < startFogDistance)
+    if (fvBaseColor.a < 0.5)
+    {
+        discard;
+    }
+    
+    if (input.PosView.z < startFogDistance)
         // Si estoy adentro del startFogDistance
         // muestro el color original de la textura
         return fvBaseColor;
@@ -118,19 +123,19 @@ float4 PSFogEffect(VS_OUTPUT_DEFAULT input) : COLOR0
         float1 resto = input.PosView.z - startFogDistance;
         float1 proporcion = resto / total;
         fvBaseColor = lerp(fvBaseColor, ColorFog, proporcion);
-       
+        
         return fvBaseColor;
-    }*/
+    }
     
     
-    
+    /*
     // combino fog y textura
     float1 total = endFogDistance - startFogDistance;
     float1 resto = input.PosView.z - startFogDistance;
     float1 proporcion = resto / total;
     float4 fvBaseColor2 = lerp(fvBaseColor, ColorFog, proporcion);
     
-    return (input.PosView.z <= startFogDistance) ? fvBaseColor : fvBaseColor2;
+    return (input.PosView.z <= startFogDistance) ? fvBaseColor : fvBaseColor2;*/
 
     
 
