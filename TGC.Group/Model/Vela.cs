@@ -31,14 +31,14 @@ namespace TGC.Group.Model
         }
         public void Interactuar(Personaje personaje)
         {
-            if (personaje.objetosInteractuables.Any(objeto => objeto is Vela))
+            if (Inventario.inventario.Any(objeto => objeto is Vela))
             {
-                var vela = (Vela)personaje.objetosInteractuables.Find(objeto => objeto is Vela);
+                var vela = (Vela)Inventario.inventario.Find(objeto => objeto is Vela);
                 vela.AumentarDuracion();
             }
             else
             {
-                personaje.objetosInteractuables.Add(this);
+                Inventario.inventario.Add(this);
             }
             eliminarMesh();
         }
@@ -50,7 +50,31 @@ namespace TGC.Group.Model
             mesh.updateBoundingBox();
             mesh.UpdateMeshTransform();
         }
-        public void Usar(Personaje personaje) { }
+        public void Usar(Personaje personaje)
+        {
+            if (personaje.tieneLuz)
+            {
+                this.ApagarVela();
+                personaje.tieneLuz = false;
+
+            }
+            else
+            {
+                this.EncenderVela();
+                personaje.tieneLuz = true;
+            }
+        }
+
+        private void ApagarVela()
+        {
+            this.estaEncendida = false;
+        }
+
+        private void EncenderVela()
+        {
+            this.estaEncendida = true;
+        }
+    
 
         public void Equipar(Personaje personaje)
         {
@@ -81,7 +105,7 @@ namespace TGC.Group.Model
         }
         public void DesecharVela(Personaje personaje)
         {
-            personaje.objetosInteractuables.Remove(this);
+            Inventario.inventario.Remove(this);
             personaje.itemEnMano = (IEquipable)personaje.objetosInteractuables.Find(itemDefault => itemDefault is ItemVacioDefault);
         }
 

@@ -387,7 +387,7 @@ namespace TGC.Group.Model
 
         private void RealizarAccionesDeInventario()
         {
-            if (Input.keyDown(Key.H))
+            if (Input.keyDown(Key.H)) //deprecado
             {
                 personaje.getItemEnMano().Usar(personaje);
                 var linterna = personaje.objetosInteractuables.Find(item=>item is Linterna);
@@ -397,6 +397,9 @@ namespace TGC.Group.Model
 
             if (Input.keyDown(Key.F))
             {
+                personaje.getItemEnMano().Usar(personaje);
+                
+                /*
                 //Prende/apaga la luz de la linterna
                 if (personaje.getItemEnMano() is Linterna || personaje.getItemEnMano() is Vela)
                 {
@@ -407,6 +410,7 @@ namespace TGC.Group.Model
                 {
                     //personaje.tieneLuz = false;
                 }
+                */
             }
 
             if (Input.keyDown(Key.R))
@@ -420,7 +424,11 @@ namespace TGC.Group.Model
             
             if (Input.keyDown(Key.Q))
             {
+                Inventario.objetoSiguiente(personaje);
+
+
                 //Cambiar entre vela y linterna (si hubiere)
+                /*
                 if ((personaje.getItemEnMano() is Linterna || personaje.getItemEnMano() is ItemVacioDefault) && personaje.objetosInteractuables.Any(objeto => objeto is Vela))
                 {
                     personaje.getItemEnMano().Usar(personaje);
@@ -435,8 +443,9 @@ namespace TGC.Group.Model
                         var linterna = (Linterna)personaje.objetosInteractuables.Find(objeto => objeto is Linterna);
                         personaje.setItemEnMano(linterna);
                     }
-                }
+                } */
             }
+                
         }
 
         private void InteraccionPersonajeYMesh()
