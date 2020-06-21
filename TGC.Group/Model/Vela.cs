@@ -102,7 +102,9 @@ namespace TGC.Group.Model
 
         public Color getLuzColor()
         {
-            return Color.DarkOrange;
+            //Hay que ir buscando un buen color
+            //return Color.FromArgb(194,91,41);
+            return Color.FromArgb(32, 22, 13);
         }
     }
 }
