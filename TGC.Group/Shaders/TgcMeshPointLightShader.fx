@@ -186,6 +186,7 @@ struct VS_OUTPUT_DIFFUSE_MAP
 	float3 WorldNormal : TEXCOORD2;
 	float3 LightVec	: TEXCOORD3;
 	float3 HalfAngleVec	: TEXCOORD4;
+    float4 PosView : COLOR0;
 };
 
 //Vertex Shader
@@ -215,6 +216,8 @@ VS_OUTPUT_DIFFUSE_MAP vs_DiffuseMap(VS_INPUT_DIFFUSE_MAP input)
 
 	//HalfAngleVec (H): vector de reflexion simplificado de Phong-Blinn (H = |V + L|). Usado en Specular
 	output.HalfAngleVec = viewVector + output.LightVec;
+	
+    output.PosView = mul(input.Position, matWorldView);
 
 	return output;
 }
@@ -227,6 +230,7 @@ struct PS_DIFFUSE_MAP
 	float3 WorldNormal : TEXCOORD2;
 	float3 LightVec	: TEXCOORD3;
 	float3 HalfAngleVec	: TEXCOORD4;
+    float4 PosView : COLOR0;
 };
 
 //Pixel Shader
@@ -273,7 +277,42 @@ float4 ps_DiffuseMap(PS_DIFFUSE_MAP input) : COLOR0
 
 	float4 finalColor = float4(saturate(materialEmissiveColor + ambientLight + diffuseLight) * texelColor + specularLight, materialDiffuseColor.a);
 
-	return finalColor;
+	///////////////////////////////
+	///////////////////////////////
+	
+    float startFogDistance = 1500;
+    float endFogDistance = 4000;
+    float4 ColorFog = float4(0.5, 0.5, 0.5, 1);
+    
+    //float4 fvBaseColor = tex2D(diffuseMap, input.Texcoord);
+	
+    float4 fvBaseColor = finalColor;
+    
+    if (fvBaseColor.a < 0.5)
+    {
+        discard;
+    }
+    // Si estoy adentro del startFogDistance muestro el color original de la textura
+    if (input.PosView.z < startFogDistance)
+        return fvBaseColor;
+    else if (input.PosView.z > endFogDistance)
+    {
+        // Si estoy fuera del endFogDistance
+        // muestro el color gris
+        fvBaseColor = ColorFog;
+        return fvBaseColor;
+    }
+    else
+    {
+		// combino fog y textura
+        float1 total = endFogDistance - startFogDistance;
+        float1 resto = input.PosView.z - startFogDistance;
+        float1 proporcion = resto / total;
+        fvBaseColor = lerp(fvBaseColor, ColorFog, proporcion);
+        
+        return fvBaseColor;
+    }
+	
 }
 
 /*
@@ -312,6 +351,7 @@ struct VS_OUTPUT_DIFFUSE_MAP_AND_LIGHTMAP
 	float3 WorldNormal : TEXCOORD3;
 	float3 LightVec	: TEXCOORD4;
 	float3 HalfAngleVec	: TEXCOORD5;
+    float4 PosView : COLOR0;
 };
 
 //Vertex Shader
@@ -343,6 +383,8 @@ VS_OUTPUT_DIFFUSE_MAP_AND_LIGHTMAP vs_diffuseMapAndLightmap(VS_INPUT_DIFFUSE_MAP
 	//HalfAngleVec (H): vector de reflexion simplificado de Phong-Blinn (H = |V + L|). Usado en Specular
 	output.HalfAngleVec = viewVector + output.LightVec;
 
+    output.PosView = mul(input.Position, matWorldView);
+	
 	return output;
 }
 
@@ -355,6 +397,7 @@ struct PS_INPUT_DIFFUSE_MAP_AND_LIGHTMAP
 	float3 WorldNormal : TEXCOORD3;
 	float3 LightVec	: TEXCOORD4;
 	float3 HalfAngleVec	: TEXCOORD5;
+    float4 PosView : COLOR0;
 };
 
 //Pixel Shader
@@ -401,9 +444,6 @@ float4 ps_diffuseMapAndLightmap(PS_INPUT_DIFFUSE_MAP_AND_LIGHTMAP input) : COLOR
 
 	float4 finalColor = float4(saturate(materialEmissiveColor + ambientLight + diffuseLight) * (texelColor * lightmapColor) + specularLight, materialDiffuseColor.a);
 	
-	
-	
-
 	return finalColor;
 }
 

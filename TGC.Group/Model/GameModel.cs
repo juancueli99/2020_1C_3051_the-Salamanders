@@ -61,6 +61,8 @@ namespace TGC.Group.Model
         public static bool perdi = false;
         public static bool estoyCorriendo = false;
 
+        private float timer = 0f;
+
         //PARED INVISIBLE
         public ParedInvisible paredInvisible = new ParedInvisible();
 
@@ -104,8 +106,10 @@ namespace TGC.Group.Model
         public static monstruos monstruoActual= monstruos.SECTARIAN;
         public static Microsoft.DirectX.DirectSound.Device deviceMusica;
         private TgcScreenQuad fullScreenQuad;
+        private VertexBuffer vertexBuffer;
         private Surface depthStencil;
         private Texture renderTarget;
+        private Microsoft.DirectX.Direct3D.Effect effect;
 
         public override void Init()
         {
@@ -113,6 +117,10 @@ namespace TGC.Group.Model
             var d3dDevice = D3DDevice.Instance.Device;
             deviceMusica = DirectSound.DsDevice;
             this.FixedTickEnable = false;
+
+            effect = TGCShaders.Instance.LoadEffect(ShadersDir + "PostProcesado.fx");
+            //effect = TGCShaders.Instance.LoadEffect(ShadersDir + "PostProcesado.fx");
+            fullScreenQuad = new TgcScreenQuad();
 
             GameModel.instancia = this;
             musicaMenu = new Sonido("SonidoPruebaTGC(Mono).wav", true);
@@ -261,6 +269,7 @@ namespace TGC.Group.Model
         private void UpdateGame()
         {
             //Capturar Input teclado
+            timer += ElapsedTime;
 
             RevisarLockeoMouse();
 
@@ -294,7 +303,12 @@ namespace TGC.Group.Model
 
                 AccionesPersonajeMonstruo();
             }
-            
+
+            var d3dDevice = D3DDevice.Instance.Device;
+            effect.SetValue("eyePosition", TGCVector3.TGCVector3ToFloat3Array(personaje.Position));
+            effect.SetValue("screenWidth", d3dDevice.PresentationParameters.BackBufferWidth);
+            effect.SetValue("screenHeight", d3dDevice.PresentationParameters.BackBufferHeight);
+            effect.SetValue("timer", timer);
 
         }
 
@@ -588,6 +602,17 @@ namespace TGC.Group.Model
 
         }
 
+        private void renderFog()
+        {
+            Microsoft.DirectX.Direct3D.Effect currentShader;
+            currentShader = TGCShaders.Instance.LoadEffect(ShadersDir + "PostProcesado.fx");
+            foreach (TgcMesh mesh in iluminables)
+            {
+                mesh.Effect = currentShader;
+                mesh.Technique = "FogEffect";
+            }
+           
+        }
         private void updateLighting()
         {
             Microsoft.DirectX.Direct3D.Effect currentShader;
@@ -604,14 +629,11 @@ namespace TGC.Group.Model
                 currentShader = TGCShaders.Instance.TgcMeshPointLightShader;
             }
 
-            //currentShader = TGCShaders.Instance.LoadEffect(ShadersDir + "PostProcesado.fx");
-
             //Aplicar a cada mesh el shader actual
             foreach (TgcMesh mesh in iluminables)
             {
                 mesh.Effect = currentShader;
                 mesh.Technique = TGCShaders.Instance.GetTGCMeshTechnique(mesh.RenderType);
-                //mesh.Technique = "FogEffect";
 
                 // Estos son paramentros del current shader, si cambias el shader chequear los parametros o rompe
                 mesh.Effect.SetValue("materialEmissiveColor", ColorValue.FromColor(Color.Black));
@@ -705,12 +727,13 @@ namespace TGC.Group.Model
         private void GameRender()
         {
             
-            RenderPantallaConMonsterCerca();
+            //RenderPantallaConMonsterCerca();
             this.updateLighting();
+            //this.renderFog();
 
 
             //Pone el fondo negro en vez del azul feo ese
-            D3DDevice.Instance.Device.Clear(ClearFlags.Target | ClearFlags.ZBuffer, Color.Black, 1.0f, 0);
+            D3DDevice.Instance.Device.Clear(ClearFlags.Target | ClearFlags.ZBuffer, Color.Gray, 1.0f, 0);
             
            
             //Frustum Culling -> OPCION 1
@@ -749,7 +772,6 @@ namespace TGC.Group.Model
             };
 
             // Vertex buffer de los triangulos
-            fullScreenQuad = new TgcScreenQuad();
             fullScreenQuad.ScreenQuadVB = new VertexBuffer(typeof(CustomVertex.PositionTextured), 4, d3dDevice, Usage.Dynamic | Usage.WriteOnly, CustomVertex.PositionTextured.Format, Pool.Default);
             fullScreenQuad.ScreenQuadVB.SetData(vertices, 0, LockFlags.None);
         }
@@ -762,17 +784,62 @@ namespace TGC.Group.Model
 
             renderTarget = new Texture(d3dDevice, d3dDevice.PresentationParameters.BackBufferWidth, d3dDevice.PresentationParameters.BackBufferHeight, 1, Usage.RenderTarget, Format.X8R8G8B8, Pool.Default);
         }
+        /*
+        private void CreateFullScreenQuad()
+        {
+            var d3dDevice = D3DDevice.Instance.Device;
+
+            // Creamos un FullScreen Quad
+            CustomVertex.PositionTextured[] vertices =
+            {
+                new CustomVertex.PositionTextured(-1, 1, 1, 0, 0),
+                new CustomVertex.PositionTextured(1, 1, 1, 1, 0),
+                new CustomVertex.PositionTextured(-1, -1, 1, 0, 1),
+                new CustomVertex.PositionTextured(1, -1, 1, 1, 1)
+            };
+
+            // Vertex buffer de los triangulos
+            //fullScreenQuad = new VertexBuffer(typeof(CustomVertex.PositionTextured), 4, d3dDevice, Usage.Dynamic | Usage.WriteOnly, CustomVertex.PositionTextured.Format, Pool.Default);
+            //fullScreenQuad.SetData(vertices, 0, LockFlags.None);
+        }
+
+        private void CreateRenderTarget()
+        {
+            var d3dDevice = D3DDevice.Instance.Device;
+
+            depthStencil = d3dDevice.CreateDepthStencilSurface(d3dDevice.PresentationParameters.BackBufferWidth, d3dDevice.PresentationParameters.BackBufferHeight, DepthFormat.D24S8, MultiSampleType.None, 0, true);
+
+            renderTarget = new Texture(d3dDevice, d3dDevice.PresentationParameters.BackBufferWidth, d3dDevice.PresentationParameters.BackBufferHeight, 1, Usage.RenderTarget, Format.X8R8G8B8, Pool.Default);
+        }*/
 
         private void RenderPantallaConMonsterCerca()
         {   
             //esta condicion es para que pueda ver al monster cuando me atrapa y tambien para que se aplique cuando aparece antes
             if (/*TiempoDeAdvertencia > personaje.tiempoSinLuz && TiempoDeGameOver > personaje.tiempoSinLuz*/ true)
             {
-                var effect = TGCShaders.Instance.LoadEffect(ShadersDir + "PostProcesado.fx");
-                var device = D3DDevice.Instance.Device;
+                /*var effect = TGCShaders.Instance.LoadEffect(ShadersDir + "PostProcesado.fx");
+                
                 effect.Technique = "PostProcessMonster";
+                var d3dDevice = D3DDevice.Instance.Device;
+
+                effect.SetValue("eyePosition", TGCVector3.TGCVector3ToFloat3Array(Camera.Position));
+
+                effect.SetValue("screenWidth", d3dDevice.PresentationParameters.BackBufferWidth);
+                effect.SetValue("screenHeight", d3dDevice.PresentationParameters.BackBufferHeight);
+
+                effect.SetValue("timer", timer);
                 effect.SetValue("renderTarget", renderTarget);
+                fullScreenQuad.render(effect);*/
+
+                var d3dDevice = D3DDevice.Instance.Device;
+
+                effect.Technique = "PostProcessMonster";
+                
+                effect.SetValue("renderTarget", renderTarget);
+
                 fullScreenQuad.render(effect);
+
+
             }
         }
 
@@ -793,7 +860,7 @@ namespace TGC.Group.Model
             vidaUtilLinterna.disposeSprite();
             linternita.disposeSprite();
             paredInvisible.DisposePared();
-            fullScreenQuad.dispose();
+            //fullScreenQuad.dispose();
             this.depthStencil.Dispose();
         }
 
