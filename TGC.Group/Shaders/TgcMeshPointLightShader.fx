@@ -297,8 +297,7 @@ float4 ps_DiffuseMap(PS_DIFFUSE_MAP input) : COLOR0
         return fvBaseColor;
     else if (input.PosView.z > endFogDistance)
     {
-        // Si estoy fuera del endFogDistance
-        // muestro el color gris
+        // Si estoy fuera del endFogDistance muestro el color gris
         fvBaseColor = ColorFog;
         return fvBaseColor;
     }
@@ -308,8 +307,11 @@ float4 ps_DiffuseMap(PS_DIFFUSE_MAP input) : COLOR0
         float1 total = endFogDistance - startFogDistance;
         float1 resto = input.PosView.z - startFogDistance;
         float1 proporcion = resto / total;
-        fvBaseColor = lerp(fvBaseColor, ColorFog, proporcion);
+		
+		float3 retorno = lerp(fvBaseColor.xyz, ColorFog.xyz, proporcion);
         
+        fvBaseColor = float4(retorno, 1);
+		
         return fvBaseColor;
     }
 }
