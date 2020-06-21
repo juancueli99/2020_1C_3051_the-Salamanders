@@ -9,6 +9,7 @@ namespace TGC.Group.Model
 {
     public interface IEquipable : IInteractuable
     {
+        void Apagar(Personaje personaje);
         void Equipar(Personaje personaje);
 
         void FinDuracion(Personaje personaje);
@@ -21,6 +22,8 @@ namespace TGC.Group.Model
 
         float getValorAtenuacion();
         Color getLuzColor();
+
+        void Encender(Personaje personaje);
 
     }
 }

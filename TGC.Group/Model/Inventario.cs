@@ -12,10 +12,13 @@ namespace TGC.Group.Model
 
         public static void objetoSiguiente(Personaje personaje)
         {
-            IEquipable item = inventario.First(); //Creo que First no lo popea de la lista
+            IEquipable itemEnMano = inventario.First(); //Creo que First no lo popea de la lista
+            itemEnMano.Apagar(personaje);
             inventario.RemoveAt(0); //Por eso hago esto
-            inventario.Add(item);
-            personaje.setItemEnMano(inventario.First());           
+            inventario.Add(itemEnMano);
+            IEquipable nuevoItemEnMano = inventario.First();
+            personaje.setItemEnMano(nuevoItemEnMano);
+            nuevoItemEnMano.Encender(personaje);
         }
     }
 }

@@ -30,12 +30,12 @@ namespace TGC.Group.Model
 
         public void Equipar(Personaje personaje)
         {
-            //personaje.setItemEnMano(this);
+
         }
 
         public void FinDuracion(Personaje personaje)
         {
-            //this.ApagarLinterna(personaje);
+
         }
 
         public float getDuracion()
@@ -83,6 +83,8 @@ namespace TGC.Group.Model
             }
         }
 
+
+
         private void eliminarMesh()
         {
             TGCVector3 posicionDeBorrado = new TGCVector3(0, -4000, 0);
@@ -94,6 +96,19 @@ namespace TGC.Group.Model
         public TGCVector3 getPosition()
         {
             return mesh.BoundingBox.PMin;
+        }
+
+        public void Apagar(Personaje personaje)
+        {
+            gameModel.effectPosProcesado.Technique = "PostProcessMonster";
+
+            nvActivada = true;
+        }
+
+        public void Encender(Personaje personaje)
+        {
+            gameModel.effectPosProcesado.Technique = "PostProcessNightVision";
+            nvActivada = false;
         }
     }
 }

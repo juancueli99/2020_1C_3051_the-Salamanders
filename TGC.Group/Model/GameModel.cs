@@ -758,8 +758,6 @@ namespace TGC.Group.Model
                 GameRender();
             }
 
-
-
             device.EndScene();
             // Fin de escena
 

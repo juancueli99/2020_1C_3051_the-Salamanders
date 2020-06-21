@@ -54,25 +54,15 @@ namespace TGC.Group.Model
         {
             if (personaje.tieneLuz)
             {
-                this.ApagarVela();
+                this.Apagar(personaje);
                 personaje.tieneLuz = false;
 
             }
             else
             {
-                this.EncenderVela();
+                this.Encender(personaje);
                 personaje.tieneLuz = true;
             }
-        }
-
-        private void ApagarVela()
-        {
-            this.estaEncendida = false;
-        }
-
-        private void EncenderVela()
-        {
-            this.estaEncendida = true;
         }
     
 
@@ -129,6 +119,17 @@ namespace TGC.Group.Model
             //Hay que ir buscando un buen color
             //return Color.FromArgb(194,91,41);
             return Color.FromArgb(32, 22, 13);
+        }
+
+        public void Apagar(Personaje personaje)
+        {
+                this.estaEncendida = false;
+
+        }
+
+        public void Encender(Personaje personaje)
+        {
+            this.estaEncendida = true;
         }
     }
 }
