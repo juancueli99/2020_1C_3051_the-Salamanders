@@ -828,7 +828,7 @@
     <None Include="Resources\ControlsMenu.jpg" />
     <Content Include="Media\YouSurvivedSprite2.jpg" />
     <Content Include="Shaders\IndicadorEscondite.fx" />
-    <Content Include="Shaders\LinternaShader.fx" />
+    <Content Include="Shaders\ShaderIndoor.fx" />
     <Content Include="Shaders\PostProcesado.fx" />
     <Content Include="Shaders\VelaShader.fx" />
   </ItemGroup>

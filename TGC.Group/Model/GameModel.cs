@@ -616,7 +616,6 @@ namespace TGC.Group.Model
         private void updateLighting()
         {
             Microsoft.DirectX.Direct3D.Effect currentShader;
-            TgcMesh unPoste;
 
             //Con luz: Cambiar el shader actual por el shader default que trae el framework para iluminacion dinamica con PointLight
             if (personaje.tieneLuz)
@@ -629,43 +628,56 @@ namespace TGC.Group.Model
                 currentShader = TGCShaders.Instance.TgcMeshPointLightShader;
             }
 
-            //Aplicar a cada mesh el shader actual
-            foreach (TgcMesh mesh in iluminables)
+            if (personaje.estoyAdentro)
             {
-                mesh.Effect = currentShader;
-                mesh.Technique = TGCShaders.Instance.GetTGCMeshTechnique(mesh.RenderType);
+                currentShader = TGCShaders.Instance.LoadEffect(ShadersDir + "ShaderIndoor.fx");
+            }
 
-                // Estos son paramentros del current shader, si cambias el shader chequear los parametros o rompe
-                mesh.Effect.SetValue("materialEmissiveColor", ColorValue.FromColor(Color.Black));
-                mesh.Effect.SetValue("materialAmbientColor", ColorValue.FromColor(Color.White));
-                mesh.Effect.SetValue("materialDiffuseColor", ColorValue.FromColor(Color.White));
-                mesh.Effect.SetValue("materialSpecularColor", ColorValue.FromColor(Color.White));
-                mesh.Effect.SetValue("materialSpecularExp", 9f);
-                mesh.Effect.SetValue("eyePosition", TGCVector3.TGCVector3ToFloat4Array(personaje.eye));
-                mesh.Effect.SetValue("lightAttenuation", personaje.itemEnMano.getValorAtenuacion());
+            var iluminablesFiltrado = iluminables.FindAll(mesh => TgcCollisionUtils.classifyFrustumAABB(this.Frustum, mesh.BoundingBox) != TgcCollisionUtils.FrustumResult.OUTSIDE);
+
+            //Aplicar a cada mesh el shader actual
+            foreach (TgcMesh mesh in iluminablesFiltrado)
+            {
+                this.AplicarShader(mesh,currentShader);
+            }
+        }
+
+        private void AplicarShader(TgcMesh mesh, Microsoft.DirectX.Direct3D.Effect currentShader)
+        {
+            TgcMesh unPoste;
+            mesh.Effect = currentShader;
+            mesh.Technique = TGCShaders.Instance.GetTGCMeshTechnique(mesh.RenderType);
+
+            // Estos son paramentros del current shader, si cambias el shader chequear los parametros o rompe
+            mesh.Effect.SetValue("materialEmissiveColor", ColorValue.FromColor(Color.Black));
+            mesh.Effect.SetValue("materialAmbientColor", ColorValue.FromColor(Color.White));
+            mesh.Effect.SetValue("materialDiffuseColor", ColorValue.FromColor(Color.White));
+            mesh.Effect.SetValue("materialSpecularColor", ColorValue.FromColor(Color.White));
+            mesh.Effect.SetValue("materialSpecularExp", 9f);
+            mesh.Effect.SetValue("eyePosition", TGCVector3.TGCVector3ToFloat4Array(personaje.eye));
+            mesh.Effect.SetValue("lightAttenuation", personaje.itemEnMano.getValorAtenuacion());
+            mesh.Effect.SetValue("lightColor", ColorValue.FromColor(Color.White));
+
+            unPoste = escenario.listaDePostes.OrderBy(poste => this.DistanciaA2(poste)).First();
+            if (!personaje.tieneLuz && DistanciaA2(unPoste) < 2000)
+            {
+                //Se prende el farol mas cercano
                 mesh.Effect.SetValue("lightColor", ColorValue.FromColor(Color.White));
-
-                unPoste = escenario.listaDePostes.OrderBy(poste => this.DistanciaA2(poste)).First();
-                if (!personaje.tieneLuz && DistanciaA2(unPoste) < 2000)
+                mesh.Effect.SetValue("lightIntensity", 50f);
+                mesh.Effect.SetValue("lightPosition", TGCVector3.TGCVector3ToFloat4Array(unPoste.BoundingBox.PMin));
+            }
+            else
+            {
+                if (personaje.tieneLuz)
                 {
-                    //Se prende el farol mas cercano
-                    mesh.Effect.SetValue("lightColor", ColorValue.FromColor(Color.White));
-                    mesh.Effect.SetValue("lightIntensity", 50f);
-                    mesh.Effect.SetValue("lightPosition", TGCVector3.TGCVector3ToFloat4Array(unPoste.BoundingBox.PMin));
+                    this.AplicarShaderSpotLight(mesh);
                 }
                 else
                 {
-                    if (personaje.tieneLuz)
-                    {
-                        this.AplicarShaderSpotLight(mesh);
-                    }
-                    else
-                    {
-                        mesh.Effect.SetValue("lightIntensity", 50f);
-                        mesh.Effect.SetValue("lightPosition", TGCVector3.TGCVector3ToFloat4Array(personaje.getPosition()));
-                    }
-                   
+                    mesh.Effect.SetValue("lightIntensity", 50f);
+                    mesh.Effect.SetValue("lightPosition", TGCVector3.TGCVector3ToFloat4Array(personaje.getPosition()));
                 }
+
             }
         }
 

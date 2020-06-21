@@ -281,7 +281,7 @@ float4 ps_DiffuseMap(PS_DIFFUSE_MAP input) : COLOR0
 	///////////////////////////////
 	
     float startFogDistance = 1500;
-    float endFogDistance = 4000;
+    float endFogDistance = 8000;
     float4 ColorFog = float4(0.5, 0.5, 0.5, 1);
     
     //float4 fvBaseColor = tex2D(diffuseMap, input.Texcoord);
@@ -312,7 +312,6 @@ float4 ps_DiffuseMap(PS_DIFFUSE_MAP input) : COLOR0
         
         return fvBaseColor;
     }
-	
 }
 
 /*
