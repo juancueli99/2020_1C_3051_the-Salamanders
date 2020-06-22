@@ -10,8 +10,18 @@ namespace TGC.Group.Model
 {
     class ItemVacioDefault : IEquipable
     {
+        public void Apagar(Personaje personaje)
+        {
+            
+        }
+
         public void DisminuirDuracion()
         {
+        }
+
+        public void Encender(Personaje personaje)
+        {
+            
         }
 
         public void Equipar(Personaje personaje)

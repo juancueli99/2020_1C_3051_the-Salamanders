@@ -31,15 +31,14 @@ namespace TGC.Group.Model
 
         public void Usar(Personaje personaje)
         {
-            if (personaje.objetosInteractuables.Any(objeto => objeto is Linterna))
+            if (Inventario.inventario.Any(objeto => objeto is Linterna) && personaje.itemEnMano is Linterna)
             {
-                var linterna = (Linterna)personaje.objetosInteractuables.Find(objeto => objeto is Linterna);
+                var linterna = (Linterna)Inventario.inventario.Find(objeto => objeto is Linterna);
                 linterna.Recargar();
 
                 personaje.objetosInteractuables.Remove(this);
+                this.sonidoInterruptor.escucharSonidoActual(false);
             }
-            this.sonidoInterruptor.escucharSonidoActual(false);
-
         }
         private void eliminarMesh()
         {

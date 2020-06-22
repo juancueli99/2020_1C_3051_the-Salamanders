@@ -31,14 +31,14 @@ namespace TGC.Group.Model
         }
         public void Interactuar(Personaje personaje)
         {
-            if (personaje.objetosInteractuables.Any(objeto => objeto is Vela))
+            if (Inventario.inventario.Any(objeto => objeto is Vela))
             {
-                var vela = (Vela)personaje.objetosInteractuables.Find(objeto => objeto is Vela);
+                var vela = (Vela)Inventario.inventario.Find(objeto => objeto is Vela);
                 vela.AumentarDuracion();
             }
             else
             {
-                personaje.objetosInteractuables.Add(this);
+                Inventario.inventario.Add(this);
             }
             eliminarMesh();
         }
@@ -50,7 +50,21 @@ namespace TGC.Group.Model
             mesh.updateBoundingBox();
             mesh.UpdateMeshTransform();
         }
-        public void Usar(Personaje personaje) { }
+        public void Usar(Personaje personaje)
+        {
+            if (personaje.tieneLuz)
+            {
+                this.Apagar(personaje);
+                personaje.tieneLuz = false;
+
+            }
+            else
+            {
+                this.Encender(personaje);
+                personaje.tieneLuz = true;
+            }
+        }
+    
 
         public void Equipar(Personaje personaje)
         {
@@ -81,7 +95,7 @@ namespace TGC.Group.Model
         }
         public void DesecharVela(Personaje personaje)
         {
-            personaje.objetosInteractuables.Remove(this);
+            Inventario.inventario.Remove(this);
             personaje.itemEnMano = (IEquipable)personaje.objetosInteractuables.Find(itemDefault => itemDefault is ItemVacioDefault);
         }
 
@@ -105,6 +119,17 @@ namespace TGC.Group.Model
             //Hay que ir buscando un buen color
             //return Color.FromArgb(194,91,41);
             return Color.FromArgb(32, 22, 13);
+        }
+
+        public void Apagar(Personaje personaje)
+        {
+                this.estaEncendida = false;
+
+        }
+
+        public void Encender(Personaje personaje)
+        {
+            this.estaEncendida = true;
         }
     }
 }

@@ -141,6 +141,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Game.settings</DependentUpon>
     </Compile>
+    <Compile Include="Model\Inventario.cs" />
     <Compile Include="Model\Maleta.cs" />
     <Compile Include="Model\Sonido.cs" />
     <Compile Include="Model\ConfiguradorMonstruo.cs" />
@@ -166,6 +167,7 @@
     <Compile Include="Model\Puerta.cs" />
     <Compile Include="Model\SpotLight.cs" />
     <Compile Include="Model\Vela.cs" />
+    <Compile Include="Model\VisionNocturna.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Form\ControlsUserControl.resx">
