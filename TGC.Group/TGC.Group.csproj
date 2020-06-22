@@ -143,6 +143,7 @@
     </Compile>
     <Compile Include="Model\Inventario.cs" />
     <Compile Include="Model\Maleta.cs" />
+    <Compile Include="Model\Sombras.cs" />
     <Compile Include="Model\Sonido.cs" />
     <Compile Include="Model\ConfiguradorMonstruo.cs" />
     <Compile Include="Model\CustomBitmap.cs" />
@@ -832,6 +833,7 @@
     <Content Include="Shaders\IndicadorEscondite.fx" />
     <Content Include="Shaders\ShaderIndoor.fx" />
     <Content Include="Shaders\PostProcesado.fx" />
+    <Content Include="Shaders\Sombras.fx" />
     <Content Include="Shaders\VelaShader.fx" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

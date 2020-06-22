@@ -116,7 +116,7 @@ namespace TGC.Group.Model
         //bool render = false;
 
         private Microsoft.DirectX.Direct3D.Effect effect;
-
+        private Sombras sombras;
 
         public override void Init()
         {
@@ -174,6 +174,9 @@ namespace TGC.Group.Model
 
             effectPosProcesado.Technique = "PostProcessMonster";
 
+
+            //sombras = new Sombras(ShadersDir, escenario);
+            //sombras.InstanciarSombras();
         }
 
         private void InstanciasSonidosInDoorRandoms()
@@ -822,7 +825,7 @@ namespace TGC.Group.Model
             
             //RenderPantallaConMonsterCerca();
             this.updateLighting();
-            //this.renderFog();
+            //sombras.renderSombras(ElapsedTime, personaje);
 
 
             //Pone el fondo negro en vez del azul feo ese
