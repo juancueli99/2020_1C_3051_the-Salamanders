@@ -59,12 +59,12 @@ namespace TGC.Group.Model
             if (personaje.tieneLuz)
             {
                 this.Apagar(personaje);
-                personaje.tieneLuz = false;
+                
             }
             else
             {
                 this.Encender(personaje);
-                personaje.tieneLuz = true;
+                
             }
             this.sonidoInterruptor.escucharSonidoActual(false);
         }
@@ -82,6 +82,7 @@ namespace TGC.Group.Model
         public void Apagar(Personaje personaje)
         {
             this.estaEncendida = false;
+            personaje.tieneLuz = false;
             //personaje.itemEnMano = (IEquipable)personaje.objetosInteractuables.Find(itemDefault => itemDefault is ItemVacioDefault);
         }
 
@@ -91,12 +92,18 @@ namespace TGC.Group.Model
             this.ActualizarHUD();
         }
 
-        public void DisminuirDuracion()
+        public void DisminuirDuracion(Personaje personaje)
         {
-            if (this.estaEncendida)
+            if(this.duracion > 0)
             {
                 this.duracion -= 1;
+                Console.WriteLine("Estoy disminuyendo");
                 this.ActualizarHUD();
+            }
+            else
+            {
+                this.FinDuracion(personaje);
+                Console.WriteLine("ME APAGO");
             }
         }
 
@@ -129,6 +136,7 @@ namespace TGC.Group.Model
         public void Encender(Personaje personaje)
         {
             this.estaEncendida = true;
+            personaje.tieneLuz = true;
         }
     }
 }

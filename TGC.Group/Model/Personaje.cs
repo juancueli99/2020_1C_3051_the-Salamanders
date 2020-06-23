@@ -814,6 +814,10 @@ namespace TGC.Group.Model
             {
                 this.tiempoSinLuz++;
             }
+            else
+            {
+                this.tiempoSinLuz = 0;
+            }
         }
         
         public void InteractuarConObjeto(IInteractuable objeto)

@@ -15,7 +15,7 @@ namespace TGC.Group.Model
             
         }
 
-        public void DisminuirDuracion()
+        public void DisminuirDuracion(Personaje personaje)
         {
         }
 

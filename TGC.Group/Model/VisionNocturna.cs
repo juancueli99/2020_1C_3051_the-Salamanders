@@ -23,7 +23,7 @@ namespace TGC.Group.Model
             this.gameModel = gameModel;
         }
 
-        public void DisminuirDuracion()
+        public void DisminuirDuracion(Personaje personaje)
         {
 
         }

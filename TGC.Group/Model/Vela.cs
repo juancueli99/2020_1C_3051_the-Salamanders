@@ -55,13 +55,13 @@ namespace TGC.Group.Model
             if (personaje.tieneLuz)
             {
                 this.Apagar(personaje);
-                personaje.tieneLuz = false;
+                
 
             }
             else
             {
                 this.Encender(personaje);
-                personaje.tieneLuz = true;
+                
             }
         }
     
@@ -82,10 +82,18 @@ namespace TGC.Group.Model
             this.ActualizarHUD();
         }
 
-        public void DisminuirDuracion()
+        public void DisminuirDuracion(Personaje personaje)
         {
-            this.duracion -= 1;
-            this.ActualizarHUD();
+            if(duracion > 0)
+            {
+                this.duracion -= 1;
+                this.ActualizarHUD();
+            }
+            else
+            {
+                this.FinDuracion(personaje);
+            }
+            
         }
 
         public void ActualizarHUD()
@@ -124,12 +132,14 @@ namespace TGC.Group.Model
         public void Apagar(Personaje personaje)
         {
                 this.estaEncendida = false;
+            personaje.tieneLuz = false;
 
         }
 
         public void Encender(Personaje personaje)
         {
             this.estaEncendida = true;
+            personaje.tieneLuz = true;
         }
     }
 }

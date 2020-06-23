@@ -144,7 +144,7 @@ namespace TGC.Group.Model
             vidaUtilLinterna.instanciarLinternas(0);
             linternita.instanciarLinternita();
             InstanciarSonidosRandoms();
-            InstanciarSondosOutDoorRandoms();
+            InstanciarSonidosOutDoorRandoms();
             InstanciasSonidosInDoorRandoms();
 
             escenario.InstanciarEstructuras();
@@ -185,7 +185,7 @@ namespace TGC.Group.Model
             sonidosInDoorRandom.Add(new Sonido("golpe metálico.wav", -3500, false));
         }
 
-        private void InstanciarSondosOutDoorRandoms()
+        private void InstanciarSonidosOutDoorRandoms()
         {
             sonidosOutDoorRandom.Add(new Sonido("ráfaga ventosa.wav", -3500, false));
             sonidosOutDoorRandom.Add(new Sonido("viento en arbustos.wav", -3500, false));
@@ -275,6 +275,7 @@ namespace TGC.Group.Model
                     sonidoBarra = new Sonido("AllAroundYou.wav", false);
                     var sonidoStart = new Sonido("auto, abrir puerta.wav", -4000, false);
                     sonidoStart.escucharSonidoActual(false);
+                   
 
                 }
             }
@@ -304,7 +305,10 @@ namespace TGC.Group.Model
                     InteraccionPersonajeYMesh();
 
                 }
+
                 ReproducirSonidoRandomEscenario();
+
+                reproducirRandomDeLista(monster.getSoundList());
 
                 RealizarAccionesDeInventario();
 
@@ -313,14 +317,12 @@ namespace TGC.Group.Model
                     personaje.tieneLuz = !personaje.tieneLuz;
                 }*/
 
-                if (personaje.chocandoConEscalera && Input.keyDown(Key.Space))
-                {
-                    personaje.MoverPersonaje(' ', ElapsedTime, Input, this);//lo dejo asi porque no se que hace esto
-                    // #TinchoHaceteCargo
-                }
                 personaje.updateCamera(ElapsedTime, Input);
 
                 personaje.aumentarTiempoSinLuz();
+
+                if (personaje.tieneLuz)
+                    personaje.itemEnMano.DisminuirDuracion(personaje);
 
                 AccionesPersonajeMonstruo();
             }
@@ -367,7 +369,7 @@ namespace TGC.Group.Model
         private void reproducirRandomDeLista(List<Sonido> listaSonidos)
         {
             var ran = new Random();
-            if (ran.Next() % 10000 == 7)
+            if (ran.Next() % 5000 == 7)
             {
                 int indice = ran.Next() % (sonidosRandoms.Count());
                 listaSonidos[Math.Max(indice-1,0)].escucharSonidoActual(false);
@@ -393,6 +395,7 @@ namespace TGC.Group.Model
                 
             }
 
+            /*
             if (personaje.TieneItemEnMano() && personaje.tieneLuz)
             {
                 personaje.getItemEnMano().DisminuirDuracion();
@@ -402,12 +405,14 @@ namespace TGC.Group.Model
                     personaje.getItemEnMano().FinDuracion(personaje);
                 }
             }
+            */
 
             InteraccionMonster();
         }
 
         private void RealizarAccionesDeInventario()
         {
+           
             if (Input.keyDown(Key.H)) //deprecado
             {
                 personaje.getItemEnMano().Usar(personaje);

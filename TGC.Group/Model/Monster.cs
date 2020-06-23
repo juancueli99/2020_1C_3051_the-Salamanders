@@ -46,7 +46,12 @@ namespace TGC.Group.Model
             ghost.Dispose();
         }
 
+        public List<Sonido> getSoundList()
+        {
+            return this.SonidosRandoms;
+        }
         //Cuando el player no usa una fuente luminosa en X tiempo
+        [Obsolete]
         public bool Aparecer(Personaje personaje)
         {
             if (!personaje.tieneLuz && !personaje.estoyEscondido && personaje.tiempoSinLuz > 3500)

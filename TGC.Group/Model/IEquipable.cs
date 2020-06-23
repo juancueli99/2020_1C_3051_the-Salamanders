@@ -14,7 +14,7 @@ namespace TGC.Group.Model
 
         void FinDuracion(Personaje personaje);
 
-        void DisminuirDuracion();
+        void DisminuirDuracion(Personaje personaje);
 
         float getDuracion();
 
