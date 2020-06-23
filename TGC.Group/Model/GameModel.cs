@@ -158,7 +158,6 @@ namespace TGC.Group.Model
             objetosInteractuables.Add(linterna);
            
             Camera = personaje;
-            
             //ShadersDir
             effectPosProcesado = TGCShaders.Instance.LoadEffect(ShadersDir + "PostProcesado.fx");
             effectPosProcesado.Technique = "PostProcessDefault";
@@ -830,12 +829,12 @@ namespace TGC.Group.Model
                 monster.RenderMonster();
             }*/
             //Render de BoundingBox, muy útil para debug de colisiones.
-            if (BoundingBox)
+            /*if (BoundingBox)
             {
                 Box.BoundingBox.Render();
                 tgcScene.Meshes.ForEach(mesh => mesh.BoundingBox.Render());
                 fondo.BoundingBox.Render();
-            }
+            }*/
             /*
             nota.renderSprite();
             vidaUtilVela.renderSprite();
