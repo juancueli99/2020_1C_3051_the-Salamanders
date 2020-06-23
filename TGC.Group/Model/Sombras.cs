@@ -32,16 +32,12 @@ namespace TGC.Group.Model
         private TGCMatrix g_mShadowProj; // Projection matrix for shadow map
         private Surface g_pDSShadow; // Depth-stencil buffer for rendering to shadow map
         private Texture g_pShadowMap; // Texture to which the shadow map is rendered
-
-        private string MyShaderDir;
-        private Escenario scene;
-
         private GameModel gameModel;
+        private string MyShaderDir;
 
-        public Sombras(string shaderDir, Escenario escenario, GameModel gameModel)
+        public Sombras(GameModel gameModel)
         {
-            MyShaderDir = shaderDir;
-            scene = escenario;
+            MyShaderDir = gameModel.ShadersDir;
             this.gameModel = gameModel;
         }
 
@@ -51,8 +47,10 @@ namespace TGC.Group.Model
             effect = TGCShaders.Instance.LoadEffect(MyShaderDir + "Sombras.fx");
 
             // le asigno el efecto a las mallas
-            var iluminablesFiltrado = gameModel.iluminables.FindAll(mesh => TgcCollisionUtils.classifyFrustumAABB(gameModel.Frustum, mesh.BoundingBox) != TgcCollisionUtils.FrustumResult.OUTSIDE);
-            foreach (var T in scene.tgcScene.Meshes)
+            var meshesQueChocanConFrustrum = gameModel.escenario.tgcScene.Meshes.FindAll
+                (mesh => TgcCollisionUtils.classifyFrustumAABB(gameModel.Frustum, mesh.BoundingBox) !=
+                TgcCollisionUtils.FrustumResult.OUTSIDE);
+            foreach (var T in meshesQueChocanConFrustrum)
             {
                 T.Scale = new TGCVector3(1f, 1f, 1f);
                 T.Effect = effect;
@@ -84,16 +82,15 @@ namespace TGC.Group.Model
             //lightLookAtModifier = camara.getLookAt();
         }
 
-        public void renderSombras(float ElapsedTime, Personaje personaje)
+        public void renderSombras()
         {
-            
             TexturesManager.Instance.clearAll();
 
             D3DDevice.Instance.Device.Clear(ClearFlags.Target | ClearFlags.ZBuffer, Color.Black, 1.0f, 0);
             //D3DDevice.Instance.Device.BeginScene();
 
-            g_LightPos = personaje.getPosition() + new TGCVector3(100, 10, -150);
-            g_LightDir = personaje.getLookAt() - g_LightPos - new TGCVector3(-100, -10, 150);
+            g_LightPos = gameModel.personaje.getPosition() + new TGCVector3(100, 10, -150);
+            g_LightDir = gameModel.personaje.getLookAt() - g_LightPos - new TGCVector3(-100, -10, 150);
             //g_LightPos = personaje.getPosition() + new TGCVector3(0, -50, 0);
             //g_LightDir = personaje.getLookAt() - g_LightPos;
             g_LightDir.Normalize();
@@ -104,22 +101,21 @@ namespace TGC.Group.Model
             //arrow.updateValues();
             // Shadow maps:
             //D3DDevice.Instance.Device.EndScene(); // termino el thread anterior
-
-            D3DDevice.Instance.Device.Clear(ClearFlags.Target | ClearFlags.ZBuffer, Color.Black, 1.0f, 0);
+            D3DDevice.Instance.Device.Clear(ClearFlags.Target | ClearFlags.ZBuffer, Color.Gray, 1.0f, 0);
 
             //Genero el shadow map
-            RenderShadowMap(personaje);
+            RenderShadowMap();
 
             //D3DDevice.Instance.Device.BeginScene();
             // dibujo la escena pp dicha
-            D3DDevice.Instance.Device.Clear(ClearFlags.Target | ClearFlags.ZBuffer, Color.Black, 1.0f, 0);
+            D3DDevice.Instance.Device.Clear(ClearFlags.Target | ClearFlags.ZBuffer, Color.Gray, 1.0f, 0);
             RenderScene(false);
 
-            arrow.Render();
+            //arrow.Render();
             //D3DDevice.Instance.Device.EndScene();
             //D3DDevice.Instance.Device.Present();
         }
-        public void RenderShadowMap(Personaje personaje)
+        public void RenderShadowMap()
         {
             // Calculo la matriz de view de la luz
             effect.SetValue("g_vLightPos", new TGCVector4(g_LightPos.X, g_LightPos.Y, g_LightPos.Z, 1));
@@ -141,7 +137,7 @@ namespace TGC.Group.Model
             D3DDevice.Instance.Device.SetRenderTarget(0, pShadowSurf);
             var pOldDS = D3DDevice.Instance.Device.DepthStencilSurface;
             D3DDevice.Instance.Device.DepthStencilSurface = g_pDSShadow;
-            D3DDevice.Instance.Device.Clear(ClearFlags.Target | ClearFlags.ZBuffer, Color.Black, 1.0f, 0);
+            D3DDevice.Instance.Device.Clear(ClearFlags.Target | ClearFlags.ZBuffer, Color.Gray, 1.0f, 0);
             //D3DDevice.Instance.Device.BeginScene();
 
             // Hago el render de la escena pp dicha
@@ -160,7 +156,11 @@ namespace TGC.Group.Model
 
         public void RenderScene(bool shadow)
         {
-            foreach (var T in scene.tgcScene.Meshes)
+            var meshesQueChocanConFrustrum = gameModel.escenario.tgcScene.Meshes.FindAll
+                (mesh => TgcCollisionUtils.classifyFrustumAABB(gameModel.Frustum, mesh.BoundingBox) != 
+                TgcCollisionUtils.FrustumResult.OUTSIDE);
+            
+            foreach (var T in meshesQueChocanConFrustrum)
             {
                 if (shadow)
                 {

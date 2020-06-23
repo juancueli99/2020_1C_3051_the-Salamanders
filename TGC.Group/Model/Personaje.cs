@@ -812,7 +812,7 @@ namespace TGC.Group.Model
         {
             if (!this.tieneLuz)
             {
-                this.tiempoSinLuz++;
+                this.tiempoSinLuz ++;
             }
             else
             {

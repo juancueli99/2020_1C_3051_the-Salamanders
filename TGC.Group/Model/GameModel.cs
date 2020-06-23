@@ -115,7 +115,7 @@ namespace TGC.Group.Model
         public Microsoft.DirectX.Direct3D.Effect effectPosProcesado;
         //bool render = false;
 
-        private Microsoft.DirectX.Direct3D.Effect effect;
+        
         private Sombras sombras;
 
         public override void Init()
@@ -125,7 +125,6 @@ namespace TGC.Group.Model
             deviceMusica = DirectSound.DsDevice;
             this.FixedTickEnable = false;
 
-            effect = TGCShaders.Instance.LoadEffect(ShadersDir + "PostProcesado.fx");
             fullScreenQuad = new TgcScreenQuad();
 
             GameModel.instancia = this;
@@ -164,7 +163,7 @@ namespace TGC.Group.Model
             effectPosProcesado = TGCShaders.Instance.LoadEffect(ShadersDir + "PostProcesado.fx");
             effectPosProcesado.Technique = "PostProcessDefault";
 
-            sombras = new Sombras(ShadersDir, escenario, this);
+            sombras = new Sombras(this);
             sombras.InstanciarSombras();
         }
 
@@ -577,8 +576,7 @@ namespace TGC.Group.Model
                     monster = unBicho;
                     iluminables.Add(unBicho.ghost);
                     monster.reproducirSonidoRandom();
-                                   
-
+                
                 }
                 
                 if (personaje.tiempoSinLuz == GameModel.TiempoDeGameOver)
@@ -624,7 +622,7 @@ namespace TGC.Group.Model
             
         }
 
-        private double DistanciaA2(TgcMesh mesh)
+        public double DistanciaA2(TgcMesh mesh)
         {
             TGCVector3 vector = personaje.getPosition() - mesh.BoundingBox.PMin;
 
@@ -632,17 +630,6 @@ namespace TGC.Group.Model
 
         }
 
-        private void renderFog()
-        {
-            Microsoft.DirectX.Direct3D.Effect currentShader;
-            currentShader = TGCShaders.Instance.LoadEffect(ShadersDir + "PostProcesado.fx");
-            foreach (TgcMesh mesh in iluminables)
-            {
-                mesh.Effect = currentShader;
-                mesh.Technique = "FogEffect";
-            }
-           
-        }
         private void updateLighting()
         {
             Microsoft.DirectX.Direct3D.Effect currentShader;
@@ -822,24 +809,26 @@ namespace TGC.Group.Model
 
         private void GameRender()
         {
-            
+
             //RenderPantallaConMonsterCerca();
             //this.updateLighting();
-            sombras.renderSombras(ElapsedTime, personaje);
+            sombras.renderSombras();
 
 
             //Pone el fondo negro en vez del azul feo ese
-            D3DDevice.Instance.Device.Clear(ClearFlags.Target | ClearFlags.ZBuffer, Color.Gray, 1.0f, 0);
-            
-           
-            //Frustum Culling -> OPCION 1
-            var meshesQueChocanConFrustrum = escenario.tgcScene.Meshes.FindAll(mesh => TgcCollisionUtils.classifyFrustumAABB(this.Frustum, mesh.BoundingBox) != TgcCollisionUtils.FrustumResult.OUTSIDE);
-            meshesQueChocanConFrustrum.ForEach(mesh => mesh.Render());
 
-            if (DistanciaA2(monster.ghost) < 5000)
+
+
+
+            //Frustum Culling -> OPCION 1
+            //var meshesQueChocanConFrustrum = escenario.tgcScene.Meshes.FindAll(mesh => TgcCollisionUtils.classifyFrustumAABB(this.Frustum, mesh.BoundingBox) != TgcCollisionUtils.FrustumResult.OUTSIDE);
+            //meshesQueChocanConFrustrum.ForEach(mesh => mesh.Render());
+
+
+            /*if (DistanciaA2(monster.ghost) < 5000)
             {
                 monster.RenderMonster();
-            }
+            }*/
             //Render de BoundingBox, muy útil para debug de colisiones.
             if (BoundingBox)
             {
