@@ -131,13 +131,14 @@ namespace TGC.Group.Model
 
         public void Apagar(Personaje personaje)
         {
-                this.estaEncendida = false;
+            this.estaEncendida = false;
             personaje.tieneLuz = false;
 
         }
 
         public void Encender(Personaje personaje)
         {
+            gameModel.effectPosProcesado.Technique = "PostProcessDefault";
             this.estaEncendida = true;
             personaje.tieneLuz = true;
         }

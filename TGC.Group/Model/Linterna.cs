@@ -135,6 +135,7 @@ namespace TGC.Group.Model
 
         public void Encender(Personaje personaje)
         {
+            gameModel.effectPosProcesado.Technique = "PostProcessDefault";
             this.estaEncendida = true;
             personaje.tieneLuz = true;
         }

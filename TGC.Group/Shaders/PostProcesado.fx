@@ -18,7 +18,8 @@ struct Light
 
 Light lights[2];
 
-float screenWidth, screenHeight, timer = 0.0;
+float screenWidth, screenHeight;
+float timer;
 
 static const int kernelRadius = 5;
 static const int kernelSize = 25;
@@ -218,12 +219,26 @@ float4 PSPostProcessNightVision(VS_OUTPUT_DEFAULT input) : COLOR0
     lerp(tex, float4(0, 0, 0, 1), bordeIzquierdo * 2);
 }
 
+float4 PSPostProcessDefault(VS_OUTPUT_DEFAULT input) : COLOR0
+{
+    return tex2D(renderTargetSampler, input.TextureCoordinates);
+}
+
 technique FogEffect
 {
     pass Pass_0
     {
         VertexShader = compile vs_3_0 VSDefault();
         PixelShader = compile ps_3_0 PSFogEffect();
+    }
+}
+
+technique PostProcessDefault
+{
+    pass Pass_0
+    {
+        VertexShader = compile vs_3_0 VSPostProcess();
+        PixelShader = compile ps_3_0 PSPostProcessDefault();
     }
 }
 

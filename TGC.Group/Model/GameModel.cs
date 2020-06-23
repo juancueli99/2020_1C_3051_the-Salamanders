@@ -126,7 +126,6 @@ namespace TGC.Group.Model
             this.FixedTickEnable = false;
 
             effect = TGCShaders.Instance.LoadEffect(ShadersDir + "PostProcesado.fx");
-            //effect = TGCShaders.Instance.LoadEffect(ShadersDir + "PostProcesado.fx");
             fullScreenQuad = new TgcScreenQuad();
 
             GameModel.instancia = this;
@@ -163,20 +162,7 @@ namespace TGC.Group.Model
             
             //ShadersDir
             effectPosProcesado = TGCShaders.Instance.LoadEffect(ShadersDir + "PostProcesado.fx");
-            effectPosProcesado.SetValue("eyePosition", TGCVector3.TGCVector3ToFloat3Array(Camera.Position));
-
-            effectPosProcesado.SetValue("screenWidth", d3dDevice.PresentationParameters.BackBufferWidth);
-            effectPosProcesado.SetValue("screenHeight", d3dDevice.PresentationParameters.BackBufferHeight);
-            timer = 0;
-            effectPosProcesado.SetValue("timer", timer);
-            //effectPosProcesado.Technique = "PostProcess";
-            //render = true;
-
-            effectPosProcesado.Technique = "PostProcessMonster";
-
-
-            //sombras = new Sombras(ShadersDir, escenario);
-            //sombras.InstanciarSombras();
+            effectPosProcesado.Technique = "PostProcessDefault";
         }
 
         private void InstanciasSonidosInDoorRandoms()
@@ -244,7 +230,7 @@ namespace TGC.Group.Model
             }
             if (mesh.Name.Contains("BarrilPolvora"))
             {
-                interactuable = new Escondite(mesh);
+                interactuable = new Escondite(mesh,this);
                 objetosInteractuables.Add(interactuable);
             }
             if (mesh.Name.Equals("EscaleraMetalMovil")|| mesh.Name.Equals("EscaleraMetalFija"))
@@ -291,7 +277,6 @@ namespace TGC.Group.Model
         private void UpdateGame()
         {
             //Capturar Input teclado
-            timer += ElapsedTime;
 
             RevisarLockeoMouse();
 
@@ -327,11 +312,15 @@ namespace TGC.Group.Model
                 AccionesPersonajeMonstruo();
             }
 
+            timer += ElapsedTime;
             var d3dDevice = D3DDevice.Instance.Device;
-            effect.SetValue("eyePosition", TGCVector3.TGCVector3ToFloat3Array(personaje.Position));
-            effect.SetValue("screenWidth", d3dDevice.PresentationParameters.BackBufferWidth);
-            effect.SetValue("screenHeight", d3dDevice.PresentationParameters.BackBufferHeight);
-            effect.SetValue("timer", timer);
+
+            effectPosProcesado.SetValue("eyePosition", TGCVector3.TGCVector3ToFloat3Array(personaje.Position));
+
+            effectPosProcesado.SetValue("screenWidth", d3dDevice.PresentationParameters.BackBufferWidth);
+            effectPosProcesado.SetValue("screenHeight", d3dDevice.PresentationParameters.BackBufferHeight);
+
+            effectPosProcesado.SetValue("timer", timer);
 
         }
 
@@ -560,6 +549,9 @@ namespace TGC.Group.Model
                 Monster unBicho;
                 if (personaje.tiempoSinLuz == GameModel.TiempoDeAdvertencia)
                 {
+
+                    effectPosProcesado.Technique = "PostProcessMonster";
+
                     unBicho = new Monster();
                     var posicion = personaje.puntoDemira(personaje.anguloAbsolutoEnY, personaje.anguloAbsolutoEnX);
                     var nuevaPosicion = new TGCVector3(posicion.X, -350, posicion.Z);
@@ -928,42 +920,9 @@ namespace TGC.Group.Model
         private void RenderPantallaConMonsterCerca()
         {   
             //esta condicion es para que pueda ver al monster cuando me atrapa y tambien para que se aplique cuando aparece antes
-            if (/*TiempoDeAdvertencia > personaje.tiempoSinLuz && TiempoDeGameOver > personaje.tiempoSinLuz*/ true)
+            if (GameModel.TiempoDeAdvertencia < personaje.tiempoSinLuz && GameModel.TiempoDeGameOver < personaje.tiempoSinLuz)
             {
-
-//BRANCH
-                //var effect = TGCShaders.Instance.LoadEffect(ShadersDir + "PostProcesado.fx");
-                //var device = D3DDevice.Instance.Device;
-                //effect.Technique = "PostProcessMonster";
-                //effect.SetValue("renderTarget", renderTarget);
-                //fullScreenQuad.render(effect);
-
-//BRANCH
-//MASTER
-                /*var effect = TGCShaders.Instance.LoadEffect(ShadersDir + "PostProcesado.fx");
-                
-                effect.Technique = "PostProcessMonster";
-                var d3dDevice = D3DDevice.Instance.Device;
-
-                effect.SetValue("eyePosition", TGCVector3.TGCVector3ToFloat3Array(Camera.Position));
-
-                effect.SetValue("screenWidth", d3dDevice.PresentationParameters.BackBufferWidth);
-                effect.SetValue("screenHeight", d3dDevice.PresentationParameters.BackBufferHeight);
-
-                effect.SetValue("timer", timer);
-                effect.SetValue("renderTarget", renderTarget);
-                fullScreenQuad.render(effect);*/
-
-                var d3dDevice = D3DDevice.Instance.Device;
-
-                effect.Technique = "PostProcessMonster";
-                
-                effect.SetValue("renderTarget", renderTarget);
-
-                fullScreenQuad.render(effect);
-
-
-//MASTER
+                effectPosProcesado.Technique = "PostProcessMonster";
             }
         }
 
