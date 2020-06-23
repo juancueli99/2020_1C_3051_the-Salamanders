@@ -91,6 +91,7 @@ namespace TGC.Group.Model
             }
             else
             {
+                gameModel.effectPosProcesado.Technique = "PostProcessDefault";
                 this.FinDuracion(personaje);
             }
             
@@ -131,6 +132,7 @@ namespace TGC.Group.Model
 
         public void Apagar(Personaje personaje)
         {
+            gameModel.effectPosProcesado.Technique = "PostProcessDefault";
             this.estaEncendida = false;
             personaje.tieneLuz = false;
 
@@ -138,7 +140,7 @@ namespace TGC.Group.Model
 
         public void Encender(Personaje personaje)
         {
-            gameModel.effectPosProcesado.Technique = "PostProcessDefault";
+            gameModel.effectPosProcesado.Technique = "PostProcessVela";
             this.estaEncendida = true;
             personaje.tieneLuz = true;
         }

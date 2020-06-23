@@ -13,12 +13,13 @@ using TGC.Core.Mathematica;
 using TGC.Core.SceneLoader;
 using TGC.Core.Shaders;
 using TGC.Core.Textures;
+using TGC.Core.Collision;
 
 namespace TGC.Group.Model
 {
     public class Sombras
     {
-        private readonly float far_plane = 3000f;
+        private readonly float far_plane = 8000f;
         private readonly float near_plane = 2f;
 
         // Shadow map
@@ -35,10 +36,13 @@ namespace TGC.Group.Model
         private string MyShaderDir;
         private Escenario scene;
 
-        public Sombras(string shaderDir, Escenario escenario)
+        private GameModel gameModel;
+
+        public Sombras(string shaderDir, Escenario escenario, GameModel gameModel)
         {
             MyShaderDir = shaderDir;
             scene = escenario;
+            this.gameModel = gameModel;
         }
 
         public void InstanciarSombras()
@@ -47,6 +51,7 @@ namespace TGC.Group.Model
             effect = TGCShaders.Instance.LoadEffect(MyShaderDir + "Sombras.fx");
 
             // le asigno el efecto a las mallas
+            var iluminablesFiltrado = gameModel.iluminables.FindAll(mesh => TgcCollisionUtils.classifyFrustumAABB(gameModel.Frustum, mesh.BoundingBox) != TgcCollisionUtils.FrustumResult.OUTSIDE);
             foreach (var T in scene.tgcScene.Meshes)
             {
                 T.Scale = new TGCVector3(1f, 1f, 1f);
@@ -72,7 +77,7 @@ namespace TGC.Group.Model
             // de hecho, un valor mayor a 90 todavia es mejor, porque hasta con 90 grados es muy dificil
             // lograr que los objetos del borde generen sombras
             var aspectRatio = D3DDevice.Instance.AspectRatio;
-            g_mShadowProj = TGCMatrix.PerspectiveFovLH(Geometry.DegreeToRadian(80), aspectRatio, 550, 3500);
+            g_mShadowProj = TGCMatrix.PerspectiveFovLH(Geometry.DegreeToRadian(80), aspectRatio, 550, 8000);
             D3DDevice.Instance.Device.Transform.Projection = TGCMatrix.PerspectiveFovLH(Geometry.DegreeToRadian(45.0f), aspectRatio, near_plane, far_plane).ToMatrix();
 
             //lightLookFromModifier = camara.getPosition();

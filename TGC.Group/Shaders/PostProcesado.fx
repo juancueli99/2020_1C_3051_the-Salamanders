@@ -221,8 +221,31 @@ float4 PSPostProcessNightVision(VS_OUTPUT_DEFAULT input) : COLOR0
 
 float4 PSPostProcessDefault(VS_OUTPUT_DEFAULT input) : COLOR0
 {
-    return tex2D(renderTargetSampler, input.TextureCoordinates);
+    float4 tex =  tex2D(renderTargetSampler, input.TextureCoordinates);
+    return lerp(tex, float4(0, 0, 0, 1), 0.7);
 }
+
+float4 PSPostProcessLinterna(VS_OUTPUT_DEFAULT input) : COLOR0
+{
+    float borde = distance(float2(input.TextureCoordinates.x, input.TextureCoordinates.y / 2), float2(0.5, 0.2));
+    
+    float4 tex = tex2D(renderTargetSampler, input.TextureCoordinates);
+    
+    return lerp(tex, float4(0, 0, 0, 1), borde * 2.5);
+}
+
+
+float4 PSPostProcessVela(VS_OUTPUT_DEFAULT input) : COLOR0
+{
+    float borde = distance(float2(input.TextureCoordinates.x, input.TextureCoordinates.y / 2), float2(0.5, 0.2));
+    
+    float4 tex = tex2D(renderTargetSampler, input.TextureCoordinates);
+    
+    tex = lerp(tex, float4(0.6,0.2,0,1), 0.3);
+    
+    return lerp(tex, float4(0, 0, 0, 1), borde * 2.5);
+}
+
 
 technique FogEffect
 {
@@ -239,6 +262,24 @@ technique PostProcessDefault
     {
         VertexShader = compile vs_3_0 VSPostProcess();
         PixelShader = compile ps_3_0 PSPostProcessDefault();
+    }
+}
+
+technique PostProcessVela
+{
+    pass Pass_0
+    {
+        VertexShader = compile vs_3_0 VSPostProcess();
+        PixelShader = compile ps_3_0 PSPostProcessVela();
+    }
+}
+
+technique PostProcessLinterna
+{
+    pass Pass_0
+    {
+        VertexShader = compile vs_3_0 VSPostProcess();
+        PixelShader = compile ps_3_0 PSPostProcessLinterna();
     }
 }
 

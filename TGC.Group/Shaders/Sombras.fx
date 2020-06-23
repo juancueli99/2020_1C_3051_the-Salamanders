@@ -101,7 +101,8 @@ void VertScene(float4 iPos : POSITION,
 	out float2 Tex : TEXCOORD0,
 	out float4 vPos : TEXCOORD1,
 	out float3 vNormal : TEXCOORD2,
-	out float4 vPosLight : TEXCOORD3
+	out float4 vPosLight : TEXCOORD3,
+    out float4 PosView : COLOR0
 )
 {
 	// transformo al screen space
@@ -117,6 +118,8 @@ void VertScene(float4 iPos : POSITION,
     vPos = mul(iPos, matWorld);
 	// propago la posicion del vertice en el espacio de proyeccion de la luz
     vPosLight = mul(vPos, g_mViewLightProj);
+    
+    PosView = mul(iPos, matWorldView);
 }
 
 //-----------------------------------------------------------------------------
@@ -125,7 +128,8 @@ void VertScene(float4 iPos : POSITION,
 float4 PixScene(float2 Tex : TEXCOORD0,
 	float4 vPos : TEXCOORD1,
 	float3 vNormal : TEXCOORD2,
-	float4 vPosLight : TEXCOORD3
+	float4 vPosLight : TEXCOORD3,
+    float4 PosView : COLOR0
 ) : COLOR
 {
     float3 vLight = normalize(float3(vPos - g_vLightPos));
@@ -175,7 +179,40 @@ float4 PixScene(float2 Tex : TEXCOORD0,
 
     float4 color_base = tex2D(diffuseMap, Tex);
     color_base.rgb *= 0.5 + 0.5 * K;
-    return color_base;
+    //return color_base;
+    
+    float startFogDistance = 3000;
+    float endFogDistance = 8000;
+    float4 ColorFog = float4(0.5, 0.5, 0.5, 1);
+    
+    float4 fvBaseColor = lerp(color_base, float4(0, 0, 0, 1), 0.8);
+    
+    if (fvBaseColor.a < 0.9)
+    {
+        discard;
+    }
+    // Si estoy adentro del startFogDistance muestro el color original de la textura
+    if (PosView.z < startFogDistance)
+        return fvBaseColor;
+    else if (PosView.z > endFogDistance)
+    {
+        // Si estoy fuera del endFogDistance muestro el color gris
+        fvBaseColor = ColorFog;
+        return fvBaseColor;
+    }
+    else
+    {
+		// combino fog y textura
+        float1 total = endFogDistance - startFogDistance;
+        float1 resto = PosView.z - startFogDistance;
+        float1 proporcion = resto / total;
+		
+        float3 retorno = lerp(fvBaseColor.xyz, ColorFog.xyz, proporcion);
+        
+        fvBaseColor = float4(retorno, 1);
+		
+        return fvBaseColor;
+    }
 }
 
 technique RenderScene

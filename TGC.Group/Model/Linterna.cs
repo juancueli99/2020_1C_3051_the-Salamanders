@@ -81,6 +81,7 @@ namespace TGC.Group.Model
 
         public void Apagar(Personaje personaje)
         {
+            gameModel.effectPosProcesado.Technique = "PostProcessDefault";
             this.estaEncendida = false;
             personaje.tieneLuz = false;
             //personaje.itemEnMano = (IEquipable)personaje.objetosInteractuables.Find(itemDefault => itemDefault is ItemVacioDefault);
@@ -102,6 +103,7 @@ namespace TGC.Group.Model
             }
             else
             {
+                gameModel.effectPosProcesado.Technique = "PostProcessDefault";
                 this.FinDuracion(personaje);
                 Console.WriteLine("ME APAGO");
             }
@@ -135,7 +137,8 @@ namespace TGC.Group.Model
 
         public void Encender(Personaje personaje)
         {
-            gameModel.effectPosProcesado.Technique = "PostProcessDefault";
+            //gameModel.effectPosProcesado.Technique = "PostProcessDefault";
+            gameModel.effectPosProcesado.Technique = "PostProcessLinterna";
             this.estaEncendida = true;
             personaje.tieneLuz = true;
         }

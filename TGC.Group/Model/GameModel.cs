@@ -163,6 +163,9 @@ namespace TGC.Group.Model
             //ShadersDir
             effectPosProcesado = TGCShaders.Instance.LoadEffect(ShadersDir + "PostProcesado.fx");
             effectPosProcesado.Technique = "PostProcessDefault";
+
+            sombras = new Sombras(ShadersDir, escenario, this);
+            sombras.InstanciarSombras();
         }
 
         private void InstanciasSonidosInDoorRandoms()
@@ -821,8 +824,8 @@ namespace TGC.Group.Model
         {
             
             //RenderPantallaConMonsterCerca();
-            this.updateLighting();
-            //sombras.renderSombras(ElapsedTime, personaje);
+            //this.updateLighting();
+            sombras.renderSombras(ElapsedTime, personaje);
 
 
             //Pone el fondo negro en vez del azul feo ese
