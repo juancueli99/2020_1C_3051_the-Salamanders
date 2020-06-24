@@ -32,7 +32,7 @@ namespace TGC.Group.Model
         public void InstanciarEstructuras()
         {
             TgcSceneLoader loader = new TgcSceneLoader();
-            tgcScene = loader.loadSceneFromFile(MediaDir + "NuestrosModelos\\MapaFullRelease-TgcScene.xml");
+            tgcScene = loader.loadSceneFromFile(MediaDir + "NuestrosModelos\\MapaFullReleaseV2-TgcScene.xml");
         }
 
         public void InstanciarSkyBox()

@@ -815,15 +815,27 @@ namespace TGC.Group.Model
 
             //var sombrasFaroles = new Sombras(this);
             TgcMesh unPoste = escenario.listaDePostes.OrderBy(poste => this.DistanciaA2(poste)).First();
-            if (!personaje.tieneLuz && DistanciaA2(unPoste) < 2000)
+            if (!personaje.tieneLuz && DistanciaA2(unPoste) < 1000)
             {
+                //var puntoMedio = (unPoste.BoundingBox.PMax + unPoste.BoundingBox.PMin) * 0.5f;
+                //var nuevoTarget = TGCVector3.Cross(puntoMedio, new TGCVector3(0, 1, 0));
                 //Se prende el farol mas cercano
-                sombras.renderSombras(unPoste.BoundingBox.PMin, new TGCVector3(0, -900, 0), new TGCVector3(30, 350, 0));
+               
+                sombras.renderSombras(unPoste.BoundingBox.PMin, new TGCVector3(unPoste.BoundingBox.PMin.X, 15, unPoste.BoundingBox.PMin.Z), new TGCVector3(15, 380, 15));
+                //sombras.renderSombras(unPoste.BoundingBox.PMin, new TGCVector3(0, -900, 0), new TGCVector3(30, 350, 0));
             }
             else
             {
                 //01158354515 --> Numero de Marce
                 sombras.renderSombras(personaje.getPosition(), personaje.getLookAt(), new TGCVector3(100, 10, -150));
+                
+                System.Console.WriteLine("X = " + personaje.getLookAt().X);
+                System.Console.WriteLine("Y = " + personaje.getLookAt().Y);
+                System.Console.WriteLine("Z = " + personaje.getLookAt().Z);
+
+                System.Console.WriteLine("Xpos = " + personaje.getPosition().X);
+                System.Console.WriteLine("Ypos = " + personaje.getPosition().Y);
+                System.Console.WriteLine("Zpos = " + personaje.getPosition().Z);
             }
             
 
