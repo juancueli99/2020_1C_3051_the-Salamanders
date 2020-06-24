@@ -14,6 +14,7 @@ using TGC.Core.SceneLoader;
 using TGC.Core.Shaders;
 using TGC.Core.Textures;
 using TGC.Core.Collision;
+using TGC.Core.BoundingVolumes;
 
 namespace TGC.Group.Model
 {
@@ -23,7 +24,7 @@ namespace TGC.Group.Model
         private readonly float near_plane = 2f;
 
         // Shadow map
-        private readonly int SHADOWMAP_SIZE = 1024;
+        private readonly int SHADOWMAP_SIZE = 512;
         private TgcArrow arrow;
         private Effect effect;
         private TGCVector3 g_LightDir; // direccion de la luz actual
@@ -109,7 +110,46 @@ namespace TGC.Group.Model
             //D3DDevice.Instance.Device.BeginScene();
             // dibujo la escena pp dicha
             D3DDevice.Instance.Device.Clear(ClearFlags.Target | ClearFlags.ZBuffer, Color.Gray, 1.0f, 0);
-            RenderScene(false);
+
+            /*var viewMatrix = new Matrix();
+            var projectMatrix = new Matrix();
+            var traslationMatrix = new Matrix();
+            var rotationMatrix = new Matrix();
+
+            var aspectRatio = D3DDevice.Instance.AspectRatio;
+            traslationMatrix = Matrix.Translation(gameModel.personaje.getLookAt());
+
+            Vector3 forward = new Vector3(gameModel.personaje.getLookAt().X, gameModel.personaje.getLookAt().Y, gameModel.personaje.getLookAt().Z);
+            Vector3 upPersonaje = new Vector3(gameModel.personaje.UpVector.X, gameModel.personaje.UpVector.Y, gameModel.personaje.UpVector.Z);
+            forward.Normalize();
+            upPersonaje.Normalize();
+            Vector3 right = Vector3.Cross(forward, upPersonaje);
+            right.Normalize();
+
+            rotationMatrix.M11 = right.X;
+            rotationMatrix.M12 = 0;
+            rotationMatrix.M13 = forward.X;
+            rotationMatrix.M14 = 0;
+
+            rotationMatrix.M21 = right.Y;
+            rotationMatrix.M22 = 1;
+            rotationMatrix.M23 = forward.Y;
+            rotationMatrix.M24 = 0;
+
+            rotationMatrix.M31 = right.Z;
+            rotationMatrix.M32 = 0;
+            rotationMatrix.M33 = forward.Z;
+            rotationMatrix.M34 = 0;
+
+            rotationMatrix.M41 = 0;
+            rotationMatrix.M42 = 0;
+            rotationMatrix.M43 = 0;
+            rotationMatrix.M44 = 1;
+
+            viewMatrix = rotationMatrix * traslationMatrix;
+            projectMatrix = TGCMatrix.PerspectiveFovLH(gameModel.personaje.meshPersonaje.Rotation.Y, aspectRatio, 550, 3000);
+            */
+            RenderScene2(false);
 
             //arrow.Render();
             //D3DDevice.Instance.Device.EndScene();
@@ -130,6 +170,9 @@ namespace TGC.Group.Model
             effect.SetValue("g_mProjLight", g_mShadowProj.ToMatrix());
             effect.SetValue("g_mViewLightProj", (g_LightView * g_mShadowProj).ToMatrix());
 
+            //frustumShadow.updateVolume(TGCMatrix.FromMatrix(D3DDevice.Instance.Device.Transform.View), 
+            //  TGCMatrix.FromMatrix(D3DDevice.Instance.Device.Transform.Projection));
+
             // Primero genero el shadow map, para ello dibujo desde el pto de vista de luz
             // a una textura, con el VS y PS que generan un mapa de profundidades.
             var pOldRT = D3DDevice.Instance.Device.GetRenderTarget(0);
@@ -142,11 +185,10 @@ namespace TGC.Group.Model
 
             // Hago el render de la escena pp dicha
             effect.SetValue("g_txShadow", g_pShadowMap);
-            RenderScene(true);
-
-            // Termino
+            //RenderScene(true,g_LightView, g_mShadowProj);
+            RenderScene2(true);
+            //Termino
             //D3DDevice.Instance.Device.EndScene();
-
             TextureLoader.Save("shadowmap.bmp", ImageFileFormat.Bmp, g_pShadowMap);
 
             // restuaro el render target y el stencil
@@ -154,8 +196,10 @@ namespace TGC.Group.Model
             D3DDevice.Instance.Device.SetRenderTarget(0, pOldRT);
         }
 
-        public void RenderScene(bool shadow)
+        public void RenderScene(bool shadow, TGCMatrix viewMatrix, TGCMatrix projectionMatrix)
         {
+            gameModel.Frustum.updateVolume(viewMatrix,projectionMatrix);
+
             var meshesQueChocanConFrustrum = gameModel.escenario.tgcScene.Meshes.FindAll
                 (mesh => TgcCollisionUtils.classifyFrustumAABB(gameModel.Frustum, mesh.BoundingBox) != 
                 TgcCollisionUtils.FrustumResult.OUTSIDE);
@@ -176,5 +220,29 @@ namespace TGC.Group.Model
    
         }
 
+
+        public void RenderScene2(bool shadow)
+        {
+            //gameModel.Frustum.updateVolume(viewMatrix, projectionMatrix);
+
+            var meshesQueChocanConFrustrum = gameModel.escenario.tgcScene.Meshes.FindAll
+                (mesh => TgcCollisionUtils.classifyFrustumAABB(gameModel.Frustum, mesh.BoundingBox) !=
+                TgcCollisionUtils.FrustumResult.OUTSIDE);
+
+            foreach (var T in meshesQueChocanConFrustrum)
+            {
+                if (shadow)
+                {
+                    T.Technique = "RenderShadow";
+                }
+                else
+                {
+                    T.Technique = "RenderScene";
+                }
+
+                T.Render();
+            }
+
+        }
     }
 }
