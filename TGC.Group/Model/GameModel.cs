@@ -811,8 +811,21 @@ namespace TGC.Group.Model
 
             //RenderPantallaConMonsterCerca();
             //this.updateLighting();
-            sombras.renderSombras();
+            //sombras.renderSombras(personaje.getPosition(),personaje.getLookAt(), new TGCVector3(100, 10, -150));
 
+            //var sombrasFaroles = new Sombras(this);
+            TgcMesh unPoste = escenario.listaDePostes.OrderBy(poste => this.DistanciaA2(poste)).First();
+            if (!personaje.tieneLuz && DistanciaA2(unPoste) < 2000)
+            {
+                //Se prende el farol mas cercano
+                sombras.renderSombras(unPoste.BoundingBox.PMin, new TGCVector3(0, -900, 0), new TGCVector3(30, 350, 0));
+            }
+            else
+            {
+                //01158354515 --> Numero de Marce
+                sombras.renderSombras(personaje.getPosition(), personaje.getLookAt(), new TGCVector3(100, 10, -150));
+            }
+            
 
             //Pone el fondo negro en vez del azul feo ese
 

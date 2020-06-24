@@ -185,7 +185,8 @@ float4 PixScene(float2 Tex : TEXCOORD0,
     float endFogDistance = 3000;
     float4 ColorFog = float4(0.5, 0.5, 0.5, 1);
     
-    float4 fvBaseColor = lerp(color_base, float4(0, 0, 0, 1), 0.8);
+    //float4 fvBaseColor = lerp(color_base, float4(0, 0, 0, 1), 0.8);
+    float4 fvBaseColor = color_base;
     
     if (fvBaseColor.a < 0.9)
     {

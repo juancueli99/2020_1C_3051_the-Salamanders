@@ -83,15 +83,15 @@ namespace TGC.Group.Model
             //lightLookAtModifier = camara.getLookAt();
         }
 
-        public void renderSombras()
+        public void renderSombras(TGCVector3 eye, TGCVector3 target, TGCVector3 delta)
         {
             TexturesManager.Instance.clearAll();
 
             D3DDevice.Instance.Device.Clear(ClearFlags.Target | ClearFlags.ZBuffer, Color.Black, 1.0f, 0);
             //D3DDevice.Instance.Device.BeginScene();
 
-            g_LightPos = gameModel.personaje.getPosition() + new TGCVector3(100, 10, -150);
-            g_LightDir = gameModel.personaje.getLookAt() - g_LightPos - new TGCVector3(-100, -10, 150);
+            g_LightPos = eye + delta;
+            g_LightDir = target - g_LightPos - delta;
             //g_LightPos = personaje.getPosition() + new TGCVector3(0, -50, 0);
             //g_LightDir = personaje.getLookAt() - g_LightPos;
             g_LightDir.Normalize();
@@ -111,47 +111,9 @@ namespace TGC.Group.Model
             // dibujo la escena pp dicha
             D3DDevice.Instance.Device.Clear(ClearFlags.Target | ClearFlags.ZBuffer, Color.Gray, 1.0f, 0);
 
-            /*var viewMatrix = new Matrix();
-            var projectMatrix = new Matrix();
-            var traslationMatrix = new Matrix();
-            var rotationMatrix = new Matrix();
-
-            var aspectRatio = D3DDevice.Instance.AspectRatio;
-            traslationMatrix = Matrix.Translation(gameModel.personaje.getLookAt());
-
-            Vector3 forward = new Vector3(gameModel.personaje.getLookAt().X, gameModel.personaje.getLookAt().Y, gameModel.personaje.getLookAt().Z);
-            Vector3 upPersonaje = new Vector3(gameModel.personaje.UpVector.X, gameModel.personaje.UpVector.Y, gameModel.personaje.UpVector.Z);
-            forward.Normalize();
-            upPersonaje.Normalize();
-            Vector3 right = Vector3.Cross(forward, upPersonaje);
-            right.Normalize();
-
-            rotationMatrix.M11 = right.X;
-            rotationMatrix.M12 = 0;
-            rotationMatrix.M13 = forward.X;
-            rotationMatrix.M14 = 0;
-
-            rotationMatrix.M21 = right.Y;
-            rotationMatrix.M22 = 1;
-            rotationMatrix.M23 = forward.Y;
-            rotationMatrix.M24 = 0;
-
-            rotationMatrix.M31 = right.Z;
-            rotationMatrix.M32 = 0;
-            rotationMatrix.M33 = forward.Z;
-            rotationMatrix.M34 = 0;
-
-            rotationMatrix.M41 = 0;
-            rotationMatrix.M42 = 0;
-            rotationMatrix.M43 = 0;
-            rotationMatrix.M44 = 1;
-
-            viewMatrix = rotationMatrix * traslationMatrix;
-            projectMatrix = TGCMatrix.PerspectiveFovLH(gameModel.personaje.meshPersonaje.Rotation.Y, aspectRatio, 550, 3000);
-            */
             RenderScene2(false);
 
-            //arrow.Render();
+            arrow.Render();
             //D3DDevice.Instance.Device.EndScene();
             //D3DDevice.Instance.Device.Present();
         }
