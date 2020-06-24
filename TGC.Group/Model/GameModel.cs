@@ -104,6 +104,7 @@ namespace TGC.Group.Model
         public Sonido estatica;
         public Sonido agarrarPagina;
         public Sonido humanHeartbeat;
+        public Sonido respiracion;
 
 
         public static monstruos monstruoActual= monstruos.SECTARIAN;
@@ -136,6 +137,7 @@ namespace TGC.Group.Model
             estatica = new Sonido("Radio Static-SoundBible.com-629277574.wav", -2500, true);
             agarrarPagina = new Sonido("Page_Turn-Mark_DiAngelo-1304638748.wav", -300, false);
             humanHeartbeat = new Sonido("human-heartbeat-daniel_simon.wav", -1000, false);
+            respiracion = new Sonido("Breathing Vent-SoundBible.com-18702822.wav", -600, false);
 
             CreateFullScreenQuad();
             CreateRenderTarget();

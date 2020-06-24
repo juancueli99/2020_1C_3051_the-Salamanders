@@ -66,6 +66,7 @@ namespace TGC.Group
             personaje.TeletrasportarmeA(posicion);
             gameModel.estatica.DetenerSonido();
             gameModel.humanHeartbeat.escucharSonidoActual(false);
+            gameModel.respiracion.escucharSonidoActual(false);
         }
 
         public void updatearMiPropiaLuz(Escenario escenario, Personaje personaje)

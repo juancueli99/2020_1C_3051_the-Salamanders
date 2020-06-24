@@ -145,6 +145,8 @@ namespace TGC.Group.Model
             personaje.tieneLuz = true;
             gameModel.estatica.DetenerSonido();
             gameModel.humanHeartbeat.escucharSonidoActual(false);
+            gameModel.respiracion.escucharSonidoActual(false);
+
         }
     }
 }
