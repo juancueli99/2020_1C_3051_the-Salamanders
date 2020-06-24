@@ -14,6 +14,7 @@ using TGC.Core.SceneLoader;
 using TGC.Core.Shaders;
 using TGC.Core.Textures;
 using TGC.Core.Collision;
+using TGC.Core.BoundingVolumes;
 
 namespace TGC.Group.Model
 {
@@ -23,7 +24,7 @@ namespace TGC.Group.Model
         private readonly float near_plane = 2f;
 
         // Shadow map
-        private readonly int SHADOWMAP_SIZE = 1024;
+        private readonly int SHADOWMAP_SIZE = 512;
         private TgcArrow arrow;
         private Effect effect;
         private TGCVector3 g_LightDir; // direccion de la luz actual
@@ -82,15 +83,15 @@ namespace TGC.Group.Model
             //lightLookAtModifier = camara.getLookAt();
         }
 
-        public void renderSombras()
+        public void renderSombras(TGCVector3 eye, TGCVector3 target, TGCVector3 delta)
         {
             TexturesManager.Instance.clearAll();
 
             D3DDevice.Instance.Device.Clear(ClearFlags.Target | ClearFlags.ZBuffer, Color.Black, 1.0f, 0);
             //D3DDevice.Instance.Device.BeginScene();
 
-            g_LightPos = gameModel.personaje.getPosition() + new TGCVector3(100, 10, -150);
-            g_LightDir = gameModel.personaje.getLookAt() - g_LightPos - new TGCVector3(-100, -10, 150);
+            g_LightPos = eye + delta;
+            g_LightDir = target - g_LightPos - delta;
             //g_LightPos = personaje.getPosition() + new TGCVector3(0, -50, 0);
             //g_LightDir = personaje.getLookAt() - g_LightPos;
             g_LightDir.Normalize();
@@ -109,9 +110,10 @@ namespace TGC.Group.Model
             //D3DDevice.Instance.Device.BeginScene();
             // dibujo la escena pp dicha
             D3DDevice.Instance.Device.Clear(ClearFlags.Target | ClearFlags.ZBuffer, Color.Gray, 1.0f, 0);
-            RenderScene(false);
 
-            //arrow.Render();
+            RenderScene2(false);
+
+            arrow.Render();
             //D3DDevice.Instance.Device.EndScene();
             //D3DDevice.Instance.Device.Present();
         }
@@ -130,6 +132,9 @@ namespace TGC.Group.Model
             effect.SetValue("g_mProjLight", g_mShadowProj.ToMatrix());
             effect.SetValue("g_mViewLightProj", (g_LightView * g_mShadowProj).ToMatrix());
 
+            //frustumShadow.updateVolume(TGCMatrix.FromMatrix(D3DDevice.Instance.Device.Transform.View), 
+            //  TGCMatrix.FromMatrix(D3DDevice.Instance.Device.Transform.Projection));
+
             // Primero genero el shadow map, para ello dibujo desde el pto de vista de luz
             // a una textura, con el VS y PS que generan un mapa de profundidades.
             var pOldRT = D3DDevice.Instance.Device.GetRenderTarget(0);
@@ -142,11 +147,10 @@ namespace TGC.Group.Model
 
             // Hago el render de la escena pp dicha
             effect.SetValue("g_txShadow", g_pShadowMap);
-            RenderScene(true);
-
-            // Termino
+            //RenderScene(true,g_LightView, g_mShadowProj);
+            RenderScene2(true);
+            //Termino
             //D3DDevice.Instance.Device.EndScene();
-
             TextureLoader.Save("shadowmap.bmp", ImageFileFormat.Bmp, g_pShadowMap);
 
             // restuaro el render target y el stencil
@@ -154,8 +158,10 @@ namespace TGC.Group.Model
             D3DDevice.Instance.Device.SetRenderTarget(0, pOldRT);
         }
 
-        public void RenderScene(bool shadow)
+        public void RenderScene(bool shadow, TGCMatrix viewMatrix, TGCMatrix projectionMatrix)
         {
+            gameModel.Frustum.updateVolume(viewMatrix,projectionMatrix);
+
             var meshesQueChocanConFrustrum = gameModel.escenario.tgcScene.Meshes.FindAll
                 (mesh => TgcCollisionUtils.classifyFrustumAABB(gameModel.Frustum, mesh.BoundingBox) != 
                 TgcCollisionUtils.FrustumResult.OUTSIDE);
@@ -176,5 +182,29 @@ namespace TGC.Group.Model
    
         }
 
+
+        public void RenderScene2(bool shadow)
+        {
+            //gameModel.Frustum.updateVolume(viewMatrix, projectionMatrix);
+
+            var meshesQueChocanConFrustrum = gameModel.escenario.tgcScene.Meshes.FindAll
+                (mesh => TgcCollisionUtils.classifyFrustumAABB(gameModel.Frustum, mesh.BoundingBox) !=
+                TgcCollisionUtils.FrustumResult.OUTSIDE);
+
+            foreach (var T in meshesQueChocanConFrustrum)
+            {
+                if (shadow)
+                {
+                    T.Technique = "RenderShadow";
+                }
+                else
+                {
+                    T.Technique = "RenderScene";
+                }
+
+                T.Render();
+            }
+
+        }
     }
 }
