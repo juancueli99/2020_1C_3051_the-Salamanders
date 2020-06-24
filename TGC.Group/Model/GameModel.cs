@@ -817,12 +817,9 @@ namespace TGC.Group.Model
             TgcMesh unPoste = escenario.listaDePostes.OrderBy(poste => this.DistanciaA2(poste)).First();
             if (!personaje.tieneLuz && DistanciaA2(unPoste) < 1000)
             {
-                //var puntoMedio = (unPoste.BoundingBox.PMax + unPoste.BoundingBox.PMin) * 0.5f;
-                //var nuevoTarget = TGCVector3.Cross(puntoMedio, new TGCVector3(0, 1, 0));
                 //Se prende el farol mas cercano
-               
                 sombras.renderSombras(unPoste.BoundingBox.PMin, new TGCVector3(unPoste.BoundingBox.PMin.X, 15, unPoste.BoundingBox.PMin.Z), new TGCVector3(15, 380, 15));
-                //sombras.renderSombras(unPoste.BoundingBox.PMin, new TGCVector3(0, -900, 0), new TGCVector3(30, 350, 0));
+               
             }
             else
             {
@@ -838,21 +835,15 @@ namespace TGC.Group.Model
                 System.Console.WriteLine("Zpos = " + personaje.getPosition().Z);
             }
             
-
-            //Pone el fondo negro en vez del azul feo ese
-
-
-
-
             //Frustum Culling -> OPCION 1
             //var meshesQueChocanConFrustrum = escenario.tgcScene.Meshes.FindAll(mesh => TgcCollisionUtils.classifyFrustumAABB(this.Frustum, mesh.BoundingBox) != TgcCollisionUtils.FrustumResult.OUTSIDE);
             //meshesQueChocanConFrustrum.ForEach(mesh => mesh.Render());
 
 
-            /*if (DistanciaA2(monster.ghost) < 5000)
+            if (DistanciaA2(monster.ghost) < 5000)
             {
                 monster.RenderMonster();
-            }*/
+            }
             //Render de BoundingBox, muy útil para debug de colisiones.
             /*if (BoundingBox)
             {
