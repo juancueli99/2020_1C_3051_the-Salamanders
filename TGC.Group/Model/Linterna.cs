@@ -141,6 +141,8 @@ namespace TGC.Group.Model
             gameModel.effectPosProcesado.Technique = "PostProcessLinterna";
             this.estaEncendida = true;
             personaje.tieneLuz = true;
+            gameModel.estatica.DetenerSonido();
+            gameModel.humanHeartbeat.escucharSonidoActual(false);
         }
     }
 }

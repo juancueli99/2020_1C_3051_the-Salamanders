@@ -143,6 +143,8 @@ namespace TGC.Group.Model
             gameModel.effectPosProcesado.Technique = "PostProcessVela";
             this.estaEncendida = true;
             personaje.tieneLuz = true;
+            gameModel.estatica.DetenerSonido();
+            gameModel.humanHeartbeat.escucharSonidoActual(false);
         }
     }
 }

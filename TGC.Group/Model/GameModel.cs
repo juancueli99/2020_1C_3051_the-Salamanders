@@ -101,6 +101,9 @@ namespace TGC.Group.Model
         public Sonido musicaMenu ;
         public Sonido sonidoBarra;
         public Sonido musicaFondoOutdoor;
+        public Sonido estatica;
+        public Sonido agarrarPagina;
+        public Sonido humanHeartbeat;
 
 
         public static monstruos monstruoActual= monstruos.SECTARIAN;
@@ -130,6 +133,9 @@ namespace TGC.Group.Model
             GameModel.instancia = this;
             musicaMenu = new Sonido("SonidoPruebaTGC(Mono).wav", true);
             musicaFondoOutdoor = new Sonido("nocturno, continuo.wav", -3000, true);
+            estatica = new Sonido("Radio Static-SoundBible.com-629277574.wav", -2500, true);
+            agarrarPagina = new Sonido("Page_Turn-Mark_DiAngelo-1304638748.wav", -300, false);
+            humanHeartbeat = new Sonido("human-heartbeat-daniel_simon.wav", -1000, false);
 
             CreateFullScreenQuad();
             CreateRenderTarget();
@@ -260,7 +266,7 @@ namespace TGC.Group.Model
                 if (estoyJugando) 
                 {
                     sonidoBarra = new Sonido("AllAroundYou.wav", false);
-                    var sonidoStart = new Sonido("auto, abrir puerta.wav", -4000, false);
+                    var sonidoStart = new Sonido("auto, abrir puerta.wav", -3000, false);
                     sonidoStart.escucharSonidoActual(false);
                    
 
@@ -543,6 +549,8 @@ namespace TGC.Group.Model
 
         private void InteraccionMonster()
         {
+
+
             if (!personaje.tieneLuz && !personaje.estoyEscondido && personaje.tiempoSinLuz > GameModel.TiempoSinAdvertencia)
             {
                 
@@ -551,6 +559,7 @@ namespace TGC.Group.Model
                 if (personaje.tiempoSinLuz == GameModel.TiempoDeAdvertencia)
                 {
 
+                   
                     effectPosProcesado.Technique = "PostProcessMonster";
 
                     unBicho = new Monster();
@@ -575,13 +584,18 @@ namespace TGC.Group.Model
                     monster = unBicho;
                     iluminables.Add(unBicho.ghost);
                     monster.reproducirSonidoRandom();
-                
+                    estatica.escucharSonidoActual(true);
+
+
+
+
                 }
                 
                 if (personaje.tiempoSinLuz == GameModel.TiempoDeGameOver)
                 {
                     perdi = true;
                     tiempoDeRotacion = 0;
+
 
                     monster.DisposeMonster();
                     //El monster aparece detrás del personaje

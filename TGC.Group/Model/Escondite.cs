@@ -64,6 +64,8 @@ namespace TGC.Group
             posicionDeEntrada = new TGCVector3(personaje.getPosition());
             TGCVector3 posicion = new TGCVector3(getPosition().X - 150, personaje.Position.Y, getPosition().Z - 150);
             personaje.TeletrasportarmeA(posicion);
+            gameModel.estatica.DetenerSonido();
+            gameModel.humanHeartbeat.escucharSonidoActual(false);
         }
 
         public void updatearMiPropiaLuz(Escenario escenario, Personaje personaje)
