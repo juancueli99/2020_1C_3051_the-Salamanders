@@ -301,6 +301,61 @@ technique PostProcessNightVision
     }
 }
 
+/////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////
+
+struct VS_OUTPUT_TRAIL
+{
+    float4 Position : POSITION0;
+    float3 MeshPosition : TEXCOORD1;
+    float3 Normal : NORMAL0;
+    float2 TextureCoordinates : TEXCOORD0;
+};
+
+//Vertex Shader
+VS_OUTPUT_TRAIL VSTrail(VS_INPUT_DEFAULT input)
+{
+    VS_OUTPUT_TRAIL output;
+    
+	// Enviamos la posicion transformada
+    output.Position = mul(input.Position, matWorldViewProj);
+ 
+    output.MeshPosition = input.Position;
+    
+    // Propagar las normales por la matriz normal
+    output.Normal = mul(input.Normal, matInverseTransposeWorld);
+    
+	// Propagar coordenadas de textura
+    output.TextureCoordinates = input.TextureCoordinates;
+    
+    return output;
+}
+
+//Pixel Shader
+float4 PSTrail(VS_OUTPUT_TRAIL input) : COLOR0
+{
+    
+    float4 textureColor = tex2D(diffuseMap, input.TextureCoordinates);
+   
+    if (abs(input.MeshPosition.x) < 5.0 && abs(input.MeshPosition.x) > 4.0 && input.MeshPosition.y > 44.0 && input.MeshPosition.y < 45.0 && input.MeshPosition.z < 0)
+    {
+        return lerp(textureColor, float4(1, 0, 0, 1), abs(sin(timer)));
+    }
+    else
+    {
+        return textureColor;
+    }
+}
+
+technique TrailEffect
+{
+    pass Pass_0
+    {
+        VertexShader = compile vs_3_0 VSTrail();
+        PixelShader = compile ps_3_0 PSTrail();
+    }
+}
+
 
 /////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////
