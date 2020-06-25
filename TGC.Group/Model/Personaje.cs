@@ -812,7 +812,11 @@ namespace TGC.Group.Model
         {
             if (!this.tieneLuz)
             {
-                this.tiempoSinLuz++;
+                this.tiempoSinLuz ++;
+            }
+            else
+            {
+                this.tiempoSinLuz = 0;
             }
         }
         
@@ -855,24 +859,22 @@ namespace TGC.Group.Model
         public void GameOver(GameModel modelo)
         {
             //Por ahora lo dejamos asi hasta que tengamos una interfaz grafica
-            
+            LockMouse = false;
             modelo.estoyJugando = false;
             modelo.musicaMenu.escucharSonidoActual(true);
-            this.lockMouse = false;
             GameOverUserControl.instancia.Show();
+            
             //tendria que mandarme de vuelta al menu
         }
-        public void YouWin(GameModel modelo)
+        public void YouWin()
         {
-            if (this.notasRequeridas == GameModel.notasParaGanar && this.getPosition() == posicionInicial)
+            if (this.cantidadNotas == 9)
             {
-                modelo.estoyJugando = false;
-                modelo.musicaMenu.escucharSonidoActual(true);
-                this.lockMouse = false;
-                YouSurvivedUserControl.instancia.Show();
                 //Por ahora lo dejamos asi hasta que tengamos una interfaz grafica
-                Console.WriteLine("Ganaste!!");
-
+                LockMouse = false;
+                GameModel.instancia.estoyJugando = false;
+                GameModel.instancia.musicaMenu.escucharSonidoActual(true);
+                YouSurvivedUserControl.instancia.Show();
             }
         }
 

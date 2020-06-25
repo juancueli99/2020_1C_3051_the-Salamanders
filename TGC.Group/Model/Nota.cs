@@ -23,7 +23,7 @@ namespace TGC.Group.Model
         {
             personaje.cantidadNotas++;
             gameModel.nota.instanciarNotas(personaje.cantidadNotas);
-            //Agregar un sonido
+            gameModel.agarrarPagina.escucharSonidoActual(false);
             eliminarMesh();
         }
         public TGCVector3 getPosition()

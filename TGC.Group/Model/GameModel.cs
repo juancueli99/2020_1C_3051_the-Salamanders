@@ -55,9 +55,13 @@ namespace TGC.Group.Model
         public HUD vidaUtilLinterna = new HUD();
         public HUD linternita = new HUD();
 
-        public static bool estoyEnElMenu = true;
+        public double tiempoDeRotacion = 0;
 
+        public static bool estoyEnElMenu = true;
+        public static bool perdi = false;
         public static bool estoyCorriendo = false;
+
+        private float timer = 0f;
 
         //PARED INVISIBLE
         public ParedInvisible paredInvisible = new ParedInvisible();
@@ -83,7 +87,7 @@ namespace TGC.Group.Model
         public static float TiempoDeGameOver = 30000;
         public static float TiempoDeAdvertencia = 4000;
         public static float TiempoSinAdvertencia = 3500;
-
+        public static GameModel instancia;
         public static int notasParaGanar = 4;
 
         /// <summary>
@@ -97,10 +101,26 @@ namespace TGC.Group.Model
         public Sonido musicaMenu ;
         public Sonido sonidoBarra;
         public Sonido musicaFondoOutdoor;
+        public Sonido estatica;
+        public Sonido agarrarPagina;
+        public Sonido humanHeartbeat;
+        public Sonido respiracion;
 
 
         public static monstruos monstruoActual= monstruos.SECTARIAN;
         public static Microsoft.DirectX.DirectSound.Device deviceMusica;
+        private TgcScreenQuad fullScreenQuad;
+        private VertexBuffer vertexBuffer;
+        private Surface depthStencil;
+        private Texture renderTarget;
+
+        
+        //string lala = "..\\..\\..\\shaders\\";
+        public Microsoft.DirectX.Direct3D.Effect effectPosProcesado;
+        //bool render = false;
+
+        
+        private Sombras sombras;
 
         public override void Init()
         {
@@ -109,9 +129,18 @@ namespace TGC.Group.Model
             deviceMusica = DirectSound.DsDevice;
             this.FixedTickEnable = false;
 
-            
+            fullScreenQuad = new TgcScreenQuad();
+
+            GameModel.instancia = this;
             musicaMenu = new Sonido("SonidoPruebaTGC(Mono).wav", true);
             musicaFondoOutdoor = new Sonido("nocturno, continuo.wav", -3000, true);
+            estatica = new Sonido("Radio Static-SoundBible.com-629277574.wav", -2500, true);
+            agarrarPagina = new Sonido("Page_Turn-Mark_DiAngelo-1304638748.wav", -300, false);
+            humanHeartbeat = new Sonido("human-heartbeat-daniel_simon.wav", -1000, false);
+            respiracion = new Sonido("Breathing Vent-SoundBible.com-18702822.wav", -600, false);
+
+            CreateFullScreenQuad();
+            CreateRenderTarget();
 
             personaje = new Personaje();
             menu.instanciarMenu();
@@ -121,7 +150,7 @@ namespace TGC.Group.Model
             vidaUtilLinterna.instanciarLinternas(0);
             linternita.instanciarLinternita();
             InstanciarSonidosRandoms();
-            InstanciarSondosOutDoorRandoms();
+            InstanciarSonidosOutDoorRandoms();
             InstanciasSonidosInDoorRandoms();
 
             escenario.InstanciarEstructuras();
@@ -135,15 +164,14 @@ namespace TGC.Group.Model
             TgcMesh mesh2 = escenario.tgcScene.Meshes.Find(mesh => mesh.Name.Equals("linterna_2"));
             var linterna = new Linterna(mesh1,mesh2,this);
             objetosInteractuables.Add(linterna);
+           
             Camera = personaje;
-            //Frustum.FarPlane;
-            //Camara.SetCamera(personaje.PosicionMesh(), new TGCVector3(0, 0, 0));
+            //ShadersDir
+            effectPosProcesado = TGCShaders.Instance.LoadEffect(ShadersDir + "PostProcesado.fx");
+            effectPosProcesado.Technique = "PostProcessDefault";
 
-            //personaje.LockMouse = true;
-
-            //Internamente el framework construye la matriz de view con estos dos vectores.
-            //Luego en nuestro juego tendremos que crear una cámara que cambie la matriz de view con variables como movimientos o animaciones de escenas
-
+            sombras = new Sombras(this);
+            sombras.InstanciarSombras();
         }
 
         private void InstanciasSonidosInDoorRandoms()
@@ -152,7 +180,7 @@ namespace TGC.Group.Model
             sonidosInDoorRandom.Add(new Sonido("golpe metálico.wav", -3500, false));
         }
 
-        private void InstanciarSondosOutDoorRandoms()
+        private void InstanciarSonidosOutDoorRandoms()
         {
             sonidosOutDoorRandom.Add(new Sonido("ráfaga ventosa.wav", -3500, false));
             sonidosOutDoorRandom.Add(new Sonido("viento en arbustos.wav", -3500, false));
@@ -195,6 +223,11 @@ namespace TGC.Group.Model
                 interactuable = new Pila(mesh);
                 objetosInteractuables.Add(interactuable);
             }
+            if (mesh.Name.Equals("NVG"))
+            {
+                interactuable = new VisionNocturna(mesh, this);
+                objetosInteractuables.Add(interactuable);
+            }
             if (mesh.Name.Contains("puerta"))
             {
                 //tengo que crear una puerta exterior o interior
@@ -206,7 +239,7 @@ namespace TGC.Group.Model
             }
             if (mesh.Name.Contains("BarrilPolvora"))
             {
-                interactuable = new Escondite(mesh);
+                interactuable = new Escondite(mesh,this);
                 objetosInteractuables.Add(interactuable);
             }
             if (mesh.Name.Equals("EscaleraMetalMovil")|| mesh.Name.Equals("EscaleraMetalFija"))
@@ -215,6 +248,10 @@ namespace TGC.Group.Model
                 objetosInteractuables.Add(interactuable);
                 var escalera = (Escalera)interactuable;
                 paredInvisible.InstanciarPared(escalera);
+            }
+            if (mesh.Name.Equals("maleta")) {
+                interactuable = new Maleta(mesh);
+                objetosInteractuables.Add(interactuable);
             }
         }
 
@@ -231,8 +268,9 @@ namespace TGC.Group.Model
                 if (estoyJugando) 
                 {
                     sonidoBarra = new Sonido("AllAroundYou.wav", false);
-                    var sonidoStart = new Sonido("auto, abrir puerta.wav", -4000, false);
+                    var sonidoStart = new Sonido("auto, abrir puerta.wav", -3000, false);
                     sonidoStart.escucharSonidoActual(false);
+                   
 
                 }
             }
@@ -253,14 +291,18 @@ namespace TGC.Group.Model
 
             if (personaje.LockMouse)
             {
-                UpdateAccionesDeMovimientoYCamara();
+                if(!perdi)
+                    UpdateAccionesDeMovimientoYCamara();
 
                 if (Input.keyDown(Key.E))
                 {
                     InteraccionPersonajeYMesh();
 
                 }
+
                 ReproducirSonidoRandomEscenario();
+
+                reproducirRandomDeLista(monster.getSoundList());
 
                 RealizarAccionesDeInventario();
 
@@ -269,20 +311,25 @@ namespace TGC.Group.Model
                     personaje.tieneLuz = !personaje.tieneLuz;
                 }*/
 
-                if (personaje.chocandoConEscalera && Input.keyDown(Key.Space))
-                {
-                    personaje.MoverPersonaje(' ', ElapsedTime, Input, this);//lo dejo asi porque no se que hace esto
-                    // #TinchoHaceteCargo
-                }
                 personaje.updateCamera(ElapsedTime, Input);
 
                 personaje.aumentarTiempoSinLuz();
 
-                AccionesPersonajeMonstruo();
+                if (personaje.tieneLuz)
+                    personaje.itemEnMano.DisminuirDuracion(personaje);
 
-                personaje.YouWin(this);
+                AccionesPersonajeMonstruo();
             }
-            
+
+            timer += ElapsedTime;
+            var d3dDevice = D3DDevice.Instance.Device;
+
+            effectPosProcesado.SetValue("eyePosition", TGCVector3.TGCVector3ToFloat3Array(personaje.Position));
+
+            effectPosProcesado.SetValue("screenWidth", d3dDevice.PresentationParameters.BackBufferWidth);
+            effectPosProcesado.SetValue("screenHeight", d3dDevice.PresentationParameters.BackBufferHeight);
+
+            effectPosProcesado.SetValue("timer", timer);
 
         }
 
@@ -320,7 +367,7 @@ namespace TGC.Group.Model
         private void reproducirRandomDeLista(List<Sonido> listaSonidos)
         {
             var ran = new Random();
-            if (ran.Next() % 10000 == 7)
+            if (ran.Next() % 5000 == 7)
             {
                 int indice = ran.Next() % (sonidosRandoms.Count());
                 listaSonidos[Math.Max(indice-1,0)].escucharSonidoActual(false);
@@ -346,6 +393,7 @@ namespace TGC.Group.Model
                 
             }
 
+            /*
             if (personaje.TieneItemEnMano() && personaje.tieneLuz)
             {
                 personaje.getItemEnMano().DisminuirDuracion();
@@ -355,13 +403,15 @@ namespace TGC.Group.Model
                     personaje.getItemEnMano().FinDuracion(personaje);
                 }
             }
+            */
 
             InteraccionMonster();
         }
 
         private void RealizarAccionesDeInventario()
         {
-            if (Input.keyDown(Key.H))
+           
+            if (Input.keyDown(Key.H)) //deprecado
             {
                 personaje.getItemEnMano().Usar(personaje);
                 var linterna = personaje.objetosInteractuables.Find(item=>item is Linterna);
@@ -371,6 +421,9 @@ namespace TGC.Group.Model
 
             if (Input.keyDown(Key.F))
             {
+                personaje.getItemEnMano().Usar(personaje);
+                
+                /*
                 //Prende/apaga la luz de la linterna
                 if (personaje.getItemEnMano() is Linterna || personaje.getItemEnMano() is Vela)
                 {
@@ -381,6 +434,7 @@ namespace TGC.Group.Model
                 {
                     //personaje.tieneLuz = false;
                 }
+                */
             }
 
             if (Input.keyDown(Key.R))
@@ -394,7 +448,11 @@ namespace TGC.Group.Model
             
             if (Input.keyDown(Key.Q))
             {
+                Inventario.objetoSiguiente(personaje);
+
+
                 //Cambiar entre vela y linterna (si hubiere)
+                /*
                 if ((personaje.getItemEnMano() is Linterna || personaje.getItemEnMano() is ItemVacioDefault) && personaje.objetosInteractuables.Any(objeto => objeto is Vela))
                 {
                     personaje.getItemEnMano().Usar(personaje);
@@ -409,8 +467,9 @@ namespace TGC.Group.Model
                         var linterna = (Linterna)personaje.objetosInteractuables.Find(objeto => objeto is Linterna);
                         personaje.setItemEnMano(linterna);
                     }
-                }
+                } */
             }
+                
         }
 
         private void InteraccionPersonajeYMesh()
@@ -492,6 +551,8 @@ namespace TGC.Group.Model
 
         private void InteraccionMonster()
         {
+
+
             if (!personaje.tieneLuz && !personaje.estoyEscondido && personaje.tiempoSinLuz > GameModel.TiempoSinAdvertencia)
             {
                 
@@ -499,6 +560,10 @@ namespace TGC.Group.Model
                 Monster unBicho;
                 if (personaje.tiempoSinLuz == GameModel.TiempoDeAdvertencia)
                 {
+
+                   
+                    effectPosProcesado.Technique = "PostProcessMonster";
+
                     unBicho = new Monster();
                     var posicion = personaje.puntoDemira(personaje.anguloAbsolutoEnY, personaje.anguloAbsolutoEnX);
                     var nuevaPosicion = new TGCVector3(posicion.X, -350, posicion.Z);
@@ -521,14 +586,19 @@ namespace TGC.Group.Model
                     monster = unBicho;
                     iluminables.Add(unBicho.ghost);
                     monster.reproducirSonidoRandom();
-                                   
+                    estatica.escucharSonidoActual(true);
+
+
+
 
                 }
-
                 
-
                 if (personaje.tiempoSinLuz == GameModel.TiempoDeGameOver)
                 {
+                    perdi = true;
+                    tiempoDeRotacion = 0;
+
+
                     monster.DisposeMonster();
                     //El monster aparece detrás del personaje
                     unBicho = new Monster();
@@ -546,11 +616,18 @@ namespace TGC.Group.Model
                     var newTarget = new TGCVector3(nuevaPosicion.X, nuevaPosicion.Y + 350, nuevaPosicion.Z);
                     personaje.SetCamera(personaje.eye, newTarget);
                     monster.ReproducirSonidoGameOver();
+                    //personaje.GameOver(this);
+                }
+
+                if (tiempoDeRotacion>6 && personaje.tiempoSinLuz > GameModel.TiempoDeGameOver)
+                {
                     personaje.GameOver(this);
-                }     
-                
+                }
+
+                tiempoDeRotacion += ElapsedTime;
             }
         }
+
 
         private double DistanciaA(IInteractuable mesh)
         {
@@ -560,7 +637,7 @@ namespace TGC.Group.Model
             
         }
 
-        private double DistanciaA2(TgcMesh mesh)
+        public double DistanciaA2(TgcMesh mesh)
         {
             TGCVector3 vector = personaje.getPosition() - mesh.BoundingBox.PMin;
 
@@ -571,7 +648,6 @@ namespace TGC.Group.Model
         private void updateLighting()
         {
             Microsoft.DirectX.Direct3D.Effect currentShader;
-            TgcMesh unPoste;
 
             //Con luz: Cambiar el shader actual por el shader default que trae el framework para iluminacion dinamica con PointLight
             if (personaje.tieneLuz)
@@ -584,43 +660,56 @@ namespace TGC.Group.Model
                 currentShader = TGCShaders.Instance.TgcMeshPointLightShader;
             }
 
-            //Aplicar a cada mesh el shader actual
-            foreach (TgcMesh mesh in iluminables)
+            if (personaje.estoyAdentro)
             {
-                mesh.Effect = currentShader;
-                mesh.Technique = TGCShaders.Instance.GetTGCMeshTechnique(mesh.RenderType);
+                currentShader = TGCShaders.Instance.LoadEffect(ShadersDir + "ShaderIndoor.fx");
+            }
 
-                // Estos son paramentros del current shader, si cambias el shader chequear los parametros o rompe
-                mesh.Effect.SetValue("materialEmissiveColor", ColorValue.FromColor(Color.Black));
-                mesh.Effect.SetValue("materialAmbientColor", ColorValue.FromColor(Color.White));
-                mesh.Effect.SetValue("materialDiffuseColor", ColorValue.FromColor(Color.White));
-                mesh.Effect.SetValue("materialSpecularColor", ColorValue.FromColor(Color.White));
-                mesh.Effect.SetValue("materialSpecularExp", 9f);
-                mesh.Effect.SetValue("eyePosition", TGCVector3.TGCVector3ToFloat4Array(personaje.eye));
-                mesh.Effect.SetValue("lightAttenuation", personaje.itemEnMano.getValorAtenuacion());
+            var iluminablesFiltrado = iluminables.FindAll(mesh => TgcCollisionUtils.classifyFrustumAABB(this.Frustum, mesh.BoundingBox) != TgcCollisionUtils.FrustumResult.OUTSIDE);
+
+            //Aplicar a cada mesh el shader actual
+            foreach (TgcMesh mesh in iluminablesFiltrado)
+            {
+                this.AplicarShader(mesh,currentShader);
+            }
+        }
+
+        private void AplicarShader(TgcMesh mesh, Microsoft.DirectX.Direct3D.Effect currentShader)
+        {
+            TgcMesh unPoste;
+            mesh.Effect = currentShader;
+            mesh.Technique = TGCShaders.Instance.GetTGCMeshTechnique(mesh.RenderType);
+
+            // Estos son paramentros del current shader, si cambias el shader chequear los parametros o rompe
+            mesh.Effect.SetValue("materialEmissiveColor", ColorValue.FromColor(Color.Black));
+            mesh.Effect.SetValue("materialAmbientColor", ColorValue.FromColor(Color.White));
+            mesh.Effect.SetValue("materialDiffuseColor", ColorValue.FromColor(Color.White));
+            mesh.Effect.SetValue("materialSpecularColor", ColorValue.FromColor(Color.White));
+            mesh.Effect.SetValue("materialSpecularExp", 9f);
+            mesh.Effect.SetValue("eyePosition", TGCVector3.TGCVector3ToFloat4Array(personaje.eye));
+            mesh.Effect.SetValue("lightAttenuation", personaje.itemEnMano.getValorAtenuacion());
+            mesh.Effect.SetValue("lightColor", ColorValue.FromColor(Color.White));
+
+            unPoste = escenario.listaDePostes.OrderBy(poste => this.DistanciaA2(poste)).First();
+            if (!personaje.tieneLuz && DistanciaA2(unPoste) < 2000)
+            {
+                //Se prende el farol mas cercano
                 mesh.Effect.SetValue("lightColor", ColorValue.FromColor(Color.White));
-
-                unPoste = escenario.listaDePostes.OrderBy(poste => this.DistanciaA2(poste)).First();
-                if (!personaje.tieneLuz && DistanciaA2(unPoste) < 2000)
+                mesh.Effect.SetValue("lightIntensity", 50f);
+                mesh.Effect.SetValue("lightPosition", TGCVector3.TGCVector3ToFloat4Array(unPoste.BoundingBox.PMin));
+            }
+            else
+            {
+                if (personaje.tieneLuz)
                 {
-                    //Se prende el farol mas cercano
-                    mesh.Effect.SetValue("lightColor", ColorValue.FromColor(Color.White));
-                    mesh.Effect.SetValue("lightIntensity", 50f);
-                    mesh.Effect.SetValue("lightPosition", TGCVector3.TGCVector3ToFloat4Array(unPoste.BoundingBox.PMin));
+                    this.AplicarShaderSpotLight(mesh);
                 }
                 else
                 {
-                    if (personaje.tieneLuz)
-                    {
-                        this.AplicarShaderSpotLight(mesh);
-                    }
-                    else
-                    {
-                        mesh.Effect.SetValue("lightIntensity", 50f);
-                        mesh.Effect.SetValue("lightPosition", TGCVector3.TGCVector3ToFloat4Array(personaje.getPosition()));
-                    }
-                   
+                    mesh.Effect.SetValue("lightIntensity", 50f);
+                    mesh.Effect.SetValue("lightPosition", TGCVector3.TGCVector3ToFloat4Array(personaje.getPosition()));
                 }
+
             }
         }
 
@@ -646,43 +735,70 @@ namespace TGC.Group.Model
         public override void Render()
         {
             //Inicio el render de la escena, para ejemplos simples. Cuando tenemos postprocesado o shaders es mejor realizar las operaciones según nuestra conveniencia.
-            PreRender();
+            //PreRender();
+                        
+            var device = D3DDevice.Instance.Device;
+
+            // Capturamos las texturas de pantalla
+            Surface screenRenderTarget = device.GetRenderTarget(0);
+            Surface screenDepthSurface = device.DepthStencilSurface;
+
+            // Especificamos que vamos a dibujar en una textura
+            Surface surface = renderTarget1.GetSurfaceLevel(0);
+            device.SetRenderTarget(0, surface);
+            device.DepthStencilSurface = depthStencil;
+
+            // Captura de escena en render target
+            device.Clear(ClearFlags.Target | ClearFlags.ZBuffer, Color.CornflowerBlue, 1.0f, 0);
+            device.BeginScene();
+
+            /**Render**/
 
             if (!estoyJugando)
             {
                 menu.renderSprite();
-                
             }
             else
             {
-                this.updateLighting();
-                
-
-                //Pone el fondo negro en vez del azul feo ese
-                D3DDevice.Instance.Device.Clear(ClearFlags.Target | ClearFlags.ZBuffer, Color.Black, 1.0f, 0);
-
-                //Frustum Culling -> OPCION 1
-                var meshesQueChocanConFrustrum = escenario.tgcScene.Meshes.FindAll(mesh => TgcCollisionUtils.classifyFrustumAABB(this.Frustum, mesh.BoundingBox) != TgcCollisionUtils.FrustumResult.OUTSIDE);
-                meshesQueChocanConFrustrum.ForEach(mesh => mesh.Render());
-
-                if (DistanciaA2(monster.ghost) < 5000)
-                {
-                    monster.RenderMonster();
-                }
-                //Render de BoundingBox, muy útil para debug de colisiones.
-                if (BoundingBox)
-                {
-                    Box.BoundingBox.Render();
-                    tgcScene.Meshes.ForEach(mesh => mesh.BoundingBox.Render());
-                    fondo.BoundingBox.Render();
-                }
-
-                nota.renderSprite();
-                vidaUtilVela.renderSprite();
-                velita.renderSprite();
-                vidaUtilLinterna.renderSprite();
-                linternita.renderSprite();
+                GameRender();
             }
+
+            device.EndScene();
+            // Fin de escena
+
+
+            // Especificamos que vamos a dibujar en pantalla
+            device.SetRenderTarget(0, screenRenderTarget);
+            device.DepthStencilSurface = screenDepthSurface;
+
+            // Dibujado de textura en full screen quad
+            device.Clear(ClearFlags.Target | ClearFlags.ZBuffer, Color.Black, 1.0f, 0);
+            device.BeginScene();
+
+            nota.renderSprite();
+            vidaUtilVela.renderSprite();
+            velita.renderSprite();
+            vidaUtilLinterna.renderSprite();
+            linternita.renderSprite();
+
+            device.VertexFormat = CustomVertex.PositionTextured.Format;
+            device.SetStreamSource(0, fullScreenQuad1, 0);
+            effectPosProcesado.SetValue("renderTarget", renderTarget1);
+
+            // Dibujamos el full screen quad
+            effectPosProcesado.Begin(FX.None);
+            effectPosProcesado.BeginPass(0);
+            device.DrawPrimitives(PrimitiveType.TriangleStrip, 0, 2);
+            effectPosProcesado.EndPass();
+            effectPosProcesado.End();
+
+            RenderFPS();
+            RenderAxis();
+            device.EndScene();
+
+            device.Present();
+
+            surface.Dispose();
 
             //Frustum Culling -> OPCION 2
             /*
@@ -703,7 +819,134 @@ namespace TGC.Group.Model
             //personaje.RenderPersonaje(ElapsedTime);
 
             //Finaliza el render y presenta en pantalla, al igual que el preRender se debe para casos puntuales es mejor utilizar a mano las operaciones de EndScene y PresentScene
-            PostRender();
+            //PostRender();
+        }
+
+        private void GameRender()
+        {
+
+            //RenderPantallaConMonsterCerca();
+            //this.updateLighting();
+            //sombras.renderSombras(personaje.getPosition(),personaje.getLookAt(), new TGCVector3(100, 10, -150));
+
+            //var sombrasFaroles = new Sombras(this);
+            TgcMesh unPoste = escenario.listaDePostes.OrderBy(poste => this.DistanciaA2(poste)).First();
+            if (!personaje.tieneLuz && DistanciaA2(unPoste) < 1000)
+            {
+                //Se prende el farol mas cercano
+                sombras.renderSombras(unPoste.BoundingBox.PMin, new TGCVector3(unPoste.BoundingBox.PMin.X, 15, unPoste.BoundingBox.PMin.Z), new TGCVector3(15, 380, 15));
+               
+            }
+            else
+            {
+                //01158354515 --> Numero de Marce
+                sombras.renderSombras(personaje.getPosition(), personaje.getLookAt(), new TGCVector3(100, 10, -150));
+                
+                System.Console.WriteLine("X = " + personaje.getLookAt().X);
+                System.Console.WriteLine("Y = " + personaje.getLookAt().Y);
+                System.Console.WriteLine("Z = " + personaje.getLookAt().Z);
+
+                System.Console.WriteLine("Xpos = " + personaje.getPosition().X);
+                System.Console.WriteLine("Ypos = " + personaje.getPosition().Y);
+                System.Console.WriteLine("Zpos = " + personaje.getPosition().Z);
+            }
+            
+            //Frustum Culling -> OPCION 1
+            //var meshesQueChocanConFrustrum = escenario.tgcScene.Meshes.FindAll(mesh => TgcCollisionUtils.classifyFrustumAABB(this.Frustum, mesh.BoundingBox) != TgcCollisionUtils.FrustumResult.OUTSIDE);
+            //meshesQueChocanConFrustrum.ForEach(mesh => mesh.Render());
+
+
+            if (DistanciaA2(monster.ghost) < 5000)
+            {
+                monster.RenderMonster();
+            }
+            //Render de BoundingBox, muy útil para debug de colisiones.
+            /*if (BoundingBox)
+            {
+                Box.BoundingBox.Render();
+                tgcScene.Meshes.ForEach(mesh => mesh.BoundingBox.Render());
+                fondo.BoundingBox.Render();
+            }*/
+            /*
+            nota.renderSprite();
+            vidaUtilVela.renderSprite();
+            velita.renderSprite();
+            vidaUtilLinterna.renderSprite();
+            linternita.renderSprite();
+            */
+        }
+        
+
+        private VertexBuffer fullScreenQuad1;
+        private void CreateFullScreenQuad()
+        {
+            var d3dDevice = D3DDevice.Instance.Device;
+
+            // Creamos un FullScreen Quad
+            CustomVertex.PositionTextured[] vertices =
+            {
+                new CustomVertex.PositionTextured(-1, 1, 1, 0, 0),
+                new CustomVertex.PositionTextured(1, 1, 1, 1, 0),
+                new CustomVertex.PositionTextured(-1, -1, 1, 0, 1),
+                new CustomVertex.PositionTextured(1, -1, 1, 1, 1)
+            };
+
+            // Vertex buffer de los triangulos
+            fullScreenQuad1 = new VertexBuffer(typeof(CustomVertex.PositionTextured), 4, d3dDevice, Usage.Dynamic | Usage.WriteOnly, CustomVertex.PositionTextured.Format, Pool.Default);
+            fullScreenQuad1.SetData(vertices, 0, LockFlags.None);
+
+        }
+
+        private Texture renderTarget1;
+        private void CreateRenderTarget()
+        {
+            var d3dDevice = D3DDevice.Instance.Device;
+
+            depthStencil = d3dDevice.CreateDepthStencilSurface(d3dDevice.PresentationParameters.BackBufferWidth, d3dDevice.PresentationParameters.BackBufferHeight, DepthFormat.D24S8, MultiSampleType.None, 0, true);
+
+            renderTarget1 = new Texture(d3dDevice, d3dDevice.PresentationParameters.BackBufferWidth, d3dDevice.PresentationParameters.BackBufferHeight, 1, Usage.RenderTarget, Format.X8R8G8B8, Pool.Default);
+        }
+        /*
+        private void CreateFullScreenQuad()
+        {
+            var d3dDevice = D3DDevice.Instance.Device;
+
+            // Creamos un FullScreen Quad
+            CustomVertex.PositionTextured[] vertices =
+            {
+                new CustomVertex.PositionTextured(-1, 1, 1, 0, 0),
+                new CustomVertex.PositionTextured(1, 1, 1, 1, 0),
+                new CustomVertex.PositionTextured(-1, -1, 1, 0, 1),
+                new CustomVertex.PositionTextured(1, -1, 1, 1, 1)
+            };
+
+            // Vertex buffer de los triangulos
+            //fullScreenQuad = new VertexBuffer(typeof(CustomVertex.PositionTextured), 4, d3dDevice, Usage.Dynamic | Usage.WriteOnly, CustomVertex.PositionTextured.Format, Pool.Default);
+            //fullScreenQuad.SetData(vertices, 0, LockFlags.None);
+        }
+
+        private void CreateRenderTarget()
+        {
+            var d3dDevice = D3DDevice.Instance.Device;
+
+            depthStencil = d3dDevice.CreateDepthStencilSurface(d3dDevice.PresentationParameters.BackBufferWidth, d3dDevice.PresentationParameters.BackBufferHeight, DepthFormat.D24S8, MultiSampleType.None, 0, true);
+
+            renderTarget = new Texture(d3dDevice, d3dDevice.PresentationParameters.BackBufferWidth, d3dDevice.PresentationParameters.BackBufferHeight, 1, Usage.RenderTarget, Format.X8R8G8B8, Pool.Default);
+        }*/
+
+        
+        
+
+
+
+
+        private void RenderPantallaConMonsterCerca()
+        {   
+            //esta condicion es para que pueda ver al monster cuando me atrapa y tambien para que se aplique cuando aparece antes
+            if (GameModel.TiempoDeAdvertencia < personaje.tiempoSinLuz && GameModel.TiempoDeGameOver < personaje.tiempoSinLuz)
+            {
+                effectPosProcesado.Technique = "PostProcessMonster";
+            }
         }
 
         /// <summary>
@@ -715,16 +958,16 @@ namespace TGC.Group.Model
         {
             escenario.DisposeEscenario();
             //personaje.DisposePersonaje();
-            monster.DisposeMonster();
-            
+            monster.DisposeMonster();     
             menu.disposeSprite();
             nota.disposeSprite();
             vidaUtilVela.disposeSprite();
             velita.disposeSprite();
             vidaUtilLinterna.disposeSprite();
             linternita.disposeSprite();
-
             paredInvisible.DisposePared();
+            //fullScreenQuad.dispose();
+            this.depthStencil.Dispose();
         }
 
     }

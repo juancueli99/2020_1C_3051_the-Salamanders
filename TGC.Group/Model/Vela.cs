@@ -31,14 +31,14 @@ namespace TGC.Group.Model
         }
         public void Interactuar(Personaje personaje)
         {
-            if (personaje.objetosInteractuables.Any(objeto => objeto is Vela))
+            if (Inventario.inventario.Any(objeto => objeto is Vela))
             {
-                var vela = (Vela)personaje.objetosInteractuables.Find(objeto => objeto is Vela);
+                var vela = (Vela)Inventario.inventario.Find(objeto => objeto is Vela);
                 vela.AumentarDuracion();
             }
             else
             {
-                personaje.objetosInteractuables.Add(this);
+                Inventario.inventario.Add(this);
             }
             eliminarMesh();
         }
@@ -50,7 +50,21 @@ namespace TGC.Group.Model
             mesh.updateBoundingBox();
             mesh.UpdateMeshTransform();
         }
-        public void Usar(Personaje personaje) { }
+        public void Usar(Personaje personaje)
+        {
+            if (personaje.tieneLuz)
+            {
+                this.Apagar(personaje);
+                
+
+            }
+            else
+            {
+                this.Encender(personaje);
+                
+            }
+        }
+    
 
         public void Equipar(Personaje personaje)
         {
@@ -68,10 +82,19 @@ namespace TGC.Group.Model
             this.ActualizarHUD();
         }
 
-        public void DisminuirDuracion()
+        public void DisminuirDuracion(Personaje personaje)
         {
-            this.duracion -= 1;
-            this.ActualizarHUD();
+            if(duracion > 0)
+            {
+                this.duracion -= 1;
+                this.ActualizarHUD();
+            }
+            else
+            {
+                gameModel.effectPosProcesado.Technique = "PostProcessDefault";
+                this.FinDuracion(personaje);
+            }
+            
         }
 
         public void ActualizarHUD()
@@ -81,7 +104,7 @@ namespace TGC.Group.Model
         }
         public void DesecharVela(Personaje personaje)
         {
-            personaje.objetosInteractuables.Remove(this);
+            Inventario.inventario.Remove(this);
             personaje.itemEnMano = (IEquipable)personaje.objetosInteractuables.Find(itemDefault => itemDefault is ItemVacioDefault);
         }
 
@@ -102,7 +125,28 @@ namespace TGC.Group.Model
 
         public Color getLuzColor()
         {
-            return Color.DarkOrange;
+            //Hay que ir buscando un buen color
+            //return Color.FromArgb(194,91,41);
+            return Color.FromArgb(32, 22, 13);
+        }
+
+        public void Apagar(Personaje personaje)
+        {
+            gameModel.effectPosProcesado.Technique = "PostProcessDefault";
+            this.estaEncendida = false;
+            personaje.tieneLuz = false;
+
+        }
+
+        public void Encender(Personaje personaje)
+        {
+            gameModel.effectPosProcesado.Technique = "PostProcessVela";
+            this.estaEncendida = true;
+            personaje.tieneLuz = true;
+            gameModel.estatica.DetenerSonido();
+            gameModel.humanHeartbeat.escucharSonidoActual(false);
+            gameModel.respiracion.escucharSonidoActual(false);
+
         }
     }
 }

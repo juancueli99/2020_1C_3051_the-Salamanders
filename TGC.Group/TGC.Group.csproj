@@ -141,6 +141,9 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Game.settings</DependentUpon>
     </Compile>
+    <Compile Include="Model\Inventario.cs" />
+    <Compile Include="Model\Maleta.cs" />
+    <Compile Include="Model\Sombras.cs" />
     <Compile Include="Model\Sonido.cs" />
     <Compile Include="Model\ConfiguradorMonstruo.cs" />
     <Compile Include="Model\CustomBitmap.cs" />
@@ -165,6 +168,7 @@
     <Compile Include="Model\Puerta.cs" />
     <Compile Include="Model\SpotLight.cs" />
     <Compile Include="Model\Vela.cs" />
+    <Compile Include="Model\VisionNocturna.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Form\ControlsUserControl.resx">
@@ -618,6 +622,7 @@
     <Content Include="Media\Sonidos\AllAroundYou.wav" />
     <Content Include="Media\Sonidos\AreYouScared.wav" />
     <Content Include="Media\Sonidos\auto, abrir puerta.wav" />
+    <Content Include="Media\Sonidos\Breathing Vent-SoundBible.com-18702822.wav" />
     <Content Include="Media\Sonidos\búho, grito.wav" />
     <Content Include="Media\Sonidos\cadena arrastrada.wav" />
     <Content Include="Media\Sonidos\cadena, agitar.wav" />
@@ -655,6 +660,7 @@
     <Content Include="Media\Sonidos\Moster1Remastered.wav" />
     <Content Include="Media\Sonidos\Movie Freaky Scene-SoundBible.com-498428129.wav" />
     <Content Include="Media\Sonidos\nocturno, continuo.wav" />
+    <Content Include="Media\Sonidos\Page_Turn-Mark_DiAngelo-1304638748.wav" />
     <Content Include="Media\Sonidos\pisada azulejo dcha.wav" />
     <Content Include="Media\Sonidos\pisada azulejo izda.wav" />
     <Content Include="Media\Sonidos\pisada hierba dcha.wav" />
@@ -662,6 +668,7 @@
     <Content Include="Media\Sonidos\puerta ruidosa, abrir.wav" />
     <Content Include="Media\Sonidos\puerta, abrir.wav" />
     <Content Include="Media\Sonidos\puerta, cerrar.wav" />
+    <Content Include="Media\Sonidos\Radio Static-SoundBible.com-629277574.wav" />
     <Content Include="Media\Sonidos\ramita, partir.wav" />
     <Content Include="Media\Sonidos\risa infantil.wav" />
     <Content Include="Media\Sonidos\ráfaga ventosa.wav" />
@@ -827,7 +834,9 @@
     <None Include="Resources\ControlsMenu.jpg" />
     <Content Include="Media\YouSurvivedSprite2.jpg" />
     <Content Include="Shaders\IndicadorEscondite.fx" />
-    <Content Include="Shaders\LinternaShader.fx" />
+    <Content Include="Shaders\ShaderIndoor.fx" />
+    <Content Include="Shaders\PostProcesado.fx" />
+    <Content Include="Shaders\Sombras.fx" />
     <Content Include="Shaders\VelaShader.fx" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

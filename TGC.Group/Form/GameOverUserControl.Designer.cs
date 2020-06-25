@@ -32,7 +32,6 @@
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.returnButton = new System.Windows.Forms.Button();
             this.Pipe1 = new System.Windows.Forms.Label();
-            this.menuUserControl1 = new TGC.Group.Form.MenuUserControl();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -76,13 +75,6 @@
             this.Pipe1.Text = "|";
             this.Pipe1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // menuUserControl1
-            // 
-            this.menuUserControl1.Location = new System.Drawing.Point(0, 0);
-            this.menuUserControl1.Name = "menuUserControl1";
-            this.menuUserControl1.Size = new System.Drawing.Size(1370, 705);
-            this.menuUserControl1.TabIndex = 47;
-            // 
             // GameOverUserControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -90,7 +82,6 @@
             this.Controls.Add(this.returnButton);
             this.Controls.Add(this.Pipe1);
             this.Controls.Add(this.pictureBox1);
-            this.Controls.Add(this.menuUserControl1);
             this.Name = "GameOverUserControl";
             this.Size = new System.Drawing.Size(1370, 705);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
@@ -104,6 +95,5 @@
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Button returnButton;
         private System.Windows.Forms.Label Pipe1;
-        private MenuUserControl menuUserControl1;
     }
 }

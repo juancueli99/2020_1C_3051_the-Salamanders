@@ -17,9 +17,11 @@ namespace TGC.Group
     {
         public TgcMesh unEscondite;
         TGCVector3 posicionDeEntrada;
-        public Escondite(TgcMesh unBarril)
+        private GameModel gameModel;
+        public Escondite(TgcMesh unBarril, GameModel gameModel)
         {
             this.unEscondite = unBarril;
+            this.gameModel = gameModel;
         }
         
         public TGCVector3 getPosition()
@@ -58,9 +60,13 @@ namespace TGC.Group
         public void Entrar(Personaje personaje)
         {
             //Meter al personaje en el barril
+            gameModel.effectPosProcesado.Technique = "PostProcessDefault";
             posicionDeEntrada = new TGCVector3(personaje.getPosition());
             TGCVector3 posicion = new TGCVector3(getPosition().X - 150, personaje.Position.Y, getPosition().Z - 150);
             personaje.TeletrasportarmeA(posicion);
+            gameModel.estatica.DetenerSonido();
+            gameModel.humanHeartbeat.escucharSonidoActual(false);
+            gameModel.respiracion.escucharSonidoActual(false);
         }
 
         public void updatearMiPropiaLuz(Escenario escenario, Personaje personaje)

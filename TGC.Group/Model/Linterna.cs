@@ -36,9 +36,9 @@ namespace TGC.Group.Model
 
         public void Interactuar(Personaje personaje)
         {
-            if (!personaje.objetosInteractuables.Any(objeto => objeto is Linterna))
+            if (!Inventario.inventario.Any(objeto => objeto is Linterna))
             {
-                personaje.objetosInteractuables.Add(this);
+                Inventario.inventario.Add(this);
             }
             eliminarMesh();
         }
@@ -58,13 +58,13 @@ namespace TGC.Group.Model
         {
             if (personaje.tieneLuz)
             {
-                this.ApagarLinterna(personaje);
-                personaje.tieneLuz = false;
+                this.Apagar(personaje);
+                
             }
             else
             {
-                this.EncenderLinterna();
-                personaje.tieneLuz = true;
+                this.Encender(personaje);
+                
             }
             this.sonidoInterruptor.escucharSonidoActual(false);
         }
@@ -76,18 +76,15 @@ namespace TGC.Group.Model
 
         public void FinDuracion(Personaje personaje)
         {
-            this.ApagarLinterna(personaje);
+            this.Apagar(personaje);
         }
 
-        public void EncenderLinterna()
+        public void Apagar(Personaje personaje)
         {
-            this.estaEncendida = true;
-        }
-
-        public void ApagarLinterna(Personaje personaje)
-        {
+            gameModel.effectPosProcesado.Technique = "PostProcessDefault";
             this.estaEncendida = false;
-            personaje.itemEnMano = (IEquipable)personaje.objetosInteractuables.Find(itemDefault => itemDefault is ItemVacioDefault);
+            personaje.tieneLuz = false;
+            //personaje.itemEnMano = (IEquipable)personaje.objetosInteractuables.Find(itemDefault => itemDefault is ItemVacioDefault);
         }
 
         public void Recargar()
@@ -96,12 +93,19 @@ namespace TGC.Group.Model
             this.ActualizarHUD();
         }
 
-        public void DisminuirDuracion()
+        public void DisminuirDuracion(Personaje personaje)
         {
-            if (this.estaEncendida)
+            if(this.duracion > 0)
             {
                 this.duracion -= 1;
+                Console.WriteLine("Estoy disminuyendo");
                 this.ActualizarHUD();
+            }
+            else
+            {
+                gameModel.effectPosProcesado.Technique = "PostProcessDefault";
+                this.FinDuracion(personaje);
+                Console.WriteLine("ME APAGO");
             }
         }
 
@@ -129,6 +133,17 @@ namespace TGC.Group.Model
         public Color getLuzColor()
         {
             return Color.LightYellow;
+        }
+
+        public void Encender(Personaje personaje)
+        {
+            //gameModel.effectPosProcesado.Technique = "PostProcessDefault";
+            gameModel.effectPosProcesado.Technique = "PostProcessLinterna";
+            this.estaEncendida = true;
+            personaje.tieneLuz = true;
+            gameModel.estatica.DetenerSonido();
+            gameModel.humanHeartbeat.escucharSonidoActual(false);
+            gameModel.respiracion.escucharSonidoActual(false);
         }
     }
 }
