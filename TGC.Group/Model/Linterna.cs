@@ -17,7 +17,7 @@ namespace TGC.Group.Model
         TgcMesh mesh2;
         //12000 = 120 segundos
         public float duracionMax = 12000;
-        public float duracion = 12000;
+        public float duracion = 0;
         public bool estaEncendida = false;
         Sonido sonidoInterruptor;
 
@@ -142,8 +142,14 @@ namespace TGC.Group.Model
             this.estaEncendida = true;
             personaje.tieneLuz = true;
             gameModel.estatica.DetenerSonido();
-            gameModel.humanHeartbeat.escucharSonidoActual(false);
-            gameModel.respiracion.escucharSonidoActual(false);
+
+            if (personaje.viAlMonster)
+            {
+                gameModel.humanHeartbeat.escucharSonidoActual(false);
+                gameModel.respiracion.escucharSonidoActual(false);
+                personaje.viAlMonster = false;
+            }
+
         }
     }
 }

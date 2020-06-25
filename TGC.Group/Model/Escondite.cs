@@ -65,8 +65,13 @@ namespace TGC.Group
             TGCVector3 posicion = new TGCVector3(getPosition().X - 150, personaje.Position.Y, getPosition().Z - 150);
             personaje.TeletrasportarmeA(posicion);
             gameModel.estatica.DetenerSonido();
-            gameModel.humanHeartbeat.escucharSonidoActual(false);
-            gameModel.respiracion.escucharSonidoActual(false);
+
+            if (personaje.viAlMonster)
+            {
+                gameModel.humanHeartbeat.escucharSonidoActual(false);
+                gameModel.respiracion.escucharSonidoActual(false);
+                personaje.viAlMonster = false;
+            }
         }
 
         public void updatearMiPropiaLuz(Escenario escenario, Personaje personaje)

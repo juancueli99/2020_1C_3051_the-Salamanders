@@ -543,6 +543,7 @@ namespace TGC.Group.Model
                     //monster.DisposeMonster();
                     monster.reproducirSonidoRandom();
                     estatica.escucharSonidoActual(true);
+                    personaje.viAlMonster = true;
 
                 }
 

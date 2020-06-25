@@ -144,8 +144,13 @@ namespace TGC.Group.Model
             this.estaEncendida = true;
             personaje.tieneLuz = true;
             gameModel.estatica.DetenerSonido();
-            gameModel.humanHeartbeat.escucharSonidoActual(false);
-            gameModel.respiracion.escucharSonidoActual(false);
+
+            if (personaje.viAlMonster)
+            {
+                gameModel.humanHeartbeat.escucharSonidoActual(false);
+                gameModel.respiracion.escucharSonidoActual(false);
+                personaje.viAlMonster = false;
+            }
 
         }
     }

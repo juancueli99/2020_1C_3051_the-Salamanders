@@ -33,6 +33,7 @@ namespace TGC.Group.Model
         public TgcMesh meshPersonaje;
         public IEquipable itemEnMano;
         public bool chocandoConEscalera = false;
+        public bool viAlMonster = false;
 
         internal void setearSonidosOutdoor()
         {
