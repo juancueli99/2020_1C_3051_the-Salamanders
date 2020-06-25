@@ -18,7 +18,7 @@ using TGC.Core.BoundingVolumes;
 
 namespace TGC.Group.Model
 {
-    public class Sombras
+    public class Sombras : ITecnicaRender
     {
         private readonly float far_plane = 3000f;
         private readonly float near_plane = 2f;
@@ -48,15 +48,7 @@ namespace TGC.Group.Model
             effect = TGCShaders.Instance.LoadEffect(MyShaderDir + "Sombras.fx");
 
             // le asigno el efecto a las mallas
-            var meshesQueChocanConFrustrum = gameModel.escenario.tgcScene.Meshes.FindAll
-                (mesh => TgcCollisionUtils.classifyFrustumAABB(gameModel.Frustum, mesh.BoundingBox) !=
-                TgcCollisionUtils.FrustumResult.OUTSIDE);
-            foreach (var T in meshesQueChocanConFrustrum)
-            {
-                T.Scale = new TGCVector3(1f, 1f, 1f);
-                T.Effect = effect;
-            }
-
+            
             // Creo el shadowmap.
             // Format.R32F
             // Format.X8R8G8B8
@@ -113,7 +105,7 @@ namespace TGC.Group.Model
 
             RenderScene2(false);
 
-            arrow.Render();
+            //arrow.Render();
             //D3DDevice.Instance.Device.EndScene();
             //D3DDevice.Instance.Device.Present();
         }
@@ -205,6 +197,93 @@ namespace TGC.Group.Model
                 T.Render();
             }
 
+        }
+
+
+        public void SetearTecnica()
+        {
+            var meshesQueChocanConFrustrum = gameModel.escenario.tgcScene.Meshes.FindAll
+                (mesh => TgcCollisionUtils.classifyFrustumAABB(gameModel.Frustum, mesh.BoundingBox) !=
+                TgcCollisionUtils.FrustumResult.OUTSIDE);
+            foreach (var T in meshesQueChocanConFrustrum)
+            {
+                T.Scale = new TGCVector3(1f, 1f, 1f);
+                T.Effect = effect;
+            }
+        }
+
+        public void AplicarRender()
+        {
+            //Inicio el render de la escena, para ejemplos simples. 
+            //Cuando tenemos postprocesado o shaders es mejor realizar las operaciones según nuestra conveniencia.
+            //PreRender();
+
+            var device = D3DDevice.Instance.Device;
+
+            // Capturamos las texturas de pantalla
+            Surface screenRenderTarget = device.GetRenderTarget(0);
+            Surface screenDepthSurface = device.DepthStencilSurface;
+
+            // Especificamos que vamos a dibujar en una textura
+            Surface surface = gameModel.renderTarget1.GetSurfaceLevel(0);
+            device.SetRenderTarget(0, surface);
+            device.DepthStencilSurface = gameModel.depthStencil;
+
+            // Captura de escena en render target
+            device.Clear(ClearFlags.Target | ClearFlags.ZBuffer, Color.CornflowerBlue, 1.0f, 0);
+            device.BeginScene();
+
+            //Render
+
+            if (!gameModel.estoyJugando)
+            {
+                gameModel.menu.renderSprite();
+            }
+            else
+            {
+                TgcMesh unPoste = gameModel.escenario.listaDePostes.OrderBy(poste => gameModel.DistanciaA2(poste)).First();
+                if (!gameModel.personaje.tieneLuz && gameModel.DistanciaA2(unPoste) < 1000)
+                {
+                    //Se prende el farol mas cercano
+                    this.renderSombras(unPoste.BoundingBox.PMin, new TGCVector3(unPoste.BoundingBox.PMin.X, 15, unPoste.BoundingBox.PMin.Z), new TGCVector3(15, 380, 15));
+
+                }
+                else
+                {
+                    //01158354515 --> Numero de Marce
+                    this.renderSombras(gameModel.personaje.getPosition(), gameModel.personaje.getLookAt(), new TGCVector3(100, 10, -150));
+                    //monsterBlur.RenderMonsterBlur();
+                }
+            }
+            device.EndScene();
+            // Fin de escena
+
+
+            // Especificamos que vamos a dibujar en pantalla
+            device.SetRenderTarget(0, screenRenderTarget);
+            device.DepthStencilSurface = screenDepthSurface;
+
+            // Dibujado de textura en full screen quad
+            device.Clear(ClearFlags.Target | ClearFlags.ZBuffer, Color.Black, 1.0f, 0);
+            device.BeginScene();
+
+            gameModel.quads.FindAll(unQuad => unQuad.loEstoyUsando).ForEach(unQuad => gameModel.RenderQuad(unQuad));
+
+            //this.OurFullScreenQuad(device, effectPosProcesado);
+
+            gameModel.RenderFps();
+
+            gameModel.nota.renderSprite();
+            gameModel.vidaUtilVela.renderSprite();
+            gameModel.velita.renderSprite();
+            gameModel.vidaUtilLinterna.renderSprite();
+            gameModel.linternita.renderSprite();
+            //RenderAxis();
+            device.EndScene();
+
+            device.Present();
+
+            surface.Dispose();
         }
     }
 }

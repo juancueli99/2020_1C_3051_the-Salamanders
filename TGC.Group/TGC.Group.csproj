@@ -141,8 +141,11 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Game.settings</DependentUpon>
     </Compile>
+    <Compile Include="Model\FullscreenQuad.cs" />
     <Compile Include="Model\Inventario.cs" />
+    <Compile Include="Model\ITecnicaRender.cs" />
     <Compile Include="Model\Maleta.cs" />
+    <Compile Include="Model\MonsterBlur.cs" />
     <Compile Include="Model\Sombras.cs" />
     <Compile Include="Model\Sonido.cs" />
     <Compile Include="Model\ConfiguradorMonstruo.cs" />
@@ -834,6 +837,7 @@
     <None Include="Resources\ControlsMenu.jpg" />
     <Content Include="Media\YouSurvivedSprite2.jpg" />
     <Content Include="Shaders\IndicadorEscondite.fx" />
+    <Content Include="Shaders\MonsterMotionBlur.fx" />
     <Content Include="Shaders\ShaderIndoor.fx" />
     <Content Include="Shaders\PostProcesado.fx" />
     <Content Include="Shaders\Sombras.fx" />

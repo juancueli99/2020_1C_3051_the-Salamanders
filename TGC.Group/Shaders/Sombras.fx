@@ -137,39 +137,10 @@ float4 PixScene(float2 Tex : TEXCOORD0,
     float4 K = 0.0;
     if (cono > 0.7)
     {
-		// coordenada de textura CT
         float2 CT = 0.5 * vPosLight.xy / vPosLight.w + float2(0.5, 0.5);
         CT.y = 1.0f - CT.y;
 
-		// sin ningun aa. conviene con smap size >= 512
         float I = (tex2D(g_samShadow, CT) + EPSILON < vPosLight.z / vPosLight.w) ? 0.0f : 1.0f;
-
-		// interpolacion standard bi-lineal del shadow map
-		// CT va de 0 a 1, lo multiplico x el tamaño de la textura
-		// la parte fraccionaria indica cuanto tengo que tomar del vecino
-		// conviene cuando el smap size = 256
-		// leo 4 valores
-		/*float2 vecino = frac( CT*SMAP_SIZE);
-		float prof = vPosLight.z / vPosLight.w;
-		float s0 = (tex2D( g_samShadow, float2(CT)) + EPSILON < prof)? 0.0f: 1.0f;
-		float s1 = (tex2D( g_samShadow, float2(CT) + float2(1.0/SMAP_SIZE,0))
-							+ EPSILON < prof)? 0.0f: 1.0f;
-		float s2 = (tex2D( g_samShadow, float2(CT) + float2(0,1.0/SMAP_SIZE))
-							+ EPSILON < prof)? 0.0f: 1.0f;
-		float s3 = (tex2D( g_samShadow, float2(CT) + float2(1.0/SMAP_SIZE,1.0/SMAP_SIZE))
-							+ EPSILON < prof)? 0.0f: 1.0f;
-		float I = lerp( lerp( s0, s1, vecino.x ),lerp( s2, s3, vecino.x ),vecino.y);
-		*/
-
-		/*
-		// anti-aliasing del shadow map
-		float I = 0;
-		float r = 2;
-		for(int i=-r;i<=r;++i)
-			for(int j=-r;j<=r;++j)
-				I += (tex2D( g_samShadow, CT + float2((float)i/SMAP_SIZE, (float)j/SMAP_SIZE) ) + EPSILON < vPosLight.z / vPosLight.w)? 0.0f: 1.0f;
-		I /= (2*r+1)*(2*r+1);
-		*/
 
         if (cono < 0.8)
             I *= 1 - (0.8 - cono) * 10;
@@ -179,14 +150,12 @@ float4 PixScene(float2 Tex : TEXCOORD0,
 
     float4 color_base = tex2D(diffuseMap, Tex);
     color_base.rgb *= 0.5 + 0.5 * K;
-    //return color_base;
     
     float startFogDistance = 1500;
     float endFogDistance = 3000;
     float4 ColorFog = float4(0.5, 0.5, 0.5, 1);
     
     float4 fvBaseColor = lerp(color_base, float4(0, 0, 0, 1), 0.6);
-    //float4 fvBaseColor = color_base;
     
     if (fvBaseColor.a < 0.9)
     {
@@ -203,7 +172,7 @@ float4 PixScene(float2 Tex : TEXCOORD0,
     }
     else
     {
-		// combino fog y textura
+		// Combino fog y textura
         float1 total = endFogDistance - startFogDistance;
         float1 resto = PosView.z - startFogDistance;
         float1 proporcion = resto / total;
