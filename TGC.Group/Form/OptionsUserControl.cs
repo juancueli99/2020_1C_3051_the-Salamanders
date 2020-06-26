@@ -47,10 +47,25 @@ namespace TGC.Group.Form
             returnButton.Parent = pictureBox1;
             returnButton.BackColor = Color.Transparent;
 
+            pictureAlien.Parent = pictureBox1;
+            pictureAlien.BackColor = Color.Transparent;
+
+            pictureGhost.Parent = pictureBox1;
+            pictureGhost.BackColor = Color.Transparent;
+
+            pictureSectarian.Parent = pictureBox1;
+            pictureSectarian.BackColor = Color.Transparent;
+
+            pictureAlien.Hide();
+            pictureGhost.Hide();
+            pictureSectarian.Hide();
         }
 
         private void returnButton_Click(object sender, EventArgs e)
         {
+            pictureGhost.Hide();
+            pictureSectarian.Hide();
+            pictureGhost.Hide();
             this.Hide();
         }
 
@@ -195,8 +210,10 @@ namespace TGC.Group.Form
         {
             //Guardar la opcion elegida
             GameModel.monstruoActual = monstruos.GHOST;//hay que cambiarle el nombre de ghost a Clown
+            pictureGhost.Hide();
+            pictureSectarian.Hide();
+            pictureGhost.Show();
             this.hideMonstersButtons();
-            
         }
 
         private void demonButton_Click(object sender, EventArgs e)
@@ -204,6 +221,9 @@ namespace TGC.Group.Form
             //Guardar la opcion elegida
 
             GameModel.monstruoActual = monstruos.SECTARIAN;//hay que cambiarle el nombre de demon a sectarian
+            pictureGhost.Hide();
+            pictureAlien.Hide();
+            pictureSectarian.Show();
             this.hideMonstersButtons();
         }
 
@@ -211,6 +231,9 @@ namespace TGC.Group.Form
         {
             //Guardar la opcion elegida
             GameModel.monstruoActual = monstruos.ALIEN;
+            pictureGhost.Hide();
+            pictureSectarian.Hide();
+            pictureAlien.Show();
             this.hideMonstersButtons();
         }
 

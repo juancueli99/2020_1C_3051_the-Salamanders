@@ -50,8 +50,14 @@
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.controlsButton = new System.Windows.Forms.Button();
             this.Pipe57 = new System.Windows.Forms.Label();
+            this.pictureAlien = new System.Windows.Forms.PictureBox();
+            this.pictureGhost = new System.Windows.Forms.PictureBox();
+            this.pictureSectarian = new System.Windows.Forms.PictureBox();
             this.controlsUserControl1 = new TGC.Group.Form.ControlsUserControl();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureAlien)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureGhost)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureSectarian)).BeginInit();
             this.SuspendLayout();
             // 
             // returnButton
@@ -364,6 +370,39 @@
             this.Pipe57.Text = "|";
             this.Pipe57.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
+            // pictureAlien
+            // 
+            this.pictureAlien.BackColor = System.Drawing.Color.Transparent;
+            this.pictureAlien.Image = ((System.Drawing.Image)(resources.GetObject("pictureAlien.Image")));
+            this.pictureAlien.Location = new System.Drawing.Point(464, 185);
+            this.pictureAlien.Name = "pictureAlien";
+            this.pictureAlien.Size = new System.Drawing.Size(440, 421);
+            this.pictureAlien.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureAlien.TabIndex = 61;
+            this.pictureAlien.TabStop = false;
+            // 
+            // pictureGhost
+            // 
+            this.pictureGhost.BackColor = System.Drawing.Color.Transparent;
+            this.pictureGhost.Image = ((System.Drawing.Image)(resources.GetObject("pictureGhost.Image")));
+            this.pictureGhost.Location = new System.Drawing.Point(483, 172);
+            this.pictureGhost.Name = "pictureGhost";
+            this.pictureGhost.Size = new System.Drawing.Size(359, 541);
+            this.pictureGhost.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureGhost.TabIndex = 62;
+            this.pictureGhost.TabStop = false;
+            // 
+            // pictureSectarian
+            // 
+            this.pictureSectarian.BackColor = System.Drawing.Color.Transparent;
+            this.pictureSectarian.Image = ((System.Drawing.Image)(resources.GetObject("pictureSectarian.Image")));
+            this.pictureSectarian.Location = new System.Drawing.Point(542, 185);
+            this.pictureSectarian.Name = "pictureSectarian";
+            this.pictureSectarian.Size = new System.Drawing.Size(328, 494);
+            this.pictureSectarian.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureSectarian.TabIndex = 63;
+            this.pictureSectarian.TabStop = false;
+            // 
             // controlsUserControl1
             // 
             this.controlsUserControl1.Location = new System.Drawing.Point(0, 0);
@@ -375,6 +414,9 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.pictureSectarian);
+            this.Controls.Add(this.pictureGhost);
+            this.Controls.Add(this.pictureAlien);
             this.Controls.Add(this.controlsButton);
             this.Controls.Add(this.Pipe57);
             this.Controls.Add(this.returnButton);
@@ -400,6 +442,9 @@
             this.Name = "OptionsUserControl";
             this.Size = new System.Drawing.Size(1370, 705);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureAlien)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureGhost)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureSectarian)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -428,5 +473,8 @@
         private System.Windows.Forms.Button controlsButton;
         private System.Windows.Forms.Label Pipe57;
         private ControlsUserControl controlsUserControl1;
+        private System.Windows.Forms.PictureBox pictureAlien;
+        private System.Windows.Forms.PictureBox pictureGhost;
+        private System.Windows.Forms.PictureBox pictureSectarian;
     }
 }
