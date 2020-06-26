@@ -355,10 +355,7 @@ float4 PSTrailSectarian(VS_OUTPUT_TRAIL input) : COLOR0
 
 float4 PSTrailGhost(VS_OUTPUT_TRAIL input) : COLOR0
 {
-    
     float4 textureColor = tex2D(diffuseMap, input.TextureCoordinates);
-  
-    
     if (textureColor.x > 0.5)
     {
         return lerp(textureColor, float4(0.5, 0.5, 0.5, 1), abs(sin(timer*2)));//si no queda choto asi que necesito que varie mas rapido
@@ -378,7 +375,7 @@ float4 PSTrailAlien(VS_OUTPUT_TRAIL input) : COLOR0
     bool condicion1 = abs(input.MeshPosition.x) < 20.0;
     bool condicion2 = abs(input.MeshPosition.x) > 4.0;
     bool condicionIntervalo = input.MeshPosition.x > 0.5; //true; //condicion1 && condicion2;
-    bool condicionIntervaloY = input.MeshPosition.y > 465 && input.MeshPosition.y < 475; // la altura de lo oho'
+    bool condicionIntervaloY = input.MeshPosition.y > 400 && input.MeshPosition.y < 420; // la altura de lo oho'
     bool condicionIntervaloZ = input.MeshPosition.z > 0.5; //input.MeshPosition.z < 0;
     if (condicionIntervalo && condicionIntervaloY && condicionIntervaloZ)
     {
