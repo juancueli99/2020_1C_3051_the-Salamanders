@@ -337,12 +337,54 @@ float4 PSTrailSectarian(VS_OUTPUT_TRAIL input) : COLOR0
     
     float4 textureColor = tex2D(diffuseMap, input.TextureCoordinates);
    
+    bool condicion1 = input.MeshPosition.x > 120 && input.MeshPosition.x < 130;//ojo izq
+    bool condicion2 = input.MeshPosition.x < 110 && input.MeshPosition.x > 100; //ojo der
+    bool condicionIntervalo = condicion1 || condicion2; 
+    bool condicionIntervaloY = input.MeshPosition.y > 470 && input.MeshPosition.y < 474;// la altura de lo oho'
+    bool condicionIntervaloZ = input.MeshPosition.z > 0.5; //input.MeshPosition.z < 0;
+        if (condicionIntervalo && condicionIntervaloY && condicionIntervaloZ)
+    {
+        return lerp(textureColor, float4(1, 0, 0, 1), abs(sin(timer)));
+    }
+    else
+    {
+        return textureColor;
+    }
+}
+
+
+float4 PSTrailGhost(VS_OUTPUT_TRAIL input) : COLOR0
+{
+    
+    float4 textureColor = tex2D(diffuseMap, input.TextureCoordinates);
+   
     bool condicion1 = abs(input.MeshPosition.x) < 20.0;
     bool condicion2 = abs(input.MeshPosition.x) > 4.0;
     bool condicionIntervalo = input.MeshPosition.x > 0.5; //true; //condicion1 && condicion2;
-    bool condicionIntervaloY = input.MeshPosition.y > 400; //input.MeshPosition.y > 40.0 && input.MeshPosition.y < 50.0;
+    bool condicionIntervaloY = input.MeshPosition.y > 465 && input.MeshPosition.y < 475; // la altura de lo oho'
     bool condicionIntervaloZ = input.MeshPosition.z > 0.5; //input.MeshPosition.z < 0;
-        if (condicionIntervalo && condicionIntervaloY && condicionIntervaloZ)
+    if (condicionIntervalo && condicionIntervaloY && condicionIntervaloZ)
+    {
+        return lerp(textureColor, float4(1, 0, 0, 1), abs(sin(timer)));
+    }
+    else
+    {
+        return textureColor;
+    }
+}
+
+
+float4 PSTrailAlien(VS_OUTPUT_TRAIL input) : COLOR0
+{
+    
+    float4 textureColor = tex2D(diffuseMap, input.TextureCoordinates);
+   
+    bool condicion1 = abs(input.MeshPosition.x) < 20.0;
+    bool condicion2 = abs(input.MeshPosition.x) > 4.0;
+    bool condicionIntervalo = input.MeshPosition.x > 0.5; //true; //condicion1 && condicion2;
+    bool condicionIntervaloY = input.MeshPosition.y > 465 && input.MeshPosition.y < 475; // la altura de lo oho'
+    bool condicionIntervaloZ = input.MeshPosition.z > 0.5; //input.MeshPosition.z < 0;
+    if (condicionIntervalo && condicionIntervaloY && condicionIntervaloZ)
     {
         return lerp(textureColor, float4(1, 0, 0, 1), abs(sin(timer)));
     }
@@ -360,8 +402,23 @@ technique TrailEffectSECTARIAN
         PixelShader = compile ps_3_0 PSTrailSectarian();
     }
 }
+technique TrailEffectGHOST
+{
+    pass Pass_0
+    {
+        VertexShader = compile vs_3_0 VSTrailSectarian();
+        PixelShader = compile ps_3_0 PSTrailGhost();
+    }
+}
 
-
+technique TrailEffectALIEN
+{
+    pass Pass_0
+    {
+        VertexShader = compile vs_3_0 VSTrailSectarian();
+        PixelShader = compile ps_3_0 PSTrailAlien();
+    }
+}
 /////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////
 
