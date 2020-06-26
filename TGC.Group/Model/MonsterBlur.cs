@@ -20,6 +20,8 @@ namespace TGC.Group.Model
     {
         private TGCMatrix antMatWorldView;
         private Effect effect;
+        private Effect effectTrait;
+
         private Surface g_pDepthStencil; // Depth-stencil buffer
         private Texture g_pRenderTarget;
         private GameModel gameModel;
@@ -62,7 +64,7 @@ namespace TGC.Group.Model
 
             effect = TGCShaders.Instance.LoadEffect(MyShaderDir + "MonsterMotionBlur.fx");
             //Configurar Technique dentro del shader
-
+             effectTrait= TGCShaders.Instance.LoadEffect(MyShaderDir + "PostProcesado.fx"); 
             // stencil
             g_pDepthStencil = d3dDevice.CreateDepthStencilSurface(d3dDevice.PresentationParameters.BackBufferWidth,
                 d3dDevice.PresentationParameters.BackBufferHeight,
@@ -113,6 +115,14 @@ namespace TGC.Group.Model
                 effect.Technique = "DefaultTechnique";
                 mesh.Effect = effect;
             }
+           
+
+        }
+
+        private void SetearEfectoMonster()
+        {
+            gameModel.monster.ghost.Technique = "TrailEffect";
+            gameModel.monster.ghost.Effect = effectTrait;
 
         }
 
@@ -137,6 +147,9 @@ namespace TGC.Group.Model
                 mesh.Technique = technique;
                 mesh.Render();
             }
+            gameModel.monster.ghost.Technique = "TrailEffect"+GameModel.monstruoActual.ToString();
+            effectTrait.SetValue("timer", gameModel.timer);
+            gameModel.monster.ghost.Render();
         }
 
         public void RenderMonsterBlur()
@@ -230,13 +243,14 @@ namespace TGC.Group.Model
 
         public void SetearTecnica()
         {
-            meshes.Add(gameModel.monster.ghost);
+            SetearEfectoMonster();
             this.ObtenerMeshesDelFrustum();
         }
 
         public void AplicarRender()
         {
             this.RenderMonsterBlur();
+
         }
     }
 }

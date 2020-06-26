@@ -61,7 +61,7 @@ namespace TGC.Group.Model
         public static bool perdi = false;
         public static bool estoyCorriendo = false;
 
-        private float timer = 0f;
+        public float timer = 0f;
 
         //PARED INVISIBLE
         public ParedInvisible paredInvisible = new ParedInvisible();
@@ -158,8 +158,8 @@ namespace TGC.Group.Model
             monster = new Monster();
             monster.InstanciarMonster(monstruoActual);
             CrearObjetosEnEscenario();
-            iluminables.Add(monster.ghost);
-            iluminables.AddRange(escenario.tgcScene.Meshes);
+            //iluminables.Add(monster.ghost);
+            //iluminables.AddRange(escenario.tgcScene.Meshes);
 
             TgcMesh mesh1 = escenario.tgcScene.Meshes.Find(mesh => mesh.Name.Equals("linterna_1"));
             TgcMesh mesh2 = escenario.tgcScene.Meshes.Find(mesh => mesh.Name.Equals("linterna_2"));

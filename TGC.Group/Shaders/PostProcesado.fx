@@ -313,7 +313,7 @@ struct VS_OUTPUT_TRAIL
 };
 
 //Vertex Shader
-VS_OUTPUT_TRAIL VSTrail(VS_INPUT_DEFAULT input)
+VS_OUTPUT_TRAIL VSTrailSectarian(VS_INPUT_DEFAULT input)
 {
     VS_OUTPUT_TRAIL output;
     
@@ -332,12 +332,17 @@ VS_OUTPUT_TRAIL VSTrail(VS_INPUT_DEFAULT input)
 }
 
 //Pixel Shader
-float4 PSTrail(VS_OUTPUT_TRAIL input) : COLOR0
+float4 PSTrailSectarian(VS_OUTPUT_TRAIL input) : COLOR0
 {
     
     float4 textureColor = tex2D(diffuseMap, input.TextureCoordinates);
    
-    if (abs(input.MeshPosition.x) < 5.0 && abs(input.MeshPosition.x) > 4.0 && input.MeshPosition.y > 44.0 && input.MeshPosition.y < 45.0 && input.MeshPosition.z < 0)
+    bool condicion1 = abs(input.MeshPosition.x) < 20.0;
+    bool condicion2 = abs(input.MeshPosition.x) > 4.0;
+    bool condicionIntervalo = input.MeshPosition.x > 0.5; //true; //condicion1 && condicion2;
+    bool condicionIntervaloY = input.MeshPosition.y > 400; //input.MeshPosition.y > 40.0 && input.MeshPosition.y < 50.0;
+    bool condicionIntervaloZ = input.MeshPosition.z > 0.5; //input.MeshPosition.z < 0;
+        if (condicionIntervalo && condicionIntervaloY && condicionIntervaloZ)
     {
         return lerp(textureColor, float4(1, 0, 0, 1), abs(sin(timer)));
     }
@@ -347,12 +352,12 @@ float4 PSTrail(VS_OUTPUT_TRAIL input) : COLOR0
     }
 }
 
-technique TrailEffect
+technique TrailEffectSECTARIAN
 {
     pass Pass_0
     {
-        VertexShader = compile vs_3_0 VSTrail();
-        PixelShader = compile ps_3_0 PSTrail();
+        VertexShader = compile vs_3_0 VSTrailSectarian();
+        PixelShader = compile ps_3_0 PSTrailSectarian();
     }
 }
 
