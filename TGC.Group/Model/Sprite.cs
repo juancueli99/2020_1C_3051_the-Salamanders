@@ -34,7 +34,7 @@ namespace TGC.Group.Model
             Console.WriteLine("Width --> " + D3DDevice.Instance.Width);
             Console.WriteLine("Height --> " + D3DDevice.Instance.Height);
 
-            sprite.Scaling = new TGCVector2(942.54f/D3DDevice.Instance.Width, 486.45f/D3DDevice.Instance.Height);
+            sprite.Scaling = new TGCVector2(Screen.PrimaryScreen.Bounds.Width / D3DDevice.Instance.Width, Screen.PrimaryScreen.Bounds.Height / D3DDevice.Instance.Height);
         }
 
         public void updateSprite()
