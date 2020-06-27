@@ -109,6 +109,28 @@ namespace TGC.Group.Model
             //D3DDevice.Instance.Device.EndScene();
             //D3DDevice.Instance.Device.Present();
         }
+
+        public void renderSombrasPersonaje(Personaje personaje)
+        {
+            TexturesManager.Instance.clearAll();
+
+            D3DDevice.Instance.Device.Clear(ClearFlags.Target | ClearFlags.ZBuffer, Color.Black, 1.0f, 0);
+
+            g_LightPos = personaje.getPosition() + new TGCVector3(100, 10, -150);
+            g_LightDir = personaje.getLookAt() - g_LightPos - new TGCVector3(-100, -10, 150);
+            g_LightDir.Normalize();
+
+            arrow.PStart = g_LightPos;
+            arrow.PEnd = g_LightPos + g_LightDir * 0.2f;
+
+            D3DDevice.Instance.Device.Clear(ClearFlags.Target | ClearFlags.ZBuffer, Color.Gray, 1.0f, 0);
+
+            RenderShadowMap();
+
+            D3DDevice.Instance.Device.Clear(ClearFlags.Target | ClearFlags.ZBuffer, Color.Gray, 1.0f, 0);
+
+            RenderScene2(false);
+        }
         public void RenderShadowMap()
         {
             // Calculo la matriz de view de la luz
@@ -251,7 +273,8 @@ namespace TGC.Group.Model
                 else
                 {
                     //01158354515 --> Numero de Marce
-                    this.renderSombras(gameModel.personaje.getPosition(), gameModel.personaje.getLookAt(), new TGCVector3(100, 10, -150));
+                    //this.renderSombras(gameModel.personaje.getPosition(), gameModel.personaje.getLookAt(), new TGCVector3(100, 10, -150));
+                    this.renderSombrasPersonaje(gameModel.personaje);
                     //monsterBlur.RenderMonsterBlur();
                 }
             }
