@@ -38,6 +38,7 @@
             // 
             // pictureBox1
             // 
+            this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
             this.pictureBox1.Location = new System.Drawing.Point(0, 0);
             this.pictureBox1.Name = "pictureBox1";
@@ -48,6 +49,7 @@
             // 
             // returnButton
             // 
+            this.returnButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.returnButton.BackColor = System.Drawing.Color.Transparent;
             this.returnButton.FlatAppearance.BorderSize = 0;
             this.returnButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Maroon;
@@ -66,6 +68,7 @@
             // 
             // Pipe1
             // 
+            this.Pipe1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.Pipe1.AutoSize = true;
             this.Pipe1.Font = new System.Drawing.Font("Bahnschrift Condensed", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Pipe1.ForeColor = System.Drawing.Color.Maroon;

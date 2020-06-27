@@ -56,6 +56,9 @@ namespace TGC.Group.Form
             pictureSectarian.Parent = pictureBox1;
             pictureSectarian.BackColor = Color.Transparent;
 
+            pictureBox2.Parent = pictureBox1;
+            pictureBox2.BackColor = Color.Transparent;
+
             pictureAlien.Hide();
             pictureGhost.Hide();
             pictureSectarian.Hide();

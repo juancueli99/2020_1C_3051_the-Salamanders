@@ -260,17 +260,20 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Media\AlienAnimation.gif" />
     <Content Include="Media\cajaMadera4.jpg" />
     <Content Include="Media\ControlsMenu.jpg" />
     <Content Include="Media\Credits.jpg" />
     <Content Include="Media\Earphones Info.jpg" />
     <Content Include="Media\GameOverSprite2.jpg" />
+    <Content Include="Media\GhostAnimation.gif" />
     <Content Include="Media\Heighmaps\alfajorGrandote.jpg" />
     <Content Include="Media\Heighmaps\Grass.JPG" />
     <Content Include="Media\Heighmaps\heightmapUsarEsteDeBase.jpg" />
     <Content Include="Media\Into the Mist Blur.jpg" />
     <Content Include="Media\Into the Mist Menu Final.jpg" />
     <Content Include="Media\Into the Mist Menu.jpg" />
+    <Content Include="Media\IntoTheMistPicBox.png" />
     <Content Include="Media\Linternita.png" />
     <Content Include="Media\LogoTGC-TgcScene.xml" />
     <Content Include="Media\Modelame\adasdads-TgcScene.xml" />
@@ -614,8 +617,10 @@
     <Content Include="Media\NuestrosModelos\Textures\_Black_1.jpg" />
     <Content Include="Media\NuestrosModelos\Textures\_Blue_.jpg" />
     <Content Include="Media\Options.jpg" />
+    <Content Include="Media\OptionsPicBox.png" />
     <Content Include="Media\pressSpacebarToContinue.jpg" />
     <Content Include="Media\Real Into the Mist.jpg" />
+    <Content Include="Media\SectarianAnimation.gif" />
     <Content Include="Media\Sky 1.png" />
     <Content Include="Media\Sky 2.png" />
     <Content Include="Media\Sky 3.png" />

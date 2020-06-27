@@ -44,6 +44,9 @@ namespace TGC.Group.Form
             exitButton.Parent = pictureBox1;
             exitButton.BackColor = Color.Transparent;
 
+            pictureBox2.Parent = pictureBox1;
+            pictureBox2.BackColor = Color.Transparent;
+
         }
 
         private void startGameButton_Click(object sender, EventArgs e)

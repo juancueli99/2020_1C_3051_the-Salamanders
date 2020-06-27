@@ -48,23 +48,26 @@
             // 
             // menuUserControl1
             // 
+            this.menuUserControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.menuUserControl1.Location = new System.Drawing.Point(0, 0);
             this.menuUserControl1.Name = "menuUserControl1";
-            this.menuUserControl1.Size = new System.Drawing.Size(1370, 705);
+            this.menuUserControl1.Size = new System.Drawing.Size(784, 561);
             this.menuUserControl1.TabIndex = 0;
             // 
             // gameOverUserControl1
             // 
+            this.gameOverUserControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.gameOverUserControl1.Location = new System.Drawing.Point(0, 0);
             this.gameOverUserControl1.Name = "gameOverUserControl1";
-            this.gameOverUserControl1.Size = new System.Drawing.Size(1370, 705);
+            this.gameOverUserControl1.Size = new System.Drawing.Size(784, 561);
             this.gameOverUserControl1.TabIndex = 1;
             // 
             // youSurvivedUserControl1
             // 
+            this.youSurvivedUserControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.youSurvivedUserControl1.Location = new System.Drawing.Point(0, 0);
             this.youSurvivedUserControl1.Name = "youSurvivedUserControl1";
-            this.youSurvivedUserControl1.Size = new System.Drawing.Size(1370, 705);
+            this.youSurvivedUserControl1.Size = new System.Drawing.Size(784, 561);
             this.youSurvivedUserControl1.TabIndex = 2;
             // 
             // GameForm

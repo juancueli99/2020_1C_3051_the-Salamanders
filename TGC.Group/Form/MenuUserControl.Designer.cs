@@ -40,11 +40,14 @@
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.creditsUserControl1 = new TGC.Group.Form.CreditsUserControl();
             this.optionsUserControl1 = new TGC.Group.Form.OptionsUserControl();
+            this.pictureBox2 = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.SuspendLayout();
             // 
             // exitButton
             // 
+            this.exitButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.exitButton.BackColor = System.Drawing.Color.Transparent;
             this.exitButton.FlatAppearance.BorderSize = 0;
             this.exitButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Maroon;
@@ -63,6 +66,7 @@
             // 
             // creditsButton
             // 
+            this.creditsButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.creditsButton.BackColor = System.Drawing.Color.Transparent;
             this.creditsButton.FlatAppearance.BorderSize = 0;
             this.creditsButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Maroon;
@@ -81,6 +85,7 @@
             // 
             // startGameButton
             // 
+            this.startGameButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.startGameButton.BackColor = System.Drawing.Color.Transparent;
             this.startGameButton.FlatAppearance.BorderSize = 0;
             this.startGameButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Maroon;
@@ -99,6 +104,7 @@
             // 
             // Pipe4
             // 
+            this.Pipe4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.Pipe4.AutoSize = true;
             this.Pipe4.Font = new System.Drawing.Font("Bahnschrift Condensed", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Pipe4.ForeColor = System.Drawing.Color.Maroon;
@@ -111,6 +117,7 @@
             // 
             // Pipe3
             // 
+            this.Pipe3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.Pipe3.AutoSize = true;
             this.Pipe3.Font = new System.Drawing.Font("Bahnschrift Condensed", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Pipe3.ForeColor = System.Drawing.Color.Maroon;
@@ -123,6 +130,7 @@
             // 
             // Pipe1
             // 
+            this.Pipe1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.Pipe1.AutoSize = true;
             this.Pipe1.Font = new System.Drawing.Font("Bahnschrift Condensed", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Pipe1.ForeColor = System.Drawing.Color.Maroon;
@@ -135,6 +143,7 @@
             // 
             // optionsButton
             // 
+            this.optionsButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.optionsButton.BackColor = System.Drawing.Color.Transparent;
             this.optionsButton.FlatAppearance.BorderSize = 0;
             this.optionsButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Maroon;
@@ -153,6 +162,7 @@
             // 
             // Pipe2
             // 
+            this.Pipe2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.Pipe2.AutoSize = true;
             this.Pipe2.Font = new System.Drawing.Font("Bahnschrift Condensed", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Pipe2.ForeColor = System.Drawing.Color.Maroon;
@@ -165,6 +175,7 @@
             // 
             // pictureBox1
             // 
+            this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
             this.pictureBox1.Location = new System.Drawing.Point(0, 0);
             this.pictureBox1.Name = "pictureBox1";
@@ -175,6 +186,7 @@
             // 
             // creditsUserControl1
             // 
+            this.creditsUserControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.creditsUserControl1.Location = new System.Drawing.Point(0, 0);
             this.creditsUserControl1.Name = "creditsUserControl1";
             this.creditsUserControl1.Size = new System.Drawing.Size(1370, 705);
@@ -182,15 +194,28 @@
             // 
             // optionsUserControl1
             // 
-            this.optionsUserControl1.Location = new System.Drawing.Point(2, 0);
+            this.optionsUserControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.optionsUserControl1.Location = new System.Drawing.Point(0, 0);
             this.optionsUserControl1.Name = "optionsUserControl1";
             this.optionsUserControl1.Size = new System.Drawing.Size(1370, 705);
             this.optionsUserControl1.TabIndex = 40;
+            // 
+            // pictureBox2
+            // 
+            this.pictureBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.pictureBox2.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox2.Image")));
+            this.pictureBox2.Location = new System.Drawing.Point(5, 474);
+            this.pictureBox2.Name = "pictureBox2";
+            this.pictureBox2.Size = new System.Drawing.Size(219, 70);
+            this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox2.TabIndex = 44;
+            this.pictureBox2.TabStop = false;
             // 
             // MenuUserControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.pictureBox2);
             this.Controls.Add(this.exitButton);
             this.Controls.Add(this.creditsButton);
             this.Controls.Add(this.startGameButton);
@@ -205,6 +230,7 @@
             this.Name = "MenuUserControl";
             this.Size = new System.Drawing.Size(1370, 705);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -222,5 +248,6 @@
         private OptionsUserControl optionsUserControl1;
         private CreditsUserControl creditsUserControl1;
         private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.PictureBox pictureBox2;
     }
 }

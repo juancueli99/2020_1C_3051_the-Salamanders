@@ -54,14 +54,17 @@
             this.pictureGhost = new System.Windows.Forms.PictureBox();
             this.pictureSectarian = new System.Windows.Forms.PictureBox();
             this.controlsUserControl1 = new TGC.Group.Form.ControlsUserControl();
+            this.pictureBox2 = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureAlien)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureGhost)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureSectarian)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.SuspendLayout();
             // 
             // returnButton
             // 
+            this.returnButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.returnButton.BackColor = System.Drawing.Color.Transparent;
             this.returnButton.FlatAppearance.BorderSize = 0;
             this.returnButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Maroon;
@@ -80,6 +83,7 @@
             // 
             // setDifficultyButton
             // 
+            this.setDifficultyButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.setDifficultyButton.BackColor = System.Drawing.Color.Transparent;
             this.setDifficultyButton.FlatAppearance.BorderSize = 0;
             this.setDifficultyButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Maroon;
@@ -98,6 +102,7 @@
             // 
             // Pipe3
             // 
+            this.Pipe3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.Pipe3.AutoSize = true;
             this.Pipe3.Font = new System.Drawing.Font("Bahnschrift Condensed", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Pipe3.ForeColor = System.Drawing.Color.Maroon;
@@ -110,6 +115,7 @@
             // 
             // Pipe1
             // 
+            this.Pipe1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.Pipe1.AutoSize = true;
             this.Pipe1.Font = new System.Drawing.Font("Bahnschrift Condensed", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Pipe1.ForeColor = System.Drawing.Color.Maroon;
@@ -122,6 +128,7 @@
             // 
             // monstersAvailableButton
             // 
+            this.monstersAvailableButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.monstersAvailableButton.BackColor = System.Drawing.Color.Transparent;
             this.monstersAvailableButton.FlatAppearance.BorderSize = 0;
             this.monstersAvailableButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Maroon;
@@ -140,6 +147,7 @@
             // 
             // Pipe2
             // 
+            this.Pipe2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.Pipe2.AutoSize = true;
             this.Pipe2.Font = new System.Drawing.Font("Bahnschrift Condensed", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Pipe2.ForeColor = System.Drawing.Color.Maroon;
@@ -152,6 +160,7 @@
             // 
             // impossibleButton
             // 
+            this.impossibleButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.impossibleButton.BackColor = System.Drawing.Color.Transparent;
             this.impossibleButton.FlatAppearance.BorderSize = 0;
             this.impossibleButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Maroon;
@@ -170,6 +179,7 @@
             // 
             // easyButton
             // 
+            this.easyButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.easyButton.BackColor = System.Drawing.Color.Transparent;
             this.easyButton.FlatAppearance.BorderSize = 0;
             this.easyButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Maroon;
@@ -188,6 +198,7 @@
             // 
             // Pipe6
             // 
+            this.Pipe6.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.Pipe6.AutoSize = true;
             this.Pipe6.Font = new System.Drawing.Font("Bahnschrift Condensed", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Pipe6.ForeColor = System.Drawing.Color.Maroon;
@@ -200,6 +211,7 @@
             // 
             // Pipe4
             // 
+            this.Pipe4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.Pipe4.AutoSize = true;
             this.Pipe4.Font = new System.Drawing.Font("Bahnschrift Condensed", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Pipe4.ForeColor = System.Drawing.Color.Maroon;
@@ -212,6 +224,7 @@
             // 
             // normalButton
             // 
+            this.normalButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.normalButton.BackColor = System.Drawing.Color.Transparent;
             this.normalButton.FlatAppearance.BorderSize = 0;
             this.normalButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Maroon;
@@ -230,6 +243,7 @@
             // 
             // Pipe5
             // 
+            this.Pipe5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.Pipe5.AutoSize = true;
             this.Pipe5.Font = new System.Drawing.Font("Bahnschrift Condensed", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Pipe5.ForeColor = System.Drawing.Color.Maroon;
@@ -242,6 +256,7 @@
             // 
             // alienButton
             // 
+            this.alienButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.alienButton.BackColor = System.Drawing.Color.Transparent;
             this.alienButton.FlatAppearance.BorderSize = 0;
             this.alienButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Maroon;
@@ -260,6 +275,7 @@
             // 
             // ghostButton
             // 
+            this.ghostButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.ghostButton.BackColor = System.Drawing.Color.Transparent;
             this.ghostButton.FlatAppearance.BorderSize = 0;
             this.ghostButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Maroon;
@@ -278,6 +294,7 @@
             // 
             // Pipe9
             // 
+            this.Pipe9.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.Pipe9.AutoSize = true;
             this.Pipe9.Font = new System.Drawing.Font("Bahnschrift Condensed", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Pipe9.ForeColor = System.Drawing.Color.Maroon;
@@ -290,6 +307,7 @@
             // 
             // Pipe7
             // 
+            this.Pipe7.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.Pipe7.AutoSize = true;
             this.Pipe7.Font = new System.Drawing.Font("Bahnschrift Condensed", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Pipe7.ForeColor = System.Drawing.Color.Maroon;
@@ -302,6 +320,7 @@
             // 
             // demonButton
             // 
+            this.demonButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.demonButton.BackColor = System.Drawing.Color.Transparent;
             this.demonButton.FlatAppearance.BorderSize = 0;
             this.demonButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Maroon;
@@ -320,6 +339,7 @@
             // 
             // Pipe8
             // 
+            this.Pipe8.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.Pipe8.AutoSize = true;
             this.Pipe8.Font = new System.Drawing.Font("Bahnschrift Condensed", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Pipe8.ForeColor = System.Drawing.Color.Maroon;
@@ -332,6 +352,7 @@
             // 
             // pictureBox1
             // 
+            this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
             this.pictureBox1.Location = new System.Drawing.Point(0, 0);
             this.pictureBox1.Name = "pictureBox1";
@@ -342,6 +363,7 @@
             // 
             // controlsButton
             // 
+            this.controlsButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.controlsButton.BackColor = System.Drawing.Color.Transparent;
             this.controlsButton.FlatAppearance.BorderSize = 0;
             this.controlsButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Maroon;
@@ -360,6 +382,7 @@
             // 
             // Pipe57
             // 
+            this.Pipe57.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.Pipe57.AutoSize = true;
             this.Pipe57.Font = new System.Drawing.Font("Bahnschrift Condensed", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Pipe57.ForeColor = System.Drawing.Color.Maroon;
@@ -372,6 +395,7 @@
             // 
             // pictureAlien
             // 
+            this.pictureAlien.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.pictureAlien.BackColor = System.Drawing.Color.Transparent;
             this.pictureAlien.Image = ((System.Drawing.Image)(resources.GetObject("pictureAlien.Image")));
             this.pictureAlien.Location = new System.Drawing.Point(464, 185);
@@ -383,6 +407,7 @@
             // 
             // pictureGhost
             // 
+            this.pictureGhost.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.pictureGhost.BackColor = System.Drawing.Color.Transparent;
             this.pictureGhost.Image = ((System.Drawing.Image)(resources.GetObject("pictureGhost.Image")));
             this.pictureGhost.Location = new System.Drawing.Point(483, 172);
@@ -394,6 +419,7 @@
             // 
             // pictureSectarian
             // 
+            this.pictureSectarian.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.pictureSectarian.BackColor = System.Drawing.Color.Transparent;
             this.pictureSectarian.Image = ((System.Drawing.Image)(resources.GetObject("pictureSectarian.Image")));
             this.pictureSectarian.Location = new System.Drawing.Point(542, 185);
@@ -405,15 +431,28 @@
             // 
             // controlsUserControl1
             // 
+            this.controlsUserControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.controlsUserControl1.Location = new System.Drawing.Point(0, 0);
             this.controlsUserControl1.Name = "controlsUserControl1";
             this.controlsUserControl1.Size = new System.Drawing.Size(1370, 705);
             this.controlsUserControl1.TabIndex = 60;
             // 
+            // pictureBox2
+            // 
+            this.pictureBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.pictureBox2.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox2.Image")));
+            this.pictureBox2.Location = new System.Drawing.Point(3, 488);
+            this.pictureBox2.Name = "pictureBox2";
+            this.pictureBox2.Size = new System.Drawing.Size(145, 52);
+            this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox2.TabIndex = 64;
+            this.pictureBox2.TabStop = false;
+            // 
             // OptionsUserControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.pictureBox2);
             this.Controls.Add(this.pictureSectarian);
             this.Controls.Add(this.pictureGhost);
             this.Controls.Add(this.pictureAlien);
@@ -445,6 +484,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureAlien)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureGhost)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureSectarian)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -476,5 +516,6 @@
         private System.Windows.Forms.PictureBox pictureAlien;
         private System.Windows.Forms.PictureBox pictureGhost;
         private System.Windows.Forms.PictureBox pictureSectarian;
+        private System.Windows.Forms.PictureBox pictureBox2;
     }
 }
