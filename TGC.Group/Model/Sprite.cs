@@ -31,8 +31,10 @@ namespace TGC.Group.Model
             var textureSize = sprite.Bitmap.Size;
             sprite.Position = new TGCVector2(FastMath.Max(D3DDevice.Instance.Width / 2 - textureSize.Width / 2, 0), FastMath.Max(D3DDevice.Instance.Height / 2 - textureSize.Height / 2, 0));
 
-            sprite.Scaling = new TGCVector2(0.69f, 0.69f);
+            Console.WriteLine("Width --> " + D3DDevice.Instance.Width);
+            Console.WriteLine("Height --> " + D3DDevice.Instance.Height);
 
+            sprite.Scaling = new TGCVector2(942.54f/D3DDevice.Instance.Width, 486.45f/D3DDevice.Instance.Height);
         }
 
         public void updateSprite()

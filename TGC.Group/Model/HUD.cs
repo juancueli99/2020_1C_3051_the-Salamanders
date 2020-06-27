@@ -29,7 +29,7 @@ namespace TGC.Group.Model
             sprite.Position = new TGCVector2(FastMath.Max(D3DDevice.Instance.Width /1 - textureSize.Width /1, 0), 
                 FastMath.Max(D3DDevice.Instance.Height /0.8f - textureSize.Height /0.8f, 0));
 
-            sprite.Scaling = new TGCVector2(0.4f, 0.4f);
+            sprite.Scaling = new TGCVector2(546.4f/ D3DDevice.Instance.Width, 282f/ D3DDevice.Instance.Height);
         }
 
         public void instanciarVelas(int porcentajeVela)
@@ -43,7 +43,7 @@ namespace TGC.Group.Model
             sprite.Position = new TGCVector2(FastMath.Max(D3DDevice.Instance.Width / 1 - textureSize.Width / 1, 0),
                 FastMath.Max(D3DDevice.Instance.Height / 0.83f - textureSize.Height / 0.83f, 0));
 
-            sprite.Scaling = new TGCVector2(0.5f, 0.5f);
+            sprite.Scaling = new TGCVector2(683f / D3DDevice.Instance.Width, 352.5f / D3DDevice.Instance.Height);
         }
 
         public void instanciarVelita()
@@ -56,7 +56,7 @@ namespace TGC.Group.Model
             sprite.Position = new TGCVector2(FastMath.Max(D3DDevice.Instance.Width / 1.135f - textureSize.Width / 1.135f, 0), 
                 FastMath.Max(D3DDevice.Instance.Height / 1.02f - textureSize.Height / 1.02f, 0));
             
-            sprite.Scaling = new TGCVector2(0.45f, 0.45f);
+            sprite.Scaling = new TGCVector2(614.7f / D3DDevice.Instance.Width, 317.25f / D3DDevice.Instance.Height);
         }
 
         public void instanciarLinternas(int porcentajeVela)
@@ -70,7 +70,7 @@ namespace TGC.Group.Model
             sprite.Position = new TGCVector2(FastMath.Max(D3DDevice.Instance.Width / 1.001f - textureSize.Width / 1.001f, 0),
                 FastMath.Max(D3DDevice.Instance.Height / 0.847f - textureSize.Height / 0.847f, 0));
 
-            sprite.Scaling = new TGCVector2(0.55f, 0.55f);
+            sprite.Scaling = new TGCVector2(751.3f / D3DDevice.Instance.Width, 387.75f / D3DDevice.Instance.Height);
         }
 
         public void instanciarLinternita()
@@ -83,7 +83,7 @@ namespace TGC.Group.Model
             sprite.Position = new TGCVector2(FastMath.Max(D3DDevice.Instance.Width / 1.135f - textureSize.Width / 1.135f, 0),
                 FastMath.Max(D3DDevice.Instance.Height / 0.99f - textureSize.Height / 0.99f, 0));
 
-            sprite.Scaling = new TGCVector2(0.45f, 0.45f);
+            sprite.Scaling = new TGCVector2(614.7f / D3DDevice.Instance.Width,317.25f / D3DDevice.Instance.Height);
         }
 
         public void updateSprite()

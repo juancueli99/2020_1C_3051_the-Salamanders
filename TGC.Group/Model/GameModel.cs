@@ -84,7 +84,7 @@ namespace TGC.Group.Model
         //Boleano para ver si dibujamos el boundingbox
         private bool BoundingBox { get; set; }
         public FrustumResult INTERSECT { get; private set; }
-        public static float TiempoDeGameOver = 3000000;
+        public static float TiempoDeGameOver = 30000;
         public static float TiempoDeAdvertencia = 4000;
         public static float TiempoSinAdvertencia = 3500;
         public static GameModel instancia;
@@ -127,7 +127,6 @@ namespace TGC.Group.Model
 
         public override void Init()
         {
-
             var d3dDevice = D3DDevice.Instance.Device;
             deviceMusica = DirectSound.DsDevice;
             this.FixedTickEnable = false;
