@@ -31,10 +31,20 @@ namespace TGC.Group.Model
             var textureSize = sprite.Bitmap.Size;
             sprite.Position = new TGCVector2(FastMath.Max(D3DDevice.Instance.Width / 2 - textureSize.Width / 2, 0), FastMath.Max(D3DDevice.Instance.Height / 2 - textureSize.Height / 2, 0));
 
-            Console.WriteLine("Width --> " + D3DDevice.Instance.Width);
-            Console.WriteLine("Height --> " + D3DDevice.Instance.Height);
+            float aspectRatio = D3DDevice.Instance.Width / D3DDevice.Instance.Height;
+            float aspectRatio2 = Screen.PrimaryScreen.Bounds.Width / Screen.PrimaryScreen.Bounds.Height;
 
-            sprite.Scaling = new TGCVector2(Screen.PrimaryScreen.Bounds.Width / D3DDevice.Instance.Width, Screen.PrimaryScreen.Bounds.Height / D3DDevice.Instance.Height);
+            Console.WriteLine("Sprite.Width --> " + D3DDevice.Instance.Width);
+            Console.WriteLine("Sprite.Height --> " + D3DDevice.Instance.Height);
+            Console.WriteLine("Pantalla.Width --> " + Screen.PrimaryScreen.Bounds.Width);
+            Console.WriteLine("Pantalla.Height --> " + Screen.PrimaryScreen.Bounds.Height);
+            float FactorDeEscalaW = (float)Screen.PrimaryScreen.Bounds.Width / textureSize.Width;
+            float FactorDeEscalaH = (float)Screen.PrimaryScreen.Bounds.Height / textureSize.Height;
+            Console.WriteLine("FactorDeEscala.Width --> " + FactorDeEscalaW);
+            Console.WriteLine("FactorDeEscala.Height --> " + FactorDeEscalaH);
+            
+
+            sprite.Scaling = new TGCVector2(FactorDeEscalaW, FactorDeEscalaH);
         }
 
         public void updateSprite()
