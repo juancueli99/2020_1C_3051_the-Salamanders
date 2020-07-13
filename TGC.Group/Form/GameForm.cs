@@ -51,9 +51,9 @@ namespace TGC.Group.Form
         private void GameForm_Load(object sender, EventArgs e)
         {
             //FullScreen, van en este orden para que queda oculta la barra de Windows.
-            //this.WindowState = FormWindowState.Normal;
-            //this.FormBorderStyle = FormBorderStyle.None;
-            //this.WindowState = FormWindowState.Maximized;
+            this.WindowState = FormWindowState.Normal;
+            this.FormBorderStyle = FormBorderStyle.None;
+            this.WindowState = FormWindowState.Maximized;
 
             //OriginalBorderStyle
             //this.FormBorderStyle = FormBorderStyle.Sizable;
@@ -62,7 +62,7 @@ namespace TGC.Group.Form
             InitGraphics();
 
             //Titulo de la ventana principal.
-            Text = Modelo.Name + @" - " + Modelo.Description;
+            Text = "The Salamanders - Into the Mist";
 
             //Focus panel3D.
             panel3D.Focus();
