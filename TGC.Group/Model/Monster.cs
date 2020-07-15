@@ -25,6 +25,7 @@ namespace TGC.Group.Model
         Sonido sonidoAtrapa3;//instanciar antes de atrapar o en el init pero alguien tiene que subir la musica que falta
         float RotacionY;
         float VelocidadMonster;
+        Sonido sonidoMuerte = new Sonido("Hl2_Rebel-Ragdoll485-573931361.wav", -1500, false);
 
         public void InstanciarMonster(monstruos tipo)
         {
@@ -183,6 +184,7 @@ namespace TGC.Group.Model
         }
         public void ReproducirSonidoGameOver() {
             this.sonidoAtrapa3.escucharSonidoActual(false);
+            this.sonidoMuerte.escucharSonidoActual(false);
         }
 
         public float obtenerAnguloDeRotacion(Personaje personaje)
