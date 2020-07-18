@@ -14,16 +14,21 @@ Proyecto plantilla para los trabajos prácticos de la asignatura electiva [Técn
 * [TGC.Core](https://www.nuget.org/packages/TGC.Core/) (se baja automáticamente al hacer build por primera vez)
 
 ## Integrantes ##
-TGC, Tgcito  |  Apellido, Nombre
+Urteaga Naya, Martín  |  Covello, Jorge
+------------ | -------------
+<img src="https://github.com/tgc-utn/tgc-utn.github.io/blob/master/images/robotgc.png" height="500"> | <img src="https://github.com/tgc-utn/tgc-utn.github.io/blob/master/images/trofeotp.png" height="500">
+
+Cueli, Juan  |  Jarazo, Juan Manuel
 ------------ | -------------
 <img src="https://github.com/tgc-utn/tgc-utn.github.io/blob/master/images/robotgc.png" height="500"> | <img src="https://github.com/tgc-utn/tgc-utn.github.io/blob/master/images/trofeotp.png" height="500">
 
 ## ScreenShot ##
-![screenshot1](https://github.com/tgc-utn/tgc-group/blob/master/TGC.Group/Media/MenuIntoTheMist.png)
-![screenshot2](https://github.com/tgc-utn/tgc-group/blob/master/TGC.Group/Media/HouseIntoTheMist.png)
-![screenshot3](https://github.com/tgc-utn/tgc-group/blob/master/TGC.Group/Media/HouseNoLightIntoTheMist.png)
-![screenshot4](https://github.com/tgc-utn/tgc-group/blob/master/TGC.Group/Media/CarIntoTheMist.png)
-![screenshot5](https://github.com/tgc-utn/tgc-group/blob/master/TGC.Group/Media/IndoorIntoTheMist.png)
+![screenshot1](https://github.com/juancueli99/2020_1C_3051_the-Salamanders/blob/master/TGC.Group/Media/MenuIntoTheMist.png)
+![screenshot2](https://github.com/juancueli99/2020_1C_3051_the-Salamanders/blob/master/TGC.Group/Media/HouseIntoTheMist.png)
+![screenshot3](https://github.com/juancueli99/2020_1C_3051_the-Salamanders/blob/master/TGC.Group/Media/HouseNoLightIntoTheMist.png)
+![screenshot4](https://github.com/juancueli99/2020_1C_3051_the-Salamanders/blob/master/TGC.Group/Media/CarIntoTheMist.png)
+![screenshot5](https://github.com/juancueli99/2020_1C_3051_the-Salamanders/blob/master/TGC.Group/Media/IndoorIntoTheMist.png)
+![screenshot6](https://github.com/juancueli99/2020_1C_3051_the-Salamanders/blob/master/TGC.Group/Media/MonsterIntoTheMist.png)
 
 ## Game Play ##
 [![Watch the video](https://img.youtube.com/vi/qESIu8ozanU/0.jpg)](https://www.youtube.com/playlist?list=PLRM4L32DjvnazuMl8wZlbpEYL5Qh63ulG)
