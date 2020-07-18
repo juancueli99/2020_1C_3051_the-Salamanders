@@ -16,11 +16,11 @@ Proyecto plantilla para los trabajos prácticos de la asignatura electiva [Técn
 ## Integrantes ##
 Urteaga Naya, Martín  |  Covello, Jorge
 ------------ | -------------
-<img src="https://github.com/juancueli99/2020_1C_3051_the-Salamanders/blob/master/TGC.Group/Media/fotoTincho.png" height="500"> | <img src="https://github.com/tgc-utn/tgc-utn.github.io/blob/master/images/trofeotp.png" height="500">
+<img src="https://github.com/juancueli99/2020_1C_3051_the-Salamanders/blob/master/TGC.Group/Media/fotoTincho.png" height="500"> | <img src="https://github.com/juancueli99/2020_1C_3051_the-Salamanders/blob/master/TGC.Group/Media/fotoJorge.jpeg" height="500">
 
 Cueli, Juan  |  Jarazo, Juan Manuel
 ------------ | -------------
-<img src="https://github.com/tgc-utn/tgc-utn.github.io/blob/master/images/robotgc.png" height="500"> | <img src="https://github.com/tgc-utn/tgc-utn.github.io/blob/master/images/trofeotp.png" height="500">
+<img src="https://github.com/juancueli99/2020_1C_3051_the-Salamanders/blob/master/TGC.Group/Media/fotoJuan.jpeg" height="500"> | <img src="https://github.com/tgc-utn/tgc-utn.github.io/blob/master/images/trofeotp.png" height="500">
 
 ## ScreenShot ##
 ![screenshot1](https://github.com/juancueli99/2020_1C_3051_the-Salamanders/blob/master/TGC.Group/Media/MenuIntoTheMist.png)
