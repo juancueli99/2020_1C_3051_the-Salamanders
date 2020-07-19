@@ -16,7 +16,7 @@ Proyecto plantilla para los trabajos prácticos de la asignatura electiva [Técn
 ## Integrantes ##
 Urteaga Naya, Martín  |  Covello, Jorge
 ------------ | -------------
-<img src="https://github.com/juancueli99/2020_1C_3051_the-Salamanders/blob/master/TGC.Group/Media/fotoTincho.png" height="500"> | <img src="https://github.com/juancueli99/2020_1C_3051_the-Salamanders/blob/master/TGC.Group/Media/fotoJorgeResized.jpeg" height="500" width="405">
+<img src="https://github.com/juancueli99/2020_1C_3051_the-Salamanders/blob/master/TGC.Group/Media/fotoTincho.png" height="500" width="380"> | <img src="https://github.com/juancueli99/2020_1C_3051_the-Salamanders/blob/master/TGC.Group/Media/fotoJorgeResized.jpeg" height="500" width="405">
 
 Cueli, Juan  |  Jarazo, Juan Manuel
 ------------ | -------------
@@ -33,5 +33,5 @@ Cueli, Juan  |  Jarazo, Juan Manuel
 ![screenshot5](https://github.com/juancueli99/2020_1C_3051_the-Salamanders/blob/master/TGC.Group/Media/IndoorIntoTheMist.png)
 ![screenshot6](https://github.com/juancueli99/2020_1C_3051_the-Salamanders/blob/master/TGC.Group/Media/MonsterIntoTheMist.png)
 
-## Game Play ##
-[![Watch the video](https://img.youtube.com/vi/qESIu8ozanU/0.jpg)](https://www.youtube.com/playlist?list=PLRM4L32DjvnazuMl8wZlbpEYL5Qh63ulG)
+## Game Trailer ##
+[![Watch the video](https://github.com/juancueli99/2020_1C_3051_the-Salamanders/blob/master/TGC.Group/Media/fotoVideo.png)](https://www.youtube.com/watch?v=Szn1OWrzz8U)
