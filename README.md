@@ -16,7 +16,7 @@ Proyecto plantilla para los trabajos prácticos de la asignatura electiva [Técn
 ## Integrantes ##
 Urteaga Naya, Martín  |  Covello, Jorge
 ------------ | -------------
-<img src="https://github.com/juancueli99/2020_1C_3051_the-Salamanders/blob/master/TGC.Group/Media/fotoTincho.png" height="500"> | <img src="https://github.com/juancueli99/2020_1C_3051_the-Salamanders/blob/master/TGC.Group/Media/jorgeDePeque.jpeg" height="500" width="550">
+<img src="https://github.com/juancueli99/2020_1C_3051_the-Salamanders/blob/master/TGC.Group/Media/fotoTincho.png" height="500"> | <img src="https://github.com/juancueli99/2020_1C_3051_the-Salamanders/blob/master/TGC.Group/Media/jorgeDePeque.jpeg" height="500" width="500">
 
 Cueli, Juan  |  Jarazo, Juan Manuel
 ------------ | -------------
