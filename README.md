@@ -16,11 +16,11 @@ Proyecto plantilla para los trabajos prácticos de la asignatura electiva [Técn
 ## Integrantes ##
 Urteaga Naya, Martín  |  Covello, Jorge
 ------------ | -------------
-<img src="https://github.com/juancueli99/2020_1C_3051_the-Salamanders/blob/master/TGC.Group/Media/fotoTincho.png" height="500"> | <img src="https://github.com/juancueli99/2020_1C_3051_the-Salamanders/blob/master/TGC.Group/Media/jorgeDePeque.jpeg" height="500" width="500">
+<img src="https://github.com/juancueli99/2020_1C_3051_the-Salamanders/blob/master/TGC.Group/Media/fotoTincho.png" height="500"> | <img src="https://github.com/juancueli99/2020_1C_3051_the-Salamanders/blob/master/TGC.Group/Media/jorgeDePeque.jpeg" height="500" width="410">
 
 Cueli, Juan  |  Jarazo, Juan Manuel
 ------------ | -------------
-<img src="https://github.com/juancueli99/2020_1C_3051_the-Salamanders/blob/master/TGC.Group/Media/fotoJuan.jpeg" height="560" width="383"> | <img src="https://github.com/tgc-utn/tgc-utn.github.io/blob/master/images/trofeotp.png" height="500">
+<img src="https://github.com/juancueli99/2020_1C_3051_the-Salamanders/blob/master/TGC.Group/Media/fotoJuan.jpeg" height="560" width="380"> | <img src="https://github.com/tgc-utn/tgc-utn.github.io/blob/master/images/trofeotp.png" height="500">
 
 ## Game Story ##
 <img src="https://github.com/juancueli99/2020_1C_3051_the-Salamanders/blob/master/TGC.Group/Media/StoryIntoTheMist.png">
