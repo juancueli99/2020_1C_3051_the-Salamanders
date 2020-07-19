@@ -26,12 +26,14 @@ Cueli, Juan  |  Jarazo, Juan Manuel
 <img src="https://github.com/juancueli99/2020_1C_3051_the-Salamanders/blob/master/TGC.Group/Media/StoryIntoTheMist.png">
 
 ## Screenshots ##
-![screenshot1](https://github.com/juancueli99/2020_1C_3051_the-Salamanders/blob/master/TGC.Group/Media/MenuIntoTheMist.png)
-![screenshot2](https://github.com/juancueli99/2020_1C_3051_the-Salamanders/blob/master/TGC.Group/Media/HouseIntoTheMist.png)
-![screenshot3](https://github.com/juancueli99/2020_1C_3051_the-Salamanders/blob/master/TGC.Group/Media/HouseNoLightIntoTheMist.png)
-![screenshot4](https://github.com/juancueli99/2020_1C_3051_the-Salamanders/blob/master/TGC.Group/Media/CarIntoTheMist.png)
-![screenshot5](https://github.com/juancueli99/2020_1C_3051_the-Salamanders/blob/master/TGC.Group/Media/IndoorIntoTheMist.png)
-![screenshot6](https://github.com/juancueli99/2020_1C_3051_the-Salamanders/blob/master/TGC.Group/Media/MonsterIntoTheMist.png)
+![screenshot1](https://github.com/juancueli99/2020_1C_3051_the-Salamanders/blob/master/TGC.Group/Media/HouseIntoTheMist.png)
+![screenshot2](https://github.com/juancueli99/2020_1C_3051_the-Salamanders/blob/master/TGC.Group/Media/HouseNoLightIntoTheMist.png)
+![screenshot3](https://github.com/juancueli99/2020_1C_3051_the-Salamanders/blob/master/TGC.Group/Media/CarIntoTheMist.png)
+![screenshot4](https://github.com/juancueli99/2020_1C_3051_the-Salamanders/blob/master/TGC.Group/Media/IndoorIntoTheMist.png)
+![screenshot5](https://github.com/juancueli99/2020_1C_3051_the-Salamanders/blob/master/TGC.Group/Media/MonsterIntoTheMist.png)
 
 ## Game Trailer ##
 [![Watch the video](https://github.com/juancueli99/2020_1C_3051_the-Salamanders/blob/master/TGC.Group/Media/fotoVideo.png)](https://www.youtube.com/watch?v=Szn1OWrzz8U)
+
+## Gameplay ##
+[![Watch the video](https://github.com/juancueli99/2020_1C_3051_the-Salamanders/blob/master/TGC.Group/Media/MenuIntoTheMist.png)](https://www.youtube.com/watch?v=Oa44a_NF4fU)
