@@ -20,7 +20,7 @@ Urteaga Naya, Martín  |  Covello, Jorge
 
 Cueli, Juan  |  Jarazo, Juan Manuel
 ------------ | -------------
-<img src="https://github.com/juancueli99/2020_1C_3051_the-Salamanders/blob/master/TGC.Group/Media/fotoJuan.jpeg" height="560" width="380"> | <img src="https://github.com/juancueli99/2020_1C_3051_the-Salamanders/blob/master/TGC.Group/Media/FotoJMJ.jpg" height="500">
+<img src="https://github.com/juancueli99/2020_1C_3051_the-Salamanders/blob/master/TGC.Group/Media/fotoJuan.jpeg" height="560" width="380"> | <img src="https://github.com/juancueli99/2020_1C_3051_the-Salamanders/blob/master/TGC.Group/Media/FotoJMJ.jpg" height="560">
 
 ## Game Story ##
 <img src="https://github.com/juancueli99/2020_1C_3051_the-Salamanders/blob/master/TGC.Group/Media/StoryIntoTheMist.png">
